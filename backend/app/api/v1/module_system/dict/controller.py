@@ -29,7 +29,7 @@ DictRouter = APIRouter(route_class=OperationLogRoute, prefix="/dict", tags=["字
 @DictRouter.get("/type/detail/{id}", summary="获取字典类型详情", description="获取字典类型详情")
 async def get_type_detail_controller(
     id: int = Path(..., description="字典类型ID"),
-    auth: AuthSchema = Depends(AuthPermission(["system:dict_type:query"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_system:dict_type:query"]))
 ) -> JSONResponse:
     """
     获取字典类型详情
@@ -52,7 +52,7 @@ async def get_type_detail_controller(
 async def get_type_list_controller(
     page: PaginationQueryParam = Depends(),
     search: DictTypeQueryParam = Depends(),
-    auth: AuthSchema = Depends(AuthPermission(["system:dict_type:query"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_system:dict_type:query"]))
 ) -> JSONResponse:
     """
     查询字典类型列表
@@ -75,7 +75,7 @@ async def get_type_list_controller(
 
 @DictRouter.get("/type/optionselect", summary="获取全部字典类型", description="获取全部字典类型")
 async def get_type_loptionselect_controller(
-    auth: AuthSchema = Depends(AuthPermission(["system:dict_type:query"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_system:dict_type:query"]))
 ) -> JSONResponse:
     """
     获取全部字典类型
@@ -97,7 +97,7 @@ async def get_type_loptionselect_controller(
 async def create_type_controller(
     data: DictTypeCreateSchema,
     redis: Redis = Depends(redis_getter),
-    auth: AuthSchema = Depends(AuthPermission(["system:dict_type:create"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_system:dict_type:create"]))
 ) -> JSONResponse:
     """
     创建字典类型
@@ -122,7 +122,7 @@ async def update_type_controller(
     data: DictTypeUpdateSchema,
     redis: Redis = Depends(redis_getter),
     id: int = Path(..., description="字典类型ID"),
-    auth: AuthSchema = Depends(AuthPermission(["system:dict_type:update"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_system:dict_type:update"]))
 ) -> JSONResponse:
     """
     修改字典类型
@@ -147,7 +147,7 @@ async def update_type_controller(
 async def delete_type_controller(
     redis: Redis = Depends(redis_getter),
     ids: list[int] = Body(..., description="ID列表"),
-    auth: AuthSchema = Depends(AuthPermission(["system:dict_type:delete"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_system:dict_type:delete"]))
 ) -> JSONResponse:
     """
     删除字典类型
@@ -170,7 +170,7 @@ async def delete_type_controller(
 @DictRouter.patch("/type/available/setting", summary="批量修改字典类型状态", description="批量修改字典类型状态")
 async def batch_set_available_dict_type_controller(
     data: BatchSetAvailable,
-    auth: AuthSchema = Depends(AuthPermission(["system:dict_type:patch"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_system:dict_type:patch"]))
 ) -> JSONResponse:
     """
     批量修改字典类型状态
@@ -192,7 +192,7 @@ async def batch_set_available_dict_type_controller(
 @DictRouter.post('/type/export', summary="导出字典类型", description="导出字典类型")
 async def export_type_list_controller(
     search: DictTypeQueryParam = Depends(),
-    auth: AuthSchema = Depends(AuthPermission(["system:dict_type:export"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_system:dict_type:export"]))
 ) -> StreamingResponse:
     """
     导出字典类型
@@ -223,7 +223,7 @@ async def export_type_list_controller(
 @DictRouter.get("/data/detail/{id}", summary="获取字典数据详情", description="获取字典数据详情")
 async def get_data_detail_controller(
     id: int = Path(..., description="字典数据ID"),
-    auth: AuthSchema = Depends(AuthPermission(["system:dict_data:query"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_system:dict_data:query"]))
 ) -> JSONResponse:
     """
     获取字典数据详情
@@ -246,7 +246,7 @@ async def get_data_detail_controller(
 async def get_data_list_controller(
     page: PaginationQueryParam = Depends(),
     search: DictDataQueryParam = Depends(),
-    auth: AuthSchema = Depends(AuthPermission(["system:dict_data:query"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_system:dict_data:query"]))
 ) -> JSONResponse:
     """
     查询字典数据
@@ -274,7 +274,7 @@ async def get_data_list_controller(
 async def create_data_controller(
     data: DictDataCreateSchema,
     redis: Redis = Depends(redis_getter),
-    auth: AuthSchema = Depends(AuthPermission(["system:dict_data:create"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_system:dict_data:create"]))
 ) -> JSONResponse:
     """
     创建字典数据
@@ -299,7 +299,7 @@ async def update_data_controller(
     data: DictDataUpdateSchema,
     redis: Redis = Depends(redis_getter),
     id: int = Path(..., description="字典数据ID"),
-    auth: AuthSchema = Depends(AuthPermission(["system:dict_data:update"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_system:dict_data:update"]))
 ) -> JSONResponse:
     """
     修改字典数据
@@ -324,7 +324,7 @@ async def update_data_controller(
 async def delete_data_controller(
     redis: Redis = Depends(redis_getter),
     ids: list[int] = Body(..., description="ID列表"),
-    auth: AuthSchema = Depends(AuthPermission(["system:dict_data:delete"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_system:dict_data:delete"]))
 ) -> JSONResponse:
     """
     删除字典数据
@@ -347,7 +347,7 @@ async def delete_data_controller(
 @DictRouter.patch("/data/available/setting", summary="批量修改字典数据状态", description="批量修改字典数据状态")
 async def batch_set_available_dict_data_controller(
     data: BatchSetAvailable,
-    auth: AuthSchema = Depends(AuthPermission(["system:dict_data:patch"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_system:dict_data:patch"]))
 ) -> JSONResponse:
     """
     批量修改字典数据状态
@@ -370,7 +370,7 @@ async def batch_set_available_dict_data_controller(
 async def export_data_list_controller(
     search: DictDataQueryParam = Depends(),
     page: PaginationQueryParam = Depends(),
-    auth: AuthSchema = Depends(AuthPermission(["system:dict_data:export"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_system:dict_data:export"]))
 ) -> StreamingResponse:
     """
     导出字典数据

@@ -24,7 +24,7 @@ GenRouter = APIRouter(route_class=OperationLogRoute, prefix='/gencode', tags=["�
 async def gen_table_list_controller(
     page: PaginationQueryParam = Depends(),
     search: GenTableQueryParam = Depends(),
-    auth: AuthSchema = Depends(AuthPermission(["generator:gencode:query"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_generator:gencode:query"]))
 ) -> JSONResponse:
     """
     查询代码生成业务表列表
@@ -47,7 +47,7 @@ async def gen_table_list_controller(
 async def get_gen_db_table_list_controller(
     page: PaginationQueryParam = Depends(),
     search: GenTableQueryParam = Depends(),
-    auth: AuthSchema = Depends(AuthPermission(["generator:dblist:query"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_generator:dblist:query"]))
 ) -> JSONResponse:
     """
     查询数据库表列表
@@ -69,7 +69,7 @@ async def get_gen_db_table_list_controller(
 @GenRouter.post("/import", summary="导入表结构", description="导入表结构")
 async def import_gen_table_controller(
     table_names: List[str] = Body(..., description="表名列表"),
-    auth: AuthSchema = Depends(AuthPermission(["generator:gencode:import"])),
+    auth: AuthSchema = Depends(AuthPermission(["module_generator:gencode:import"])),
 ) -> JSONResponse:
     """
     导入表结构
@@ -90,7 +90,7 @@ async def import_gen_table_controller(
 @GenRouter.get("/detail/{table_id}", summary="获取业务表详细信息", description="获取业务表详细信息")
 async def gen_table_detail_controller(
     table_id: int = Path(..., description="业务表ID"),
-    auth: AuthSchema = Depends(AuthPermission(["generator:gencode:query"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_generator:gencode:query"]))
 ) -> JSONResponse:
     """
     获取业务表详细信息
@@ -110,7 +110,7 @@ async def gen_table_detail_controller(
 @GenRouter.post("/create", summary="创建表结构", description="创建表结构")
 async def create_table_controller(
     sql: str = Body(..., description="SQL语句，用于创建表结构"),
-    auth: AuthSchema = Depends(AuthPermission(["generator:gencode:create"])),
+    auth: AuthSchema = Depends(AuthPermission(["module_generator:gencode:create"])),
 ) -> JSONResponse:
     """
     创建表结构
@@ -131,7 +131,7 @@ async def create_table_controller(
 async def update_gen_table_controller(
     table_id: int = Path(..., description="业务表ID"),
     data: GenTableSchema = Body(..., description="业务表信息"),
-    auth: AuthSchema = Depends(AuthPermission(["generator:gencode:update"])),
+    auth: AuthSchema = Depends(AuthPermission(["module_generator:gencode:update"])),
 ) -> JSONResponse:
     """
     编辑业务表信息
@@ -152,7 +152,7 @@ async def update_gen_table_controller(
 @GenRouter.delete("/delete", summary="删除业务表信息", description="删除业务表信息")
 async def delete_gen_table_controller(
     ids: List[int] = Body(..., description="业务表ID列表"),
-    auth: AuthSchema = Depends(AuthPermission(["generator:gencode:delete"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_generator:gencode:delete"]))
 ) -> JSONResponse:
     """
     删除业务表信息
@@ -172,7 +172,7 @@ async def delete_gen_table_controller(
 @GenRouter.patch("/batch/output", summary="批量生成代码", description="批量生成代码")
 async def batch_gen_code_controller(
     table_names: List[str] = Body(..., description="表名列表"),
-    auth: AuthSchema = Depends(AuthPermission(["generator:gencode:operate"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_generator:gencode:operate"]))
 ) -> StreamResponse:
     """
     批量生成代码
@@ -196,7 +196,7 @@ async def batch_gen_code_controller(
 @GenRouter.post("/output/{table_name}", summary="生成代码到指定路径", description="生成代码到指定路径")
 async def gen_code_local_controller(
     table_name: str = Path(..., description="表名"),
-    auth: AuthSchema = Depends(AuthPermission(["generator:gencode:code"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_generator:gencode:code"]))
 ) -> JSONResponse:
     """
     生成代码到指定路径
@@ -216,7 +216,7 @@ async def gen_code_local_controller(
 @GenRouter.get("/preview/{table_id}", summary="预览代码", description="预览代码")
 async def preview_code_controller(
     table_id: int = Path(..., description="业务表ID"),
-    auth: AuthSchema = Depends(AuthPermission(["generator:gencode:query"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_generator:gencode:query"]))
 ) -> JSONResponse:
     """
     预览代码
@@ -236,7 +236,7 @@ async def preview_code_controller(
 @GenRouter.post("/sync_db/{table_name}", summary="同步数据库", description="同步数据库")
 async def sync_db_controller(
     table_name: str = Path(..., description="表名"),
-    auth: AuthSchema = Depends(AuthPermission(["generator:db:sync"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_generator:db:sync"]))
 ) -> JSONResponse:
     """
     同步数据库

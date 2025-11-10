@@ -21,7 +21,7 @@ AIRouter = APIRouter(route_class=OperationLogRoute, prefix="/ai", tags=["MCP智�
 @AIRouter.post("/chat", summary="智能对话", description="与MCP智能助手进行对话")
 async def chat_controller(
     query: ChatQuerySchema,
-    auth: AuthSchema = Depends(AuthPermission(["app:ai:chat"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_application:ai:chat"]))
 ) -> StreamingResponse:
     """
     智能对话接口
@@ -51,7 +51,7 @@ async def chat_controller(
 @AIRouter.get("/detail/{id}", summary="获取 MCP 服务器详情", description="获取 MCP 服务器详情")
 async def detail_controller(
     id: int = Path(..., description="MCP ID"),
-    auth: AuthSchema = Depends(AuthPermission(["app:ai:query"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_application:ai:query"]))
 ) -> JSONResponse:
     """
     获取 MCP 服务器详情接口
@@ -71,7 +71,7 @@ async def detail_controller(
 async def list_controller(
     page: PaginationQueryParam = Depends(),
     search: McpQueryParam = Depends(),
-    auth: AuthSchema = Depends(AuthPermission(["app:ai:query"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_application:ai:query"]))
 ) -> JSONResponse:
     """
     查询 MCP 服务器列表接口
@@ -93,7 +93,7 @@ async def list_controller(
 @AIRouter.post("/create", summary="创建 MCP 服务器", description="创建 MCP 服务器")
 async def create_controller(
     data: McpCreateSchema,
-    auth: AuthSchema = Depends(AuthPermission(["app:ai:create"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_application:ai:create"]))
 ) -> JSONResponse:
     """
     创建 MCP 服务器接口
@@ -114,7 +114,7 @@ async def create_controller(
 async def update_controller(
     data: McpUpdateSchema,
     id: int = Path(..., description="MCP ID"),
-    auth: AuthSchema = Depends(AuthPermission(["app:ai:update"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_application:ai:update"]))
 ) -> JSONResponse:
     """
     修改 MCP 服务器接口
@@ -135,7 +135,7 @@ async def update_controller(
 @AIRouter.delete("/delete", summary="删除 MCP 服务器", description="删除 MCP 服务器")
 async def delete_controller(
     ids: list[int] = Body(..., description="ID列表"),
-    auth: AuthSchema = Depends(AuthPermission(["app:ai:delete"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_application:ai:delete"]))
 ) -> JSONResponse:
     """
     删除 MCP 服务器接口

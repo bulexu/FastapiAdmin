@@ -25,7 +25,7 @@ NoticeRouter = APIRouter(route_class=OperationLogRoute, prefix="/notice", tags=[
 @NoticeRouter.get("/detail/{id}", summary="获取公告详情", description="获取公告详情")
 async def get_obj_detail_controller(
     id: int = Path(..., description="公告ID"),
-    auth: AuthSchema = Depends(AuthPermission(["system:notice:query"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_system:notice:query"]))
 ) -> JSONResponse:
     """
     获取公告详情。
@@ -45,7 +45,7 @@ async def get_obj_detail_controller(
 async def get_obj_list_controller(
     page: PaginationQueryParam = Depends(),
     search: NoticeQueryParam = Depends(),
-    auth: AuthSchema = Depends(AuthPermission(["system:notice:query"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_system:notice:query"]))
 ) -> JSONResponse:
     """
     查询公告。
@@ -66,7 +66,7 @@ async def get_obj_list_controller(
 @NoticeRouter.post("/create", summary="创建公告", description="创建公告")
 async def create_obj_controller(
     data: NoticeCreateSchema,
-    auth: AuthSchema = Depends(AuthPermission(["system:notice:create"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_system:notice:create"]))
 ) -> JSONResponse:
     """
     创建公告。
@@ -86,7 +86,7 @@ async def create_obj_controller(
 async def update_obj_controller(
     data: NoticeUpdateSchema,
     id: int = Path(..., description="公告ID"),
-    auth: AuthSchema = Depends(AuthPermission(["system:notice:update"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_system:notice:update"]))
 ) -> JSONResponse:
     """
     修改公告。
@@ -106,7 +106,7 @@ async def update_obj_controller(
 @NoticeRouter.delete("/delete", summary="删除公告", description="删除公告")
 async def delete_obj_controller(
     ids: list[int] = Body(..., description="ID列表"),
-    auth: AuthSchema = Depends(AuthPermission(["system:notice:delete"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_system:notice:delete"]))
 ) -> JSONResponse:
     """
     删除公告。
@@ -125,7 +125,7 @@ async def delete_obj_controller(
 @NoticeRouter.patch("/available/setting", summary="批量修改公告状态", description="批量修改公告状态")
 async def batch_set_available_obj_controller(
     data: BatchSetAvailable,
-    auth: AuthSchema = Depends(AuthPermission(["system:notice:patch"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_system:notice:patch"]))
 ) -> JSONResponse:
     """
     批量修改公告状态。
@@ -144,7 +144,7 @@ async def batch_set_available_obj_controller(
 @NoticeRouter.post('/export', summary="导出公告", description="导出公告")
 async def export_obj_list_controller(
     search: NoticeQueryParam = Depends(),
-    auth: AuthSchema = Depends(AuthPermission(["system:notice:export"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_system:notice:export"]))
 ) -> StreamingResponse:
     """
     导出公告。

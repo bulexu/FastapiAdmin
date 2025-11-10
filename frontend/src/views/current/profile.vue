@@ -41,7 +41,7 @@
                   @change="handleFileChange"
                 >
                   <template #trigger>
-                      <el-button v-hasPerm="['system:user:update']" type="primary" :icon="Camera" class="upload-trigger"/>
+                      <el-button v-hasPerm="['module_system:user:update']" type="primary" :icon="Camera" class="upload-trigger"/>
                     </template>
                 </el-upload>
             </div>
@@ -161,7 +161,7 @@
                   </el-form-item>
 
                   <el-form-item>
-                    <el-button v-hasPerm="['system:user:update']" type="primary" :loading="infoSubmitting" icon="edit" @click="handleSave">保存更改</el-button>
+                    <el-button v-hasPerm="['module_system:user:update']" type="primary" :loading="infoSubmitting" icon="edit" @click="handleSave">保存更改</el-button>
                   </el-form-item>
                 </el-form>
               </div>

@@ -247,7 +247,7 @@
     </el-tabs>
     <template #footer> 
       <el-button @click="handleCloseDialog">取消</el-button>
-      <el-button v-hasPerm="['system:config:update']" type="primary" :disabled="!hasChanges" @click="submitChanges">保存</el-button>
+      <el-button v-hasPerm="['module_system:config:update']" type="primary" :disabled="!hasChanges" @click="submitChanges">保存</el-button>
     </template>
   </el-drawer>
 </template>

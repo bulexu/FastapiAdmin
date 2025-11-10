@@ -29,8 +29,8 @@
         </el-form-item>
         <!-- 查询、重置、展开/收起按钮 -->
         <el-form-item class="search-buttons">
-          <el-button v-hasPerm="['system:log:query']" type="primary" icon="search" native-type="submit">查询</el-button>
-          <el-button v-hasPerm="['system:log:query']" icon="refresh" @click="handleResetQuery">重置</el-button>
+          <el-button v-hasPerm="['module_system:log:query']" type="primary" icon="search" native-type="submit">查询</el-button>
+          <el-button v-hasPerm="['module_system:log:query']" icon="refresh" @click="handleResetQuery">重置</el-button>
           <!-- 展开/收起 -->
           <template v-if="isExpandable">
             <el-link class="ml-3" type="primary" underline="never" @click="isExpand = !isExpand">
@@ -67,7 +67,7 @@
         <div class="data-table__toolbar--left">
           <el-row :gutter="10">
             <el-col :span="1.5">
-              <el-button v-hasPerm="['system:log:delete']" type="danger" icon="delete" :disabled="selectIds.length === 0" @click="handleDelete(selectIds)">批量删除</el-button>
+              <el-button v-hasPerm="['module_system:log:delete']" type="danger" icon="delete" :disabled="selectIds.length === 0" @click="handleDelete(selectIds)">批量删除</el-button>
             </el-col>
           </el-row>
         </div>
@@ -75,12 +75,12 @@
           <el-row :gutter="10">
             <el-col :span="1.5">
               <el-tooltip content="导出">
-                <el-button v-hasPerm="['system:log:export']" type="warning" icon="download" circle @click="handleOpenExportsModal"/>
+                <el-button v-hasPerm="['module_system:log:export']" type="warning" icon="download" circle @click="handleOpenExportsModal"/>
               </el-tooltip>
             </el-col>
             <el-col :span="1.5">
               <el-tooltip content="刷新">
-                <el-button v-hasPerm="['system:log:refresh']" type="default" icon="refresh" circle @click="handleRefresh"/>
+                <el-button v-hasPerm="['module_system:log:refresh']" type="default" icon="refresh" circle @click="handleRefresh"/>
               </el-tooltip>
             </el-col>
           </el-row>
@@ -138,8 +138,8 @@
         </el-table-column>
         <el-table-column label="操作" fixed="right" align="center" min-width="150">
           <template #default="scope">
-            <el-button v-hasPerm="['system:log:detail']" type="info" size="small" link icon="document" @click="handleOpenDialog('detail', scope.row.id)">详情</el-button>
-            <el-button v-hasPerm="['system:log:delete']" type="danger" size="small" link icon="delete" @click="handleDelete([scope.row.id])">删除</el-button>
+            <el-button v-hasPerm="['module_system:log:detail']" type="info" size="small" link icon="document" @click="handleOpenDialog('detail', scope.row.id)">详情</el-button>
+            <el-button v-hasPerm="['module_system:log:delete']" type="danger" size="small" link icon="delete" @click="handleDelete([scope.row.id])">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -193,7 +193,7 @@
         <div class="dialog-footer">
           <!-- 详情弹窗不需要确定按钮的提交逻辑 -->
           <el-button @click="handleCloseDialog">取消</el-button>
-          <el-button v-hasPerm="['system:log:detail']" type="primary" @click="handleCloseDialog">确定</el-button>
+          <el-button v-hasPerm="['module_system:log:detail']" type="primary" @click="handleCloseDialog">确定</el-button>
         </div>
       </template>
     </el-dialog>
@@ -430,7 +430,7 @@ const exportColumns = [
 
 // 导入/导出配置（用于导出弹窗）
 const curdContentConfig = {
-  permPrefix: 'system:log',
+  permPrefix: 'module_system:log',
   cols: exportColumns as any,
   exportsAction: async (params: any) => {
     const query: any = { ...params };

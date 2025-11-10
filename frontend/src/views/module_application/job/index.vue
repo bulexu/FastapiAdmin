@@ -44,8 +44,8 @@
         </el-form-item>
         <!-- 查询、重置、展开/收起按钮 -->
         <el-form-item class="search-buttons">
-          <el-button v-hasPerm="['app:job:query']" type="primary" icon="search" native-type="submit">查询</el-button>
-          <el-button v-hasPerm="['app:job:query']" icon="refresh" @click="handleResetQuery">重置</el-button>
+          <el-button v-hasPerm="['module_application:job:query']" type="primary" icon="search" native-type="submit">查询</el-button>
+          <el-button v-hasPerm="['module_application:job:query']" icon="refresh" @click="handleResetQuery">重置</el-button>
           <!-- 展开/收起 -->
           <template v-if="isExpandable">
             <el-link
@@ -88,7 +88,7 @@
           <el-row :gutter="10">
             <el-col :span="1.5">
               <el-button
-                v-hasPerm="['app:job:create']"
+                v-hasPerm="['module_application:job:create']"
                 type="success"
                 icon="plus"
                 @click="handleOpenDialog('create')"
@@ -96,7 +96,7 @@
             </el-col>
             <el-col :span="1.5">
               <el-button
-                v-hasPerm="['app:job:delete']"
+                v-hasPerm="['module_application:job:delete']"
                 type="danger"
                 icon="delete"
                 :disabled="selectIds.length === 0"
@@ -110,7 +110,7 @@
             <el-col :span="1.5">
               <el-tooltip content="导出">
                 <el-button
-                  v-hasPerm="['app:job:export']"
+                  v-hasPerm="['module_application:job:export']"
                   type="warning"
                   icon="download"
                   circle
@@ -120,13 +120,13 @@
             </el-col>
             <el-col :span="1.5">
               <el-tooltip content="清除">
-                <el-button v-hasPerm="['app:job:clear']" type="danger" icon="delete" circle @click="handleClear"/>
+                <el-button v-hasPerm="['module_application:job:clear']" type="danger" icon="delete" circle @click="handleClear"/>
               </el-tooltip>
             </el-col>
             <el-col :span="1.5">
               <el-tooltip content="刷新">
                 <el-button
-                  v-hasPerm="['app:job:refresh']"
+                  v-hasPerm="['module_application:job:refresh']"
                   type="primary"
                   icon="refresh"
                   circle
@@ -230,7 +230,7 @@
                 详情
               </el-button>
               <el-button
-                v-hasPerm="['app:job:update']"
+                v-hasPerm="['module_application:job:update']"
                 type="primary"
                 size="small"
                 link
@@ -240,7 +240,7 @@
                 编辑
               </el-button>
               <el-button
-                v-hasPerm="['app:job:delete']"
+                v-hasPerm="['module_application:job:delete']"
                 type="danger"
                 size="small"
                 link
@@ -249,7 +249,7 @@
               >
                 删除
               </el-button>
-              <el-dropdown v-hasPerm="['app:job:status']" trigger="click">
+              <el-dropdown v-hasPerm="['module_application:job:status']" trigger="click">
                 <el-button type="warning" size="small" link icon="ArrowDown">更多</el-button>
                 <template #dropdown>
                   <el-dropdown-menu>
@@ -581,7 +581,7 @@
           <!-- 详情弹窗不需要确定按钮的提交逻辑 -->
           <el-button @click="handleCloseDialog">取消</el-button>
           <el-button v-if="dialogVisible.type !== 'detail'" type="primary" @click="handleSubmit">确定</el-button>
-          <el-button v-else v-hasPerm="['app:job:detail']" type="primary" @click="handleCloseDialog" >确定</el-button>
+          <el-button v-else v-hasPerm="['module_application:job:detail']" type="primary" @click="handleCloseDialog" >确定</el-button>
         </div>
       </template>
     </el-dialog>
@@ -942,7 +942,7 @@ const exportColumns = [
 
 // 导出配置（用于导出弹窗）
 const curdContentConfig = {
-  permPrefix: 'app:job',
+  permPrefix: 'module_application:job',
   cols: exportColumns as any,
   exportsAction: async (params: any) => {
     const query: any = { ...params };

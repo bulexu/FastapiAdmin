@@ -32,8 +32,8 @@
         </el-form-item>
         <!-- 查询、重置、展开/收起按钮 -->
         <el-form-item class="search-buttons">
-          <el-button v-hasPerm="['system:dict_type:query']" type="primary" icon="search" native-type="submit">查询</el-button>
-          <el-button v-hasPerm="['system:dict_type:query']" icon="refresh" @click="handleResetQuery">重置</el-button>
+          <el-button v-hasPerm="['module_system:dict_type:query']" type="primary" icon="search" native-type="submit">查询</el-button>
+          <el-button v-hasPerm="['module_system:dict_type:query']" icon="refresh" @click="handleResetQuery">重置</el-button>
           <!-- 展开/收起 -->
           <template v-if="isExpandable">
             <el-link class="ml-3" type="primary" underline="never" @click="isExpand = !isExpand">
@@ -70,13 +70,13 @@
         <div class="data-table__toolbar--left">
           <el-row :gutter="10">
             <el-col :span="1.5">
-              <el-button v-hasPerm="['system:dict_type:create']" type="success" icon="plus" @click="handleOpenDialog('create')">新增</el-button>
+              <el-button v-hasPerm="['module_system:dict_type:create']" type="success" icon="plus" @click="handleOpenDialog('create')">新增</el-button>
             </el-col>
             <el-col :span="1.5">
-              <el-button v-hasPerm="['system:dict_type:delete']" type="danger" icon="delete" :disabled="selectIds.length === 0" @click="handleDelete(selectIds)">批量删除</el-button>
+              <el-button v-hasPerm="['module_system:dict_type:delete']" type="danger" icon="delete" :disabled="selectIds.length === 0" @click="handleDelete(selectIds)">批量删除</el-button>
             </el-col>
             <el-col :span="1.5">
-              <el-dropdown v-hasPerm="['system:dict_type:patch']" trigger="click">
+              <el-dropdown v-hasPerm="['module_system:dict_type:patch']" trigger="click">
                 <el-button type="default" :disabled="selectIds.length === 0" icon="ArrowDown">
                   更多
                 </el-button>
@@ -94,12 +94,12 @@
           <el-row :gutter="10">
             <el-col :span="1.5">
               <el-tooltip content="导出">
-                <el-button v-hasPerm="['system:dict_type:export']" type="warning" icon="download" circle @click="handleOpenExportsModal"/>
+                <el-button v-hasPerm="['module_system:dict_type:export']" type="warning" icon="download" circle @click="handleOpenExportsModal"/>
               </el-tooltip>
             </el-col>
             <el-col :span="1.5">
               <el-tooltip content="刷新">
-                <el-button v-hasPerm="['system:dict_type:refresh']" type="primary" icon="refresh" circle @click="handleRefresh"/>
+                <el-button v-hasPerm="['module_system:dict_type:refresh']" type="primary" icon="refresh" circle @click="handleRefresh"/>
               </el-tooltip>
             </el-col>
             <el-col :span="1.5">
@@ -152,10 +152,10 @@
         </el-table-column>
         <el-table-column v-if="tableColumns.find(col => col.prop === 'operation')?.show" fixed="right" label="操作" align="center" min-width="260">
           <template #default="scope">
-            <el-button v-hasPerm="['system:dict_data:query']" type="warning" size="small" link icon="document" @click="handleDictDataDrawer(scope.row.dict_type, scope.row.dict_name)">字典</el-button>
-            <el-button v-hasPerm="['system:dict_type:detail']" type="info" size="small" link icon="document" @click="handleOpenDialog('detail', scope.row.id)">详情</el-button>
-            <el-button v-hasPerm="['system:dict_type:update']" type="primary" size="small" link icon="edit" @click="handleOpenDialog('update', scope.row.id)">编辑</el-button>
-            <el-button v-hasPerm="['system:dict_type:delete']" type="danger" size="small" link icon="delete" @click="handleDelete([scope.row.id])">删除</el-button>
+            <el-button v-hasPerm="['module_system:dict_data:query']" type="warning" size="small" link icon="document" @click="handleDictDataDrawer(scope.row.dict_type, scope.row.dict_name)">字典</el-button>
+            <el-button v-hasPerm="['module_system:dict_type:detail']" type="info" size="small" link icon="document" @click="handleOpenDialog('detail', scope.row.id)">详情</el-button>
+            <el-button v-hasPerm="['module_system:dict_type:update']" type="primary" size="small" link icon="edit" @click="handleOpenDialog('update', scope.row.id)">编辑</el-button>
+            <el-button v-hasPerm="['module_system:dict_type:delete']" type="danger" size="small" link icon="delete" @click="handleDelete([scope.row.id])">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -210,8 +210,8 @@
         <div class="dialog-footer">
           <!-- 详情弹窗不需要确定按钮的提交逻辑 -->
           <el-button @click="handleCloseDialog">取消</el-button>
-          <el-button v-if="dialogVisible.type !== 'detail'" v-hasPerm="['system:dict_type:submit']" type="primary" @click="handleSubmit">确定</el-button>
-          <el-button v-else v-hasPerm="['system:dict_type:detail']" type="primary" @click="handleCloseDialog">确定</el-button>
+          <el-button v-if="dialogVisible.type !== 'detail'" v-hasPerm="['module_system:dict_type:submit']" type="primary" @click="handleSubmit">确定</el-button>
+          <el-button v-else v-hasPerm="['module_system:dict_type:detail']" type="primary" @click="handleCloseDialog">确定</el-button>
         </div>
       </template>
     </el-dialog>
@@ -531,7 +531,7 @@ const exportColumns = [
 
 // 导出配置（用于导出弹窗）
 const curdContentConfig = {
-  permPrefix: 'system:dict_type',
+  permPrefix: 'module_system:dict_type',
   cols: exportColumns as any,
   exportsAction: async (params: any) => {
     const query: any = { ...params };

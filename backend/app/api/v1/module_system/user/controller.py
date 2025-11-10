@@ -172,7 +172,7 @@ async def forget_password_controller(
 async def get_obj_list_controller(
     page: PaginationQueryParam = Depends(),
     search: UserQueryParam = Depends(),
-    auth: AuthSchema = Depends(AuthPermission(["system:user:query"])),
+    auth: AuthSchema = Depends(AuthPermission(["module_system:user:query"])),
 ) -> JSONResponse:
     """
     查询用户
@@ -194,7 +194,7 @@ async def get_obj_list_controller(
 @UserRouter.get("/detail/{id}", summary="查询用户详情", description="查询用户详情")
 async def get_obj_detail_controller(
     id: int = Path(..., description="用户ID"),
-    auth: AuthSchema = Depends(AuthPermission(["system:user:query"])),
+    auth: AuthSchema = Depends(AuthPermission(["module_system:user:query"])),
 ) -> JSONResponse:
     """
     查询用户详情
@@ -214,7 +214,7 @@ async def get_obj_detail_controller(
 @UserRouter.post("/create", summary="创建用户", description="创建用户")
 async def create_obj_controller(
     data: UserCreateSchema,
-    auth: AuthSchema = Depends(AuthPermission(["system:user:create"])),
+    auth: AuthSchema = Depends(AuthPermission(["module_system:user:create"])),
 ) -> JSONResponse:
     """
     创建用户
@@ -239,7 +239,7 @@ async def create_obj_controller(
 async def update_obj_controller(
     data: UserUpdateSchema,
     id: int = Path(..., description="用户ID"),
-    auth: AuthSchema = Depends(AuthPermission(["system:user:update"])),
+    auth: AuthSchema = Depends(AuthPermission(["module_system:user:update"])),
 ) -> JSONResponse:
     """
     修改用户
@@ -260,7 +260,7 @@ async def update_obj_controller(
 @UserRouter.delete("/delete", summary="删除用户", description="删除用户")
 async def delete_obj_controller(
     ids: list[int] = Body(..., description="ID列表"),
-    auth: AuthSchema = Depends(AuthPermission(["system:user:delete"])),
+    auth: AuthSchema = Depends(AuthPermission(["module_system:user:delete"])),
 ) -> JSONResponse:
     """
     删除用户
@@ -280,7 +280,7 @@ async def delete_obj_controller(
 @UserRouter.patch("/available/setting", summary="批量修改用户状态", description="批量修改用户状态")
 async def batch_set_available_obj_controller(
     data: BatchSetAvailable,
-    auth: AuthSchema = Depends(AuthPermission(["system:user:patch"])),
+    auth: AuthSchema = Depends(AuthPermission(["module_system:user:patch"])),
 ) -> JSONResponse:
     """
     批量修改用户状态
@@ -297,7 +297,7 @@ async def batch_set_available_obj_controller(
     return SuccessResponse(msg="批量修改用户状态成功")
 
 
-@UserRouter.post('/import/template', summary="获取用户导入模板", description="获取用户导入模板", dependencies=[Depends(AuthPermission(["system:user:import"]))])
+@UserRouter.post('/import/template', summary="获取用户导入模板", description="获取用户导入模板", dependencies=[Depends(AuthPermission(["module_system:user:import"]))])
 async def export_obj_template_controller()-> StreamingResponse:
     """
     获取用户导入模板
@@ -322,7 +322,7 @@ async def export_obj_template_controller()-> StreamingResponse:
 async def export_obj_list_controller(
     page: PaginationQueryParam = Depends(),
     search: UserQueryParam = Depends(),
-    auth: AuthSchema = Depends(AuthPermission(["system:user:export"])),
+    auth: AuthSchema = Depends(AuthPermission(["module_system:user:export"])),
 ) -> StreamingResponse:
     """
     导出用户
@@ -351,7 +351,7 @@ async def export_obj_list_controller(
 @UserRouter.post('/import/data', summary="导入用户", description="导入用户")
 async def import_obj_list_controller(
     file: UploadFile,
-    auth: AuthSchema = Depends(AuthPermission(["system:user:import"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_system:user:import"]))
 ) -> JSONResponse:
     """
     导入用户

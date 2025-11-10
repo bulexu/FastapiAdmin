@@ -13,8 +13,8 @@
           />
         </el-form-item>
         <el-form-item class="search-buttons">
-          <el-button v-hasPerm="['monitor:resource:query']" type="primary" icon="search" native-type="submit">查询</el-button>
-          <el-button v-hasPerm="['monitor:resource:query']" icon="refresh" @click="handleResetQuery">重置</el-button>
+          <el-button v-hasPerm="['module_monitor:resource:query']" type="primary" icon="search" native-type="submit">查询</el-button>
+          <el-button v-hasPerm="['module_monitor:resource:query']" icon="refresh" @click="handleResetQuery">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -52,34 +52,34 @@
         <div class="data-table__toolbar--left">
           <el-row :gutter="10">
             <el-col :span="1.5">
-              <el-button v-hasPerm="['monitor:resource:upload']" type="success" icon="plus" @click="handleUpload">上传文件</el-button>
+              <el-button v-hasPerm="['module_monitor:resource:upload']" type="success" icon="plus" @click="handleUpload">上传文件</el-button>
             </el-col>
             <el-col :span="1.5">
-              <el-button v-hasPerm="['monitor:resource:create_dir']" type="primary" icon="folder-add" @click="handleCreateDir">新建文件夹</el-button>
+              <el-button v-hasPerm="['module_monitor:resource:create_dir']" type="primary" icon="folder-add" @click="handleCreateDir">新建文件夹</el-button>
             </el-col>
             <el-col :span="1.5">
-              <el-button v-hasPerm="['monitor:resource:delete']" type="danger" icon="delete" :disabled="selectedItems.length === 0" @click="handleBatchDelete">批量删除</el-button>
+              <el-button v-hasPerm="['module_monitor:resource:delete']" type="danger" icon="delete" :disabled="selectedItems.length === 0" @click="handleBatchDelete">批量删除</el-button>
             </el-col>
           </el-row>
         </div>
         <div class="data-table__toolbar--right">
           <el-row :gutter="10">
             <el-col :span="1.5">
-              <el-checkbox v-model="showHiddenFiles" v-hasPerm="['monitor:resource:show_hidden']"  @change="handleShowHiddenChange">
+              <el-checkbox v-model="showHiddenFiles" v-hasPerm="['module_monitor:resource:show_hidden']"  @change="handleShowHiddenChange">
                 显示隐藏文件
               </el-checkbox>
             </el-col>
             <el-col :span="1.5">
               <el-button-group>
                 <el-button
-                  v-hasPerm="['monitor:resource:view_list']"
+                  v-hasPerm="['module_monitor:resource:view_list']"
                   :type="viewMode === 'list' ? 'primary' : ''"
                   @click="viewMode = 'list'"
                 >
                   <el-icon><List /></el-icon>
                 </el-button>
                 <el-button
-                  v-hasPerm="['monitor:resource:view_grid']"
+                  v-hasPerm="['module_monitor:resource:view_grid']"
                   :type="viewMode === 'grid' ? 'primary' : ''"
                   @click="viewMode = 'grid'"
                 >
@@ -89,7 +89,7 @@
             </el-col>
             <el-col :span="1.5">
               <el-tooltip content="刷新">
-                <el-button v-hasPerm="['monitor:resource:refresh']" type="primary" icon="refresh" circle @click="handleRefresh"/>
+                <el-button v-hasPerm="['module_monitor:resource:refresh']" type="primary" icon="refresh" circle @click="handleRefresh"/>
               </el-tooltip>
             </el-col>
           </el-row>
@@ -122,7 +122,7 @@
                 <Document v-else />
               </el-icon>
               <span 
-                v-hasPerm="['monitor:resource:preview']"
+                v-hasPerm="['module_monitor:resource:preview']"
                 :class="{ 'file-name-clickable': true }"
                 @click="handleFileNameClick(row)"
               >
@@ -141,7 +141,7 @@
           <template #default="{ row }">
             <el-button
               v-if="!row.is_dir"
-              v-hasPerm="['monitor:resource:download']"
+              v-hasPerm="['module_monitor:resource:download']"
               type="success"
               size="small"
               link
@@ -150,10 +150,10 @@
             >
               下载
             </el-button>
-            <el-button v-hasPerm="['monitor:resource:rename']" type="primary" size="small" link icon="edit" @click="handleRename(row)">
+            <el-button v-hasPerm="['module_monitor:resource:rename']" type="primary" size="small" link icon="edit" @click="handleRename(row)">
               重命名
             </el-button>
-            <el-button v-hasPerm="['monitor:resource:delete']" type="danger" size="small" link icon="delete" @click="handleDelete(row)">
+            <el-button v-hasPerm="['module_monitor:resource:delete']" type="danger" size="small" link icon="delete" @click="handleDelete(row)">
               删除
             </el-button>
           </template>
@@ -221,7 +221,7 @@
       </el-upload>
       <template #footer>
         <el-button @click="uploadDialogVisible = false">取消</el-button>
-        <el-button v-hasPerm="['monitor:resource:upload']" type="primary" :loading="uploading" @click="handleUploadConfirm">
+        <el-button v-hasPerm="['module_monitor:resource:upload']" type="primary" :loading="uploading" @click="handleUploadConfirm">
           确定上传
         </el-button>
       </template>
@@ -244,7 +244,7 @@
       </el-form>
       <template #footer>
         <el-button @click="createDirDialogVisible = false">取消</el-button>
-        <el-button v-hasPerm="['monitor:resource:create_dir']" type="primary" @click="handleCreateDirConfirm">确定</el-button>
+        <el-button v-hasPerm="['module_monitor:resource:create_dir']" type="primary" @click="handleCreateDirConfirm">确定</el-button>
       </template>
     </el-dialog>
 
@@ -265,7 +265,7 @@
       </el-form>
       <template #footer>
         <el-button @click="renameDialogVisible = false">取消</el-button>
-        <el-button v-hasPerm="['monitor:resource:rename']" type="primary" @click="handleRenameConfirm">确定</el-button>
+        <el-button v-hasPerm="['module_monitor:resource:rename']" type="primary" @click="handleRenameConfirm">确定</el-button>
       </template>
     </el-dialog>
   </div>

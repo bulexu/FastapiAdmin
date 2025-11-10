@@ -25,7 +25,7 @@ DemoRouter = APIRouter(route_class=OperationLogRoute, prefix="/demo", tags=["示
 @DemoRouter.get("/detail/{id}", summary="获取示例详情", description="获取示例详情")
 async def get_obj_detail_controller(
     id: int = Path(..., description="示例ID"),
-    auth: AuthSchema = Depends(AuthPermission(["generator:demo:query"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_generator:demo:query"]))
 ) -> JSONResponse:
     """
     获取示例详情
@@ -45,7 +45,7 @@ async def get_obj_detail_controller(
 async def get_obj_list_controller(
     page: PaginationQueryParam = Depends(),
     search: DemoQueryParam = Depends(),
-    auth: AuthSchema = Depends(AuthPermission(["generator:demo:query"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_generator:demo:query"]))
 ) -> JSONResponse:
     """
     查询示例列表
@@ -72,7 +72,7 @@ async def get_obj_list_controller(
 @DemoRouter.post("/create", summary="创建示例", description="创建示例")
 async def create_obj_controller(
     data: DemoCreateSchema,
-    auth: AuthSchema = Depends(AuthPermission(["generator:demo:create"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_generator:demo:create"]))
 ) -> JSONResponse:
     """
     创建示例
@@ -92,7 +92,7 @@ async def create_obj_controller(
 async def update_obj_controller(
     data: DemoUpdateSchema,
     id: int = Path(..., description="示例ID"),
-    auth: AuthSchema = Depends(AuthPermission(["generator:demo:update"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_generator:demo:update"]))
 ) -> JSONResponse:
     """
     修改示例
@@ -112,7 +112,7 @@ async def update_obj_controller(
 @DemoRouter.delete("/delete", summary="删除示例", description="删除示例")
 async def delete_obj_controller(
     ids: list[int] = Body(..., description="ID列表"),
-    auth: AuthSchema = Depends(AuthPermission(["generator:demo:delete"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_generator:demo:delete"]))
 ) -> JSONResponse:
     """
     删除示例
@@ -131,7 +131,7 @@ async def delete_obj_controller(
 @DemoRouter.patch("/available/setting", summary="批量修改示例状态", description="批量修改示例状态")
 async def batch_set_available_obj_controller(
     data: BatchSetAvailable,
-    auth: AuthSchema = Depends(AuthPermission(["generator:demo:patch"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_generator:demo:patch"]))
 ) -> JSONResponse:
     """
     批量修改示例状态
@@ -150,7 +150,7 @@ async def batch_set_available_obj_controller(
 @DemoRouter.post('/export', summary="导出示例", description="导出示例")
 async def export_obj_list_controller(
     search: DemoQueryParam = Depends(),
-    auth: AuthSchema = Depends(AuthPermission(["generator:demo:export"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_generator:demo:export"]))
 ) -> StreamingResponse:
     """
     导出示例
@@ -177,7 +177,7 @@ async def export_obj_list_controller(
 @DemoRouter.post('/import', summary="导入示例", description="导入示例")
 async def import_obj_list_controller(
     file: UploadFile,
-    auth: AuthSchema = Depends(AuthPermission(["generator:demo:import"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_generator:demo:import"]))
 ) -> JSONResponse:
     """
     导入示例
@@ -193,7 +193,7 @@ async def import_obj_list_controller(
     logger.info(f"导入示例成功: {batch_import_result}")
     return SuccessResponse(data=batch_import_result, msg="导入示例成功")
 
-@DemoRouter.post('/download/template', summary="获取示例导入模板", description="获取示例导入模板", dependencies=[Depends(AuthPermission(["generator:demo:download"]))])
+@DemoRouter.post('/download/template', summary="获取示例导入模板", description="获取示例导入模板", dependencies=[Depends(AuthPermission(["module_generator:demo:download"]))])
 async def export_obj_template_controller() -> StreamingResponse:
     """
     获取示例导入模板

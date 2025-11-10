@@ -27,7 +27,7 @@ PositionRouter = APIRouter(route_class=OperationLogRoute, prefix="/position", ta
 async def get_obj_list_controller(
     page: PaginationQueryParam = Depends(),
     search: PositionQueryParam = Depends(),
-    auth: AuthSchema = Depends(AuthPermission(["system:position:query"])),
+    auth: AuthSchema = Depends(AuthPermission(["module_system:position:query"])),
 ) -> JSONResponse:
     """
     查询岗位列表
@@ -52,7 +52,7 @@ async def get_obj_list_controller(
 @PositionRouter.get("/detail/{id}", summary="查询岗位详情", description="查询岗位详情")
 async def get_obj_detail_controller(
     id: int = Path(..., description="岗位ID"),
-    auth: AuthSchema = Depends(AuthPermission(["system:position:query"])),
+    auth: AuthSchema = Depends(AuthPermission(["module_system:position:query"])),
 ) -> JSONResponse:
     """
     查询岗位详情
@@ -72,7 +72,7 @@ async def get_obj_detail_controller(
 @PositionRouter.post("/create", summary="创建岗位", description="创建岗位")
 async def create_obj_controller(
     data: PositionCreateSchema,
-    auth: AuthSchema = Depends(AuthPermission(["system:position:create"])),
+    auth: AuthSchema = Depends(AuthPermission(["module_system:position:create"])),
 ) -> JSONResponse:
     """
     创建岗位
@@ -93,7 +93,7 @@ async def create_obj_controller(
 async def update_obj_controller(
     data: PositionUpdateSchema,
     id: int = Path(..., description="岗位ID"),
-    auth: AuthSchema = Depends(AuthPermission(["system:position:update"])),
+    auth: AuthSchema = Depends(AuthPermission(["module_system:position:update"])),
 ) -> JSONResponse:
     """
     修改岗位
@@ -114,7 +114,7 @@ async def update_obj_controller(
 @PositionRouter.delete("/delete", summary="删除岗位", description="删除岗位")
 async def delete_obj_controller(
     ids: list[int] = Body(..., description="ID列表"),
-    auth: AuthSchema = Depends(AuthPermission(["system:position:delete"])),
+    auth: AuthSchema = Depends(AuthPermission(["module_system:position:delete"])),
 ) -> JSONResponse:
     """
     删除岗位
@@ -134,7 +134,7 @@ async def delete_obj_controller(
 @PositionRouter.patch("/available/setting", summary="批量修改岗位状态", description="批量修改岗位状态")
 async def batch_set_available_obj_controller(
     data: BatchSetAvailable,
-    auth: AuthSchema = Depends(AuthPermission(["system:position:patch"])),
+    auth: AuthSchema = Depends(AuthPermission(["module_system:position:patch"])),
 ) -> JSONResponse:
     """
     批量修改岗位状态
@@ -154,7 +154,7 @@ async def batch_set_available_obj_controller(
 @PositionRouter.post('/export', summary="导出岗位", description="导出岗位")
 async def export_obj_list_controller(
     search: PositionQueryParam = Depends(),
-    auth: AuthSchema = Depends(AuthPermission(["system:position:export"])),
+    auth: AuthSchema = Depends(AuthPermission(["module_system:position:export"])),
 ) -> StreamingResponse:
     """
     导出岗位

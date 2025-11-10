@@ -24,7 +24,7 @@ MyAppRouter = APIRouter(route_class=OperationLogRoute, prefix="/myapp", tags=["�
 @MyAppRouter.get("/detail/{id}", summary="获取应用详情", description="获取应用详情")
 async def get_obj_detail_controller(
     id: int = Path(..., description="应用ID"),
-    auth: AuthSchema = Depends(AuthPermission(["app:myapp:query"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_application:myapp:query"]))
 ) -> JSONResponse:
     """
     获取应用详情
@@ -44,7 +44,7 @@ async def get_obj_detail_controller(
 async def get_obj_list_controller(
     page: PaginationQueryParam = Depends(),
     search: ApplicationQueryParam = Depends(),
-    auth: AuthSchema = Depends(AuthPermission(["app:myapp:query"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_application:myapp:query"]))
 ) -> JSONResponse:
     """
     查询应用列表
@@ -65,7 +65,7 @@ async def get_obj_list_controller(
 @MyAppRouter.post("/create", summary="创建应用", description="创建应用")
 async def create_obj_controller(
     data: ApplicationCreateSchema,
-    auth: AuthSchema = Depends(AuthPermission(["app:myapp:create"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_application:myapp:create"]))
 ) -> JSONResponse:
     """
     创建应用
@@ -85,7 +85,7 @@ async def create_obj_controller(
 async def update_obj_controller(
     data: ApplicationUpdateSchema,
     id: int = Path(..., description="应用ID"),
-    auth: AuthSchema = Depends(AuthPermission(["app:myapp:update"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_application:myapp:update"]))
 ) -> JSONResponse:
     """
     修改应用
@@ -105,7 +105,7 @@ async def update_obj_controller(
 @MyAppRouter.delete("/delete", summary="删除应用", description="删除应用")
 async def delete_obj_controller(
     ids: list[int] = Body(..., description="ID列表"),
-    auth: AuthSchema = Depends(AuthPermission(["app:myapp:delete"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_application:myapp:delete"]))
 ) -> JSONResponse:
     """
     删除应用
@@ -124,7 +124,7 @@ async def delete_obj_controller(
 @MyAppRouter.patch("/available/setting", summary="批量修改应用状态", description="批量修改应用状态")
 async def batch_set_available_obj_controller(
     data: BatchSetAvailable,
-    auth: AuthSchema = Depends(AuthPermission(["app:myapp:patch"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_application:myapp:patch"]))
 ) -> JSONResponse:
     """
     批量修改应用状态

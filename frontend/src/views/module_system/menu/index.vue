@@ -22,8 +22,8 @@
         </el-form-item>
         <!-- 查询、重置、展开/收起按钮 -->
         <el-form-item class="search-buttons">
-          <el-button v-hasPerm="['system:menu:query']" type="primary" icon="search" native-type="submit">查询</el-button>
-          <el-button v-hasPerm="['system:menu:query']" icon="refresh" @click="handleResetQuery">重置</el-button>
+          <el-button v-hasPerm="['module_system:menu:query']" type="primary" icon="search" native-type="submit">查询</el-button>
+          <el-button v-hasPerm="['module_system:menu:query']" icon="refresh" @click="handleResetQuery">重置</el-button>
           <!-- 展开/收起 -->
           <template v-if="isExpandable">
             <el-link class="ml-3" type="primary" underline="never" @click="isExpand = !isExpand">
@@ -60,13 +60,13 @@
         <div class="data-table__toolbar--left">
           <el-row :gutter="10">
             <el-col :span="1.5">
-              <el-button v-hasPerm="['system:menu:create']" type="success" icon="plus" @click="handleOpenDialog('create')">新增</el-button>
+              <el-button v-hasPerm="['module_system:menu:create']" type="success" icon="plus" @click="handleOpenDialog('create')">新增</el-button>
             </el-col>
             <el-col :span="1.5">
-              <el-button v-hasPerm="['system:menu:delete']" type="danger" icon="delete" :disabled="selectIds.length === 0" @click="handleDelete(selectIds)">批量删除</el-button>
+              <el-button v-hasPerm="['module_system:menu:delete']" type="danger" icon="delete" :disabled="selectIds.length === 0" @click="handleDelete(selectIds)">批量删除</el-button>
             </el-col>
             <el-col :span="1.5">
-              <el-dropdown v-hasPerm="['system:menu:patch']" trigger="click">
+              <el-dropdown v-hasPerm="['module_system:menu:patch']" trigger="click">
                 <el-button type="default" :disabled="selectIds.length === 0" icon="ArrowDown">更多</el-button>
                 <template #dropdown>
                   <el-dropdown-menu>
@@ -82,7 +82,7 @@
           <el-row :gutter="10">
             <el-col :span="1.5">
               <el-tooltip content="刷新">
-                <el-button v-hasPerm="['system:menu:refresh']" type="primary" icon="refresh" circle @click="handleRefresh"/>
+                <el-button v-hasPerm="['module_system:menu:refresh']" type="primary" icon="refresh" circle @click="handleRefresh"/>
               </el-tooltip>
             </el-col>
           </el-row>
@@ -166,10 +166,10 @@
 
         <el-table-column fixed="right" label="操作" align="center" min-width="260">
           <template #default="scope">
-            <el-button v-if="scope.row.type == MenuTypeEnum.CATALOG || scope.row.type == MenuTypeEnum.MENU" v-hasPerm="['system:menu:create']" type="success" link size="small" icon="plus" @click.stop="handleOpenDialog('create', undefined, scope.row.id)">新增</el-button>
-            <el-button v-hasPerm="['system:menu:detail']" type="info" size="small" link icon="document" @click="handleOpenDialog('detail', scope.row.id)">详情</el-button>
-            <el-button v-hasPerm="['system:menu:update']" type="primary" size="small" link icon="edit" @click="handleOpenDialog('update', scope.row.id)">编辑</el-button>
-            <el-button v-hasPerm="['system:menu:delete']" type="danger" size="small" link icon="delete" @click="handleDelete([scope.row.id])">删除</el-button>
+            <el-button v-if="scope.row.type == MenuTypeEnum.CATALOG || scope.row.type == MenuTypeEnum.MENU" v-hasPerm="['module_system:menu:create']" type="success" link size="small" icon="plus" @click.stop="handleOpenDialog('create', undefined, scope.row.id)">新增</el-button>
+            <el-button v-hasPerm="['module_system:menu:detail']" type="info" size="small" link icon="document" @click="handleOpenDialog('detail', scope.row.id)">详情</el-button>
+            <el-button v-hasPerm="['module_system:menu:update']" type="primary" size="small" link icon="edit" @click="handleOpenDialog('update', scope.row.id)">编辑</el-button>
+            <el-button v-hasPerm="['module_system:menu:delete']" type="danger" size="small" link icon="delete" @click="handleDelete([scope.row.id])">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -463,8 +463,8 @@
       <template #footer>
         <div class="dialog-footer">
           <!-- 详情弹窗不需要确定按钮的提交逻辑 -->
-          <el-button v-if="dialogVisible.type !== 'detail'" v-hasPerm="['system:menu:submit']" type="primary" @click="handleSubmit">确定</el-button>
-          <el-button v-else v-hasPerm="['system:menu:detail']" type="primary" @click="handleCloseDialog">确定</el-button>
+          <el-button v-if="dialogVisible.type !== 'detail'" v-hasPerm="['module_system:menu:submit']" type="primary" @click="handleSubmit">确定</el-button>
+          <el-button v-else v-hasPerm="['module_system:menu:detail']" type="primary" @click="handleCloseDialog">确定</el-button>
           <el-button @click="handleCloseDialog">取消</el-button>
         </div>
       </template>

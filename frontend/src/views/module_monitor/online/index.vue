@@ -15,8 +15,8 @@
         </el-form-item>
         <!-- 查询、重置、展开/收起按钮 -->
         <el-form-item class="search-buttons">
-          <el-button v-hasPerm="['monitor:online:query']" type="primary" icon="search" native-type="submit">查询</el-button>
-          <el-button v-hasPerm="['monitor:online:query']" icon="refresh" @click="handleResetQuery">重置</el-button>
+          <el-button v-hasPerm="['module_monitor:online:query']" type="primary" icon="search" native-type="submit">查询</el-button>
+          <el-button v-hasPerm="['module_monitor:online:query']" icon="refresh" @click="handleResetQuery">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -39,7 +39,7 @@
         <div class="data-table__toolbar--left">
           <el-row :gutter="10">
             <el-col :span="1.5">
-              <el-button v-hasPerm="['monitor:online:force_logout']" type="danger" icon="delete" @click="handleClear">强退所有</el-button>
+              <el-button v-hasPerm="['module_monitor:online:force_logout']" type="danger" icon="delete" @click="handleClear">强退所有</el-button>
             </el-col>
           </el-row>
         </div>
@@ -47,7 +47,7 @@
           <el-row :gutter="10">
             <el-col :span="1.5">
               <el-tooltip content="刷新">
-                <el-button v-hasPerm="['monitor:online:refresh']" type="primary" icon="refresh" circle @click="handleRefresh"/>
+                <el-button v-hasPerm="['module_monitor:online:refresh']" type="primary" icon="refresh" circle @click="handleRefresh"/>
               </el-tooltip>
             </el-col>
             <el-col :span="1.5">
@@ -89,7 +89,7 @@
         <el-table-column v-if="tableColumns.find(col => col.prop === 'login_time')?.show" key="login_time" label="登录时间" prop="login_time" min-width="180" />
         <el-table-column v-if="tableColumns.find(col => col.prop === 'operation')?.show" key="operation" fixed="right" label="操作" min-width="100">
           <template #default="scope">
-            <el-button v-hasPerm="['monitor:online:force_logout']" type="danger" size="small" link icon="delete" @click="handleSubmit(scope.row.session_id)">强退
+            <el-button v-hasPerm="['module_monitor:online:force_logout']" type="danger" size="small" link icon="delete" @click="handleSubmit(scope.row.session_id)">强退
             </el-button>
           </template>
         </el-table-column>

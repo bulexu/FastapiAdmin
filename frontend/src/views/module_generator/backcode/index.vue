@@ -10,8 +10,8 @@
           <el-input v-model="queryFormData.table_comment" placeholder="请输入表描述" clearable style="width: 200px" @keyup.enter="handleQuery"/>
         </el-form-item>
         <el-form-item class="search-buttons">
-          <el-button v-hasPerm="['generator:gencode:query']" type="primary" icon="search" native-type="submit">查询</el-button>
-          <el-button v-hasPerm="['generator:gencode:query']" icon="refresh" @click="handleRefresh">重置</el-button>
+          <el-button v-hasPerm="['module_generator:gencode:query']" type="primary" icon="search" native-type="submit">查询</el-button>
+          <el-button v-hasPerm="['module_generator:gencode:query']" icon="refresh" @click="handleRefresh">重置</el-button>
         </el-form-item>
       </el-form>
     </div>
@@ -34,16 +34,16 @@
         <div class="data-table__toolbar--left">
           <el-row :gutter="10">
             <el-col :span="1.5">
-              <el-button v-hasPerm="['generator:gencode:create']" type="primary" plain icon="Plus" @click="createTableVisible = true;">创建</el-button>
+              <el-button v-hasPerm="['module_generator:gencode:create']" type="primary" plain icon="Plus" @click="createTableVisible = true;">创建</el-button>
             </el-col>
             <el-col :span="1.5">
-              <el-button v-hasPerm="['generator:gencode:import']" type="success" plain icon="Upload" @click="handleImportClick">导入</el-button>
+              <el-button v-hasPerm="['module_generator:gencode:import']" type="success" plain icon="Upload" @click="handleImportClick">导入</el-button>
             </el-col>
             <el-col :span="1.5">
-              <el-button v-hasPerm="['generator:gencode:delete']" type="danger" plain icon="Delete" :disabled="ids.length === 0" @click="handleDelete()">批量删除</el-button>
+              <el-button v-hasPerm="['module_generator:gencode:delete']" type="danger" plain icon="Delete" :disabled="ids.length === 0" @click="handleDelete()">批量删除</el-button>
             </el-col>
             <el-col :span="1.5">
-              <el-button v-hasPerm="['generator:gencode:code']" type="warning" plain icon="Download" :disabled="!canGenerate" @click="handleGenTable('0')">批量生成</el-button>
+              <el-button v-hasPerm="['module_generator:gencode:code']" type="warning" plain icon="Download" :disabled="!canGenerate" @click="handleGenTable('0')">批量生成</el-button>
             </el-col>
           </el-row>
         </div>
@@ -51,7 +51,7 @@
           <el-row :gutter="10">
             <el-col :span="1.5">
               <el-tooltip content="刷新">
-                <el-button v-hasPerm="['generator:gencode:refresh']" type="primary" icon="refresh" circle @click="handleRefresh"/>
+                <el-button v-hasPerm="['module_generator:gencode:refresh']" type="primary" icon="refresh" circle @click="handleRefresh"/>
               </el-tooltip>
             </el-col>
             <el-col :span="1.5">
@@ -97,9 +97,9 @@
         <el-table-column v-if="tableColumns.find(col => col.prop === 'updated_at')?.show" label="更新时间" prop="updated_at" />
         <el-table-column v-if="tableColumns.find(col => col.prop === 'operation')?.show" label="操作" align="center" min-width="120" class-name="small-padding fixed-width">
           <template #default="scope">
-            <el-button v-hasPerm="['generator:gencode:update']" link type="primary" :icon="MagicStick" @click="handlePreviewTable(scope.row)">代码生成</el-button>
-            <el-button v-hasPerm="['generator:gencode:delete']" link type="danger" icon="Delete" @click="handleDelete(scope.row)">删除</el-button>
-            <el-button v-hasPerm="['generator:gencode:sync']" link type="success" icon="Refresh" @click="handleSynchDb(scope.row)">同步</el-button>
+            <el-button v-hasPerm="['module_generator:gencode:update']" link type="primary" :icon="MagicStick" @click="handlePreviewTable(scope.row)">代码生成</el-button>
+            <el-button v-hasPerm="['module_generator:gencode:delete']" link type="danger" icon="Delete" @click="handleDelete(scope.row)">删除</el-button>
+            <el-button v-hasPerm="['module_generator:gencode:sync']" link type="success" icon="Refresh" @click="handleSynchDb(scope.row)">同步</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -297,6 +297,25 @@
               <el-form-item label="备注" prop="description">
                 <el-input v-model="info.description" type="textarea" :rows="3"></el-input>
               </el-form-item>
+            </el-col>
+
+            <el-divider>生成文件路径</el-divider>
+
+            <el-col :span="24">
+              <el-descriptions
+                :column="2"
+                border
+              >
+              <el-descriptions-item :label="info.function_name + '功能，后端控制层'">backend/app/api/v1/{{ info.module_name }}/{{ info.business_name }}/controller.py</el-descriptions-item>
+              <el-descriptions-item :label="info.function_name + '功能，后端业务层'">backend/app/api/v1/{{ info.module_name }}/{{ info.business_name }}/service.py</el-descriptions-item>
+              <el-descriptions-item :label="info.function_name + '功能，后端数据层'">backend/app/api/v1/{{ info.module_name }}/{{ info.business_name }}/crud.py</el-descriptions-item>
+              <el-descriptions-item :label="info.function_name + '功能，后端实体层'">backend/app/api/v1/{{ info.module_name }}/{{ info.business_name }}/model.py</el-descriptions-item>
+              <el-descriptions-item :label="info.function_name + '功能，后端访问层'">backend/app/api/v1/{{ info.module_name }}/{{ info.business_name }}/param.py</el-descriptions-item>
+              <el-descriptions-item :label="info.function_name + '功能，后端序列化层'">backend/app/api/v1/{{ info.module_name }}/{{ info.business_name }}/schema.py</el-descriptions-item>
+              <el-descriptions-item :label="info.function_name + '功能，数据库业务菜单'">backend/sql/menu/{{ info.module_name }}.{{ info.business_name }}.sql</el-descriptions-item>
+              <el-descriptions-item :label="info.function_name + '功能，前端接口层'">frontend/src/api/{{ info.module_name }}/{{ info.business_name }}.ts</el-descriptions-item>
+              <el-descriptions-item :label="info.function_name + '功能，前端视图层'">frontend/src/views/{{ info.module_name }}/{{ info.business_name }}/index.vue</el-descriptions-item>
+              </el-descriptions>
             </el-col>
           </el-row>
         </el-form>
@@ -546,7 +565,7 @@
         <!-- 公共按钮：关闭 -->
         <el-button :icon="Close" @click="close">关闭</el-button>
         <el-button v-if="activeStep != 0" type="success" :icon="Back" @click="prevStep">上一步</el-button>
-        <el-button v-if="activeStep != 2" v-hasPerm="['generator:gencode:update']" type="warning" :icon="Edit" :loading="loading" @click="submitForm">保存配置</el-button>
+        <el-button v-if="activeStep != 2" v-hasPerm="['module_generator:gencode:update']" type="warning" :icon="Edit" :loading="loading" @click="submitForm">保存配置</el-button>
         <el-button v-if="activeStep != 2" type="primary" @click="nextStep">下一步<el-icon class="el-icon--right"><Right /></el-icon></el-button>
         <el-button v-if="activeStep === 2" type="warning" :icon="Download" :loading="loading" @click="handleGenTable('0', info)">下载代码</el-button>
         <el-button v-if="activeStep === 2" type="primary" :icon="FolderOpened" :loading="loading" @click="handleGenTable('1', info)">写入本地</el-button>

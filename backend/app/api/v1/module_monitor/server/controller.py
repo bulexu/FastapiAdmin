@@ -17,7 +17,7 @@ ServerRouter = APIRouter(route_class=OperationLogRoute, prefix="/server", tags=[
     '/info',
     summary="查询服务器监控信息",
     description="查询服务器监控信息",
-    dependencies=[Depends(AuthPermission(["monitor:server:query"]))]
+    dependencies=[Depends(AuthPermission(["module_monitor:server:query"]))]
 )
 async def get_monitor_server_info_controller() -> JSONResponse:
     """

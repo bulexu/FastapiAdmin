@@ -5,7 +5,7 @@ import os
 from datetime import datetime
 from jinja2.environment import Environment
 from jinja2 import Environment, FileSystemLoader, select_autoescape, Template
-from typing import Dict, List, Any, Set
+from typing import List, Any, Set
 
 from app.common.constant import GenConstant
 from app.config.setting import settings
@@ -179,7 +179,7 @@ class Jinja2TemplateUtil:
             'model.py.j2': f'{cls.BACKEND_PROJECT_PATH}/app/api/v1/{module_name}/{business_name}/model.py',
             'param.py.j2': f'{cls.BACKEND_PROJECT_PATH}/app/api/v1/{module_name}/{business_name}/param.py',
             'schema.py.j2': f'{cls.BACKEND_PROJECT_PATH}/app/api/v1/{module_name}/{business_name}/schema.py',
-            'sql.sql.j2': f'{cls.BACKEND_PROJECT_PATH}/sql/{module_name}/{business_name}_menu.sql',
+            'sql.sql.j2': f'{cls.BACKEND_PROJECT_PATH}/sql/menu/{module_name}/{business_name}.sql',
             'api.ts.j2': f'{cls.FRONTEND_PROJECT_PATH}/src/api/{module_name}/{business_name}.ts',
             'index.vue.j2': f'{cls.FRONTEND_PROJECT_PATH}/src/views/{module_name}/{business_name}/index.vue'
         }

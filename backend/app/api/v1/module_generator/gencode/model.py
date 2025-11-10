@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from typing import Optional, List, Dict, Any
-from sqlalchemy import String, Integer, ForeignKey, Boolean, JSON, Text
+from typing import Optional, List
+from sqlalchemy import String, Integer, ForeignKey, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 from sqlalchemy.sql import expression
 

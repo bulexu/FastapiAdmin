@@ -28,7 +28,7 @@ RoleRouter = APIRouter(route_class=OperationLogRoute, prefix="/role", tags=["角
 async def get_obj_list_controller(
     page: PaginationQueryParam = Depends(),
     search: RoleQueryParam = Depends(),
-    auth: AuthSchema = Depends(AuthPermission(["system:role:query"])),
+    auth: AuthSchema = Depends(AuthPermission(["module_system:role:query"])),
 ) -> JSONResponse:
     """
     查询角色
@@ -53,7 +53,7 @@ async def get_obj_list_controller(
 @RoleRouter.get("/detail/{id}", summary="查询角色详情", description="查询角色详情")
 async def get_obj_detail_controller(
     id: int = Path(..., description="角色ID"),
-    auth: AuthSchema = Depends(AuthPermission(["system:role:query"])),
+    auth: AuthSchema = Depends(AuthPermission(["module_system:role:query"])),
 ) -> JSONResponse:
     """
     查询角色详情
@@ -73,7 +73,7 @@ async def get_obj_detail_controller(
 @RoleRouter.post("/create", summary="创建角色", description="创建角色")
 async def create_obj_controller(
     data: RoleCreateSchema,
-    auth: AuthSchema = Depends(AuthPermission(["system:role:create"])),
+    auth: AuthSchema = Depends(AuthPermission(["module_system:role:create"])),
 ) -> JSONResponse:
     """
     创建角色
@@ -94,7 +94,7 @@ async def create_obj_controller(
 async def update_obj_controller(
     data: RoleUpdateSchema,
     id: int = Path(..., description="角色ID"),
-    auth: AuthSchema = Depends(AuthPermission(["system:role:update"])),
+    auth: AuthSchema = Depends(AuthPermission(["module_system:role:update"])),
 ) -> JSONResponse:
     """
     修改角色
@@ -115,7 +115,7 @@ async def update_obj_controller(
 @RoleRouter.delete("/delete", summary="删除角色", description="删除角色")
 async def delete_obj_controller(
     ids: list[int] = Body(..., description="ID列表"),
-    auth: AuthSchema = Depends(AuthPermission(["system:role:delete"])),
+    auth: AuthSchema = Depends(AuthPermission(["module_system:role:delete"])),
 ) -> JSONResponse:
     """
     删除角色
@@ -135,7 +135,7 @@ async def delete_obj_controller(
 @RoleRouter.patch("/available/setting", summary="批量修改角色状态", description="批量修改角色状态")
 async def batch_set_available_obj_controller(
     data: BatchSetAvailable,
-    auth: AuthSchema = Depends(AuthPermission(["system:role:patch"])),
+    auth: AuthSchema = Depends(AuthPermission(["module_system:role:patch"])),
 ) -> JSONResponse:
     """
     批量修改角色状态
@@ -155,7 +155,7 @@ async def batch_set_available_obj_controller(
 @RoleRouter.patch("/permission/setting", summary="角色授权", description="角色授权")
 async def set_role_permission_controller(
     data: RolePermissionSettingSchema,
-    auth: AuthSchema = Depends(AuthPermission(["system:role:permission"])),
+    auth: AuthSchema = Depends(AuthPermission(["module_system:role:permission"])),
 ) -> JSONResponse:
     """
     角色授权
@@ -175,7 +175,7 @@ async def set_role_permission_controller(
 @RoleRouter.post('/export', summary="导出角色", description="导出角色")
 async def export_obj_list_controller(
     search: RoleQueryParam = Depends(),
-    auth: AuthSchema = Depends(AuthPermission(["system:role:export"])),
+    auth: AuthSchema = Depends(AuthPermission(["module_system:role:export"])),
 ) -> StreamingResponse:
     """
     导出角色
