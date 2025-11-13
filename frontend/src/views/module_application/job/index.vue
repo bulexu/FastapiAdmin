@@ -165,12 +165,12 @@
             {{ (dictStore.getDictLabel('sys_job_function',scope.row.func) as any)?.dict_label || scope.row.func }}
           </template>
         </el-table-column>
-        <el-table-column label="触发器" prop="trigger" min-width="100">
+        <el-table-column label="触发器" prop="trigger" min-width="100" show-overflow-tooltip>
           <template #default="scope">
             {{ (dictStore.getDictLabel('sys_job_trigger',scope.row.trigger) as any)?.dict_label }}
           </template>
         </el-table-column>
-        <el-table-column label="存储器" prop="jobstore" min-width="120">
+        <el-table-column label="存储器" prop="jobstore" min-width="120" show-overflow-tooltip>
           <template #default="scope">
             {{ (dictStore.getDictLabel('sys_job_store',scope.row.jobstore) as any)?.dict_label }}
           </template>

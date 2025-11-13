@@ -138,7 +138,7 @@
             {{ (queryFormData.page_no - 1) * queryFormData.page_size + scope.$index + 1 }}
           </template>
         </el-table-column>
-        <el-table-column v-if="tableColumns.find(col => col.prop === 'notice_title')?.show" label="通知标题" prop="notice_title" min-width="140" />
+        <el-table-column v-if="tableColumns.find(col => col.prop === 'notice_title')?.show" label="通知标题" prop="notice_title" min-width="140" show-overflow-tooltip/>
         <el-table-column v-if="tableColumns.find(col => col.prop === 'status')?.show" label="状态" prop="status" min-width="80">
           <template #default="scope">
             <el-tag :type="scope.row.status === true ? 'success' : 'danger'">
@@ -154,7 +154,7 @@
           </template>
         </el-table-column>
         <el-table-column v-if="tableColumns.find(col => col.prop === 'notice_content')?.show" label="内容" prop="notice_content" min-width="200" show-overflow-tooltip />
-        <el-table-column v-if="tableColumns.find(col => col.prop === 'description')?.show" label="描述" prop="description" min-width="140" />
+        <el-table-column v-if="tableColumns.find(col => col.prop === 'description')?.show" label="描述" prop="description" min-width="140" show-overflow-tooltip/>
         <el-table-column v-if="tableColumns.find(col => col.prop === 'created_at')?.show" label="创建时间" prop="created_at" min-width="180" sortable />
         <el-table-column v-if="tableColumns.find(col => col.prop === 'updated_at')?.show" label="更新时间" prop="updated_at" min-width="180" sortable />
         <el-table-column v-if="tableColumns.find(col => col.prop === 'creator')?.show" key="creator" label="创建人" min-width="100">
