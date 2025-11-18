@@ -9,24 +9,22 @@ from uvicorn.config import LifespanType
 from urllib.parse import quote_plus
 
 from app.common.enums import EnvironmentEnum
+from app.config.path_conf import BASE_DIR, ENV_DIR
 
 
 class Settings(BaseSettings):
     """系统配置类"""
     model_config = SettingsConfigDict(
-        env_file='.env',
+        env_file=ENV_DIR / f".env.{os.getenv('ENVIRONMENT')}",
         env_file_encoding="utf-8",
         extra='ignore',
         case_sensitive=True, # 区分大小写
     )
 
+    # ================================================= #
+    # ******************* 项目环境 ****************** #
+    # ================================================= #
     ENVIRONMENT: EnvironmentEnum = EnvironmentEnum.DEV
-    
-    # ================================================= #
-    # ******************* 项目配置 ****************** #
-    # ================================================= #
-    # 项目根目录
-    BASE_DIR: Path = Path(__file__).parent.parent.parent
 
     # ================================================= #
     # ******************* 服务器配置 ****************** #
@@ -53,12 +51,6 @@ class Settings(BaseSettings):
     DOCS_URL: str = "/docs"      # Swagger UI路径
     REDOC_URL: str = "/redoc"    # ReDoc路径
     ROOT_PATH: str = "/api/v1"   # API路由前缀
-
-    # ================================================= #
-    # ******************* alembic配置 ****************** #
-    # ================================================= #
-    # alembic 迁移文件存放路径
-    ALEMBIC_VERSION_DIR: Path = BASE_DIR / 'app' / 'alembic' / 'versions'
 
     # ================================================= #
     # ******************** 跨域配置 ******************** #
@@ -131,14 +123,6 @@ class Settings(BaseSettings):
     # ================================================= #
     # ********************* 日志配置 ******************* #
     # ================================================= #
-    LOGGER_DIR: Path = BASE_DIR.joinpath('logs')
-    LOGGER_FORMAT: str = '%(asctime)s - %(levelname)8s - [%(name)s:%(filename)s:%(funcName)s:%(lineno)d] %(message)s' # 日志格式
-    LOGGER_LEVEL: str = 'INFO'                                                                      # 日志级别 (DEBUG, INFO, WARNING, ERROR, CRITICAL)
-    BACKUPCOUNT: int = 10                                                                           # 日志文件备份数
-    WHEN: str = 'MIDNIGHT'                                                                          # 日志分割时间 (MIDNIGHT, H, D, W0-W6)
-    INTERVAL: int = 1                                                                               # 日志分割间隔
-    ENCODING: str = 'utf-8'                                                                         # 日志编码
-    LOG_RETENTION_DAYS: int = 30                                                                    # 日志保留天数，超过此天数的日志文件将被自动清理
     OPERATION_LOG_RECORD: bool = True                                                               # 是否记录操作日志
     IGNORE_OPERATION_FUNCTION: List[str] = ["get_captcha_for_login"]                                # 忽略记录的函数
     OPERATION_RECORD_METHOD: List[str] = ["POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"]      # 需要记录的请求方法
@@ -157,12 +141,6 @@ class Settings(BaseSettings):
     STATIC_URL: str = "/static"                           # 访问路由
     STATIC_DIR: str = "static"                            # 目录名
     STATIC_ROOT: Path = BASE_DIR.joinpath(STATIC_DIR)     # 绝对路径
-
-    # ================================================= #
-    # ***************** 模版文件配置 ***************** #
-    # ================================================= #
-    TEMPLATE: str = "templates"
-    TEMPLATE_DIR: Path = BASE_DIR.joinpath(TEMPLATE)
 
     # ================================================= #
     # ***************** 动态文件配置 ***************** #
@@ -190,16 +168,16 @@ class Settings(BaseSettings):
     FAVICON_URL: str = "static/swagger/favicon.png"
 
     # ================================================= #
-    # ******************* 初始化数据 ****************** #
-    # ================================================= #
-    SCRIPT_DIR: Path = BASE_DIR.joinpath('app/scripts/data')
-
-    # ================================================= #
     # ******************* AI大模型配置 ****************** #
     # ================================================= #
     OPENAI_BASE_URL: str = ''
     OPENAI_API_KEY: str = ''
     OPENAI_MODEL: str = ''
+
+    # ================================================= #
+    # ******************* 请求限制配置 ****************** #
+    # ================================================= #
+    REQUEST_LIMITER_REDIS_PREFIX: str = 'fastapiadmin:request_limiter:'
 
     # ================================================= #
     # ******************* 重构配置 ******************* #
@@ -265,9 +243,8 @@ class Settings(BaseSettings):
     @property
     def UVICORN_CONFIG(self) -> Dict[str, Any]:
         """获取Uvicorn配置"""
-        # 确保日志目录存在
-        self.LOGGER_DIR.mkdir(parents=True, exist_ok=True)
-        
+        from app.core.logger import setup_logging
+        setup_logging()
         return {
             "host": self.SERVER_HOST,
             "port": self.SERVER_PORT,
@@ -285,14 +262,6 @@ class Settings(BaseSettings):
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
     """获取配置实例"""
-    env = os.getenv('ENVIRONMENT', EnvironmentEnum.DEV.value)
-    if env not in [e.value for e in EnvironmentEnum]:
-        raise ValueError(f"无效的环境配置: {env}")
-    
-    env_file = Path(__file__).parent.parent.parent / "env" / f".env.{env}"
-    if not env_file.exists():
-        raise FileNotFoundError(f"环境配置文件不存在: {env_file}")
-
-    return Settings(_env_file=env_file)
+    return Settings()
 
 settings = get_settings()

@@ -8,7 +8,7 @@ from app.core.base_params import PaginationQueryParam
 from app.core.dependencies import AuthPermission, get_current_user
 from app.core.router_class import OperationLogRoute
 from app.core.base_schema import BatchSetAvailable
-from app.core.logger import logger
+from app.core.logger import log
 from app.common.request import PaginationService
 from app.utils.common_util import bytes2file_response
 
@@ -39,7 +39,7 @@ async def get_obj_detail_controller(
     - JSONResponse: 包含公告详情的响应模型。
     """
     result_dict = await NoticeService.get_notice_detail_service(id=id, auth=auth)
-    logger.info(f"获取公告详情成功 {id}")
+    log.info(f"获取公告详情成功 {id}")
     return SuccessResponse(data=result_dict, msg="获取公告详情成功")
 
 @NoticeRouter.get("/list", summary="查询公告", description="查询公告")
@@ -61,7 +61,7 @@ async def get_obj_list_controller(
     """
     result_dict_list = await NoticeService.get_notice_list_service(auth=auth, search=search, order_by=page.order_by)
     result_dict = await PaginationService.paginate(data_list= result_dict_list, page_no= page.page_no, page_size = page.page_size)
-    logger.info(f"查询公告列表成功")
+    log.info(f"查询公告列表成功")
     return SuccessResponse(data=result_dict, msg="查询公告列表成功")
 
 @NoticeRouter.post("/create", summary="创建公告", description="创建公告")
@@ -80,7 +80,7 @@ async def create_obj_controller(
     - JSONResponse: 包含创建公告结果的响应模型。
     """
     result_dict = await NoticeService.create_notice_service(auth=auth, data=data)
-    logger.info(f"创建公告成功: {result_dict}")
+    log.info(f"创建公告成功: {result_dict}")
     return SuccessResponse(data=result_dict, msg="创建公告成功")
 
 @NoticeRouter.put("/update/{id}", summary="修改公告", description="修改公告")
@@ -101,7 +101,7 @@ async def update_obj_controller(
     - JSONResponse: 包含修改公告结果的响应模型。
     """
     result_dict = await NoticeService.update_notice_service(auth=auth, id=id, data=data)
-    logger.info(f"修改公告成功: {result_dict}")
+    log.info(f"修改公告成功: {result_dict}")
     return SuccessResponse(data=result_dict, msg="修改公告成功")
 
 @NoticeRouter.delete("/delete", summary="删除公告", description="删除公告")
@@ -120,7 +120,7 @@ async def delete_obj_controller(
     - JSONResponse: 包含删除公告结果的响应模型。
     """
     await NoticeService.delete_notice_service(auth=auth, ids=ids)
-    logger.info(f"删除公告成功: {ids}")
+    log.info(f"删除公告成功: {ids}")
     return SuccessResponse(msg="删除公告成功")
 
 @NoticeRouter.patch("/available/setting", summary="批量修改公告状态", description="批量修改公告状态")
@@ -139,7 +139,7 @@ async def batch_set_available_obj_controller(
     - JSONResponse: 包含批量修改公告状态结果的响应模型。
     """
     await NoticeService.set_notice_available_service(auth=auth, data=data)
-    logger.info(f"批量修改公告状态成功: {data.ids}")
+    log.info(f"批量修改公告状态成功: {data.ids}")
     return SuccessResponse(msg="批量修改公告状态成功")
 
 @NoticeRouter.post('/export', summary="导出公告", description="导出公告")
@@ -159,7 +159,7 @@ async def export_obj_list_controller(
     """
     result_dict_list = await NoticeService.get_notice_list_service(search=search, auth=auth)
     export_result = await NoticeService.export_notice_service(notice_list=result_dict_list)
-    logger.info('导出公告成功')
+    log.info('导出公告成功')
 
     return StreamResponse(
         data=bytes2file_response(export_result),
@@ -185,5 +185,5 @@ async def get_obj_list_available_controller(
     """
     result_dict_list = await NoticeService.get_notice_list_available_service(auth=auth)
     result_dict = await PaginationService.paginate(data_list= result_dict_list)
-    logger.info(f"查询已启用公告列表成功")
+    log.info(f"查询已启用公告列表成功")
     return SuccessResponse(data=result_dict, msg="查询已启用公告列表成功")

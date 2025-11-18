@@ -36,7 +36,7 @@ class PaginationQueryParam:
                         self.order_by.append({field.strip(): direction.strip().lower()})
             except ValueError:
                 # 如果解析失败，使用默认排序
-                self.order_by = [{'id': 'asc'}]
+                self.order_by = [{'updated_at': 'desc'}]
         else:
-            self.order_by = [{'id': 'asc'}]
+            self.order_by = [{'updated_at': 'desc'}]
 

@@ -7,7 +7,7 @@ from app.common.response import SuccessResponse
 from app.core.dependencies import AuthPermission
 from app.core.base_schema import BatchSetAvailable
 from app.core.router_class import OperationLogRoute
-from app.core.logger import logger
+from app.core.logger import log
 
 from ..auth.schema import AuthSchema
 from .param import MenuQueryParam
@@ -36,7 +36,7 @@ async def get_menu_tree_controller(
     """
     order_by = [{"order": "asc"}]
     result_dict_list = await MenuService.get_menu_tree_service(search=search, auth=auth, order_by=order_by)
-    logger.info(f"查询菜单树成功")
+    log.info(f"查询菜单树成功")
     return SuccessResponse(data=result_dict_list, msg="查询菜单树成功")
 
 
@@ -55,7 +55,7 @@ async def get_obj_detail_controller(
     - JSONResponse: 包含菜单详情的 JSON 响应。
     """
     result_dict = await MenuService.get_menu_detail_service(id=id, auth=auth)
-    logger.info(f"查询菜单情成功 {id}")
+    log.info(f"查询菜单情成功 {id}")
     return SuccessResponse(data=result_dict, msg="获取菜单成功")
 
 
@@ -74,7 +74,7 @@ async def create_obj_controller(
     - JSONResponse: 包含创建菜单的 JSON 响应。
     """
     result_dict = await MenuService.create_menu_service(data=data, auth=auth)
-    logger.info(f"创建菜单成功: {result_dict}")
+    log.info(f"创建菜单成功: {result_dict}")
     return SuccessResponse(data=result_dict, msg="创建菜单成功")
 
 
@@ -95,7 +95,7 @@ async def update_obj_controller(
     - JSONResponse: 包含修改菜单的 JSON 响应。
     """
     result_dict = await MenuService.update_menu_service(id=id, data=data, auth=auth)
-    logger.info(f"修改菜单成功: {result_dict}")
+    log.info(f"修改菜单成功: {result_dict}")
     return SuccessResponse(data=result_dict, msg="修改菜单成功")
 
 
@@ -114,7 +114,7 @@ async def delete_obj_controller(
     - JSONResponse: 包含删除菜单的 JSON 响应。
     """
     await MenuService.delete_menu_service(ids=ids, auth=auth)
-    logger.info(f"删除菜单成功: {ids}")
+    log.info(f"删除菜单成功: {ids}")
     return SuccessResponse(msg="删除菜单成功")
 
 
@@ -133,5 +133,5 @@ async def batch_set_available_obj_controller(
     - JSONResponse: 批量修改菜单状态的 JSON 响应。
     """
     await MenuService.set_menu_available_service(data=data, auth=auth)
-    logger.info(f"批量修改菜单状态成功: {data.ids}")
+    log.info(f"批量修改菜单状态成功: {data.ids}")
     return SuccessResponse(msg="批量修改菜单状态成功")

@@ -2,7 +2,7 @@
 
 from starlette.responses import HTMLResponse
 from typing import Any, AsyncGenerator
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, Response
 from fastapi.staticfiles import StaticFiles
 from fastapi.concurrency import asynccontextmanager
 from fastapi.openapi.docs import (
@@ -10,13 +10,15 @@ from fastapi.openapi.docs import (
     get_swagger_ui_html,
     get_swagger_ui_oauth2_redirect_html
 )
+from fastapi_limiter import FastAPILimiter
+from math import ceil
 
 from app.config.setting import settings
 from app.core.ap_scheduler import SchedulerUtil
-from app.core.logger import logger
+from app.core.logger import log
 from app.utils.common_util import import_module, import_modules_async
 from app.utils.console import run as console_run
-from app.core.exceptions import handle_exception
+from app.core.exceptions import CustomException, handle_exception
 from app.core.discover import router
 from app.scripts.initialize import InitializeData
 
@@ -36,15 +38,22 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[Any, Any]:
     - AsyncGenerator[Any, Any]: 生命周期上下文生成器。
     """
     await InitializeData().init_db()
-    logger.info(f"✅️ 初始化 {settings.DATABASE_TYPE} 数据库初始化完成...")
+    log.info(f"✅️ 初始化 {settings.DATABASE_TYPE} 数据库初始化完成...")
     await import_modules_async(modules=settings.EVENT_LIST, desc="全局事件", app=app, status=True)
-    logger.info("✅️ 初始化全局事件完成...")
+    log.info("✅️ 初始化全局事件完成...")
     await ParamsService().init_config_service(redis=app.state.redis)
-    logger.info("✅️ 初始化Redis系统配置完成...")
+    log.info("✅️ 初始化Redis系统配置完成...")
     await DictDataService().init_dict_service(redis=app.state.redis)
-    logger.info('✅️ 初始化Redis数据字典完成...')
+    log.info('✅️ 初始化Redis数据字典完成...')
     await SchedulerUtil.init_system_scheduler()
-    logger.info('✅️ 初始化定时任务完成...')
+    log.info('✅️ 初始化定时任务完成...')
+
+    # 初始化 limiter
+    await FastAPILimiter.init(
+        redis=app.state.redis,
+        prefix=settings.REQUEST_LIMITER_REDIS_PREFIX,
+        http_callback=http_limit_callback,
+    )
     
     console_run(
         host=settings.SERVER_HOST,
@@ -60,7 +69,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[Any, Any]:
 
     await import_modules_async(modules=settings.EVENT_LIST, desc="全局事件", app=app, status=False)
     await SchedulerUtil.close_system_scheduler()
-    logger.info(f'⚠️  {settings.TITLE} 服务关闭...')
+    log.info(f'⚠️  {settings.TITLE} 服务关闭...')
 
 def register_middlewares(app: FastAPI) -> None:
     """
@@ -152,3 +161,19 @@ def reset_api_docs(app: FastAPI) -> None:
             redoc_js_url=settings.REDOC_JS_URL,
             redoc_favicon_url=settings.FAVICON_URL,
         )
+
+async def http_limit_callback(request: Request, response: Response, expire: int):
+    """
+    请求限制时的默认回调函数
+
+    :param request: FastAPI 请求对象
+    :param response: FastAPI 响应对象
+    :param expire: 剩余毫秒数
+    :return:
+    """
+    expires = ceil(expire / 30)
+    raise CustomException(
+        code=429,
+        msg='请求过于频繁，请稍后重试',
+        data={'Retry-After': str(expires)},
+    )

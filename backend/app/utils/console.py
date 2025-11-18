@@ -22,7 +22,6 @@ def run(host: str, port: int, reload: bool, workers: int, *, redis_ready: bool |
     panel_content.append(f'\n根路由前缀: {settings.ROOT_PATH}')
     panel_content.append(f'\n运行环境: {getattr(settings.ENVIRONMENT, "value", settings.ENVIRONMENT)}')
     panel_content.append(f'\n数据库类型: {settings.DATABASE_TYPE}')
-    panel_content.append(f'\n日志级别: {settings.LOGGER_LEVEL}')
     panel_content.append(f'\n重载: {reload}  进程: {workers}')
 
     # 附加运行时组件状态

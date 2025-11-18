@@ -16,7 +16,7 @@ from app.utils.ip_local_util import IpLocalUtil
 from app.utils.hash_bcrpy_util import PwdUtil
 from app.core.redis_crud import RedisCURD
 from app.core.exceptions import CustomException
-from app.core.logger import logger
+from app.core.logger import log
 from app.config.setting import settings
 from app.core.security import (
     CustomOAuth2PasswordRequestForm,
@@ -280,7 +280,7 @@ class LoginService:
         await RedisCURD(redis).delete(f"{RedisInitKeyConfig.ACCESS_TOKEN.key}:{session_id}")
         await RedisCURD(redis).delete(f"{RedisInitKeyConfig.REFRESH_TOKEN.key}:{session_id}")
         
-        logger.info(f"用户退出登录成功,会话编号:{session_id}")
+        log.info(f"用户退出登录成功,会话编号:{session_id}")
 
         return True
 
@@ -317,7 +317,7 @@ class CaptchaService:
             expire=settings.CAPTCHA_EXPIRE_SECONDS
         )
 
-        logger.info(f"生成验证码成功,验证码:{captcha_value}")
+        log.info(f"生成验证码成功,验证码:{captcha_value}")
 
         # 返回验证码信息
         return CaptchaOutSchema(
@@ -350,15 +350,15 @@ class CaptchaService:
         
         captcha_value = await RedisCURD(redis).get(redis_key)
         if not captcha_value:
-            logger.warning('验证码已过期或不存在')
+            log.error('验证码已过期或不存在')
             raise CustomException(msg="验证码已过期")
 
         # 验证码不区分大小写比对
         if captcha.lower() != captcha_value.lower():
-            logger.warning(f'验证码错误,用户输入:{captcha},正确值:{captcha_value}')
+            log.error(f'验证码错误,用户输入:{captcha},正确值:{captcha_value}')
             raise CustomException(msg="验证码错误")
 
         # 验证成功后删除验证码,避免重复使用
         await RedisCURD(redis).delete(redis_key)
-        logger.info(f'验证码校验成功,key:{key}')
+        log.info(f'验证码校验成功,key:{key}')
         return True

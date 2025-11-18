@@ -125,7 +125,7 @@
             <el-col :span="1.5">
               <el-tooltip content="刷新">
                 <el-button
-                  v-hasPerm="['module_system:menu:refresh']"
+                  v-hasPerm="['module_system:menu:query']"
                   type="primary"
                   icon="refresh"
                   circle
@@ -238,7 +238,7 @@
               新增
             </el-button>
             <el-button
-              v-hasPerm="['module_system:menu:detail']"
+              v-hasPerm="['module_system:menu:query']"
               type="info"
               size="small"
               link
@@ -654,7 +654,6 @@
           <!-- 详情弹窗不需要确定按钮的提交逻辑 -->
           <el-button
             v-if="dialogVisible.type !== 'detail'"
-            v-hasPerm="['module_system:menu:submit']"
             type="primary"
             @click="handleSubmit"
           >
@@ -662,7 +661,6 @@
           </el-button>
           <el-button
             v-else
-            v-hasPerm="['module_system:menu:detail']"
             type="primary"
             @click="handleCloseDialog"
           >
@@ -807,7 +805,7 @@ function handleDateRangeChange(range: [Date, Date]) {
 async function handleRefresh() {
   loading.value = true;
   try {
-    const response = await MenuAPI.getMenuList(queryFormData);
+    const response = await MenuAPI.listMenu(queryFormData);
     pageTableData.value = response.data.data;
   } catch (error: any) {
     console.error(error);
@@ -830,7 +828,7 @@ const filterMenuTypes = (nodes: MenuTable[]) => {
 async function loadingData() {
   loading.value = true;
   try {
-    const response = await MenuAPI.getMenuList(queryFormData);
+    const response = await MenuAPI.listMenu(queryFormData);
     pageTableData.value = response.data.data;
     // 加载菜单选项，只显示目录、菜单
     menuOptions.value = formatTree(filterMenuTypes(response.data.data));
@@ -913,7 +911,7 @@ async function handleOpenDialog(
 ) {
   dialogVisible.type = type;
   if (id) {
-    const response = await MenuAPI.getMenuDetail(id);
+    const response = await MenuAPI.detailMenu(id);
     if (type === "detail") {
       dialogVisible.title = "菜单详情";
       Object.assign(detailFormData.value, response.data.data);
@@ -1004,7 +1002,7 @@ async function handleMoreClick(status: boolean) {
     .then(async () => {
       try {
         loading.value = true;
-        await MenuAPI.batchAvailableMenu({ ids: selectIds.value, status });
+        await MenuAPI.batchMenu({ ids: selectIds.value, status });
         handleResetQuery();
       } catch (error: any) {
         console.error(error);

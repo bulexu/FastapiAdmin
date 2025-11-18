@@ -20,7 +20,7 @@ class {{ class_name }}CRUD(CRUDBase[{{ class_name }}Model, {{ class_name }}Creat
         """
         super().__init__(model={{ class_name }}Model, auth=auth)
 
-    async def get_by_id_crud(self, id: int, preload: Optional[List[Union[str, Any]]] = None) -> Optional[{{ class_name }}Model]:
+    async def get_by_id_{{ business_name }}_crud(self, id: int, preload: Optional[List[Union[str, Any]]] = None) -> Optional[{{ class_name }}Model]:
         """
         详情
         
@@ -33,7 +33,7 @@ class {{ class_name }}CRUD(CRUDBase[{{ class_name }}Model, {{ class_name }}Creat
         """
         return await self.get(id=id, preload=preload)
     
-    async def list_crud(self, search: Optional[Dict] = None, order_by: Optional[List[Dict[str, str]]] = None, preload: Optional[List[Union[str, Any]]] = None) -> Sequence[{{ class_name }}Model]:
+    async def list_{{ business_name }}_crud(self, search: Optional[Dict] = None, order_by: Optional[List[Dict[str, str]]] = None, preload: Optional[List[Union[str, Any]]] = None) -> Sequence[{{ class_name }}Model]:
         """
         列表查询
         
@@ -47,7 +47,7 @@ class {{ class_name }}CRUD(CRUDBase[{{ class_name }}Model, {{ class_name }}Creat
         """
         return await self.list(search=search, order_by=order_by, preload=preload)
     
-    async def create_crud(self, data: {{ class_name }}CreateSchema) -> Optional[{{ class_name }}Model]:
+    async def create_{{ business_name }}_crud(self, data: {{ class_name }}CreateSchema) -> Optional[{{ class_name }}Model]:
         """
         创建
         
@@ -59,7 +59,7 @@ class {{ class_name }}CRUD(CRUDBase[{{ class_name }}Model, {{ class_name }}Creat
         """
         return await self.create(data=data)
     
-    async def update_crud(self, id: int, data: {{ class_name }}UpdateSchema) -> Optional[{{ class_name }}Model]:
+    async def update_{{ business_name }}_crud(self, id: int, data: {{ class_name }}UpdateSchema) -> Optional[{{ class_name }}Model]:
         """
         更新
         
@@ -72,7 +72,7 @@ class {{ class_name }}CRUD(CRUDBase[{{ class_name }}Model, {{ class_name }}Creat
         """
         return await self.update(id=id, data=data)
     
-    async def delete_crud(self, ids: List[int]) -> None:
+    async def delete_{{ business_name }}_crud(self, ids: List[int]) -> None:
         """
         批量删除
         
@@ -84,7 +84,7 @@ class {{ class_name }}CRUD(CRUDBase[{{ class_name }}Model, {{ class_name }}Creat
         """
         return await self.delete(ids=ids)
     
-    async def set_available_crud(self, ids: List[int], status: bool) -> None:
+    async def set_available_{{ business_name }}_crud(self, ids: List[int], status: bool) -> None:
         """
         批量设置可用状态
         
@@ -97,7 +97,7 @@ class {{ class_name }}CRUD(CRUDBase[{{ class_name }}Model, {{ class_name }}Creat
         """
         return await self.set(ids=ids, status=status)
     
-    async def page_crud(self, offset: int, limit: int, order_by: Optional[List[Dict[str, str]]] = None, search: Optional[Dict] = None, preload: Optional[List[Union[str, Any]]] = None) -> Dict:
+    async def page_{{ business_name }}_crud(self, offset: int, limit: int, order_by: Optional[List[Dict[str, str]]] = None, search: Optional[Dict] = None, preload: Optional[List[Union[str, Any]]] = None) -> Dict:
         """
         分页查询
         

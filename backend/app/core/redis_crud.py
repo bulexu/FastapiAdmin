@@ -4,7 +4,7 @@ import pickle
 from typing import Any, Awaitable, List, Optional
 from redis.asyncio.client import Redis
 
-from app.core.logger import logger
+from app.core.logger import log
 
 
 class RedisCURD:
@@ -27,7 +27,7 @@ class RedisCURD:
             data = await self.redis.mget(*[str(key) for key in keys])
             return data
         except Exception as e:
-            logger.error(f"批量获取缓存失败: {str(e)}")
+            log.error(f"批量获取缓存失败: {str(e)}")
             return []
     
     async def get_keys(self, pattern: str = "*") -> list:
@@ -43,7 +43,7 @@ class RedisCURD:
             keys = await self.redis.keys(f"{pattern}")
             return keys
         except Exception as e:
-            logger.error(f"获取缓存键名失败: {str(e)}")
+            log.error(f"获取缓存键名失败: {str(e)}")
             return []
         
     
@@ -65,7 +65,7 @@ class RedisCURD:
             return data
 
         except Exception as e:
-            logger.error(f"获取缓存失败: {str(e)}")
+            log.error(f"获取缓存失败: {str(e)}")
             return None
 
     async def set(self, key: str, value: Any, expire: Optional[int] = None) -> bool:
@@ -87,7 +87,7 @@ class RedisCURD:
                 try:
                     data = pickle.dumps(value)
                 except Exception as e:
-                    logger.error(f"序列化数据失败: {str(e)}")
+                    log.error(f"序列化数据失败: {str(e)}")
                     return False
                     
             await self.redis.set(
@@ -98,7 +98,7 @@ class RedisCURD:
             return True
             
         except Exception as e:
-            logger.error(f"设置缓存失败: {str(e)}")
+            log.error(f"设置缓存失败: {str(e)}")
             return False
 
     async def delete(self, *keys: str) -> bool:
@@ -114,7 +114,7 @@ class RedisCURD:
             await self.redis.delete(*keys)
             return True
         except Exception as e:
-            logger.error(f"删除缓存失败: {str(e)}")
+            log.error(f"删除缓存失败: {str(e)}")
             return False
 
     async def clear(self, pattern: str = "*") -> bool:
@@ -132,7 +132,7 @@ class RedisCURD:
                 await self.redis.delete(*keys)
             return True
         except Exception as e:
-            logger.error(f"清空缓存失败: {str(e)}")
+            log.error(f"清空缓存失败: {str(e)}")
             return False
 
     async def exists(self, key: str) -> bool:
@@ -147,7 +147,7 @@ class RedisCURD:
         try:
             return await self.redis.exists(f"{key}")
         except Exception as e:
-            logger.error(f"判断缓存是否存在失败: {str(e)}")
+            log.error(f"判断缓存是否存在失败: {str(e)}")
             return False
 
     async def ttl(self, key: str) -> int:
@@ -162,7 +162,7 @@ class RedisCURD:
         try:
             return await self.redis.ttl(f"{key}")
         except Exception as e:
-            logger.error(f"获取缓存过期时间失败: {str(e)}")
+            log.error(f"获取缓存过期时间失败: {str(e)}")
             return -1
 
     async def expire(self, key: str, expire: int) -> bool:
@@ -178,7 +178,7 @@ class RedisCURD:
         try:
             return await self.redis.expire(f"{key}", expire)
         except Exception as e:
-            logger.error(f"设置缓存过期时间失败: {str(e)}")
+            log.error(f"设置缓存过期时间失败: {str(e)}")
             return False
     
     async def info(self) -> dict:
@@ -190,7 +190,7 @@ class RedisCURD:
         try:
             return await self.redis.info()
         except Exception as e:
-            logger.error(f"获取缓存信息失败: {str(e)}")
+            log.error(f"获取缓存信息失败: {str(e)}")
             return {}
         
     async def db_size(self) -> int:
@@ -202,7 +202,7 @@ class RedisCURD:
         try:
             return await self.redis.dbsize()
         except Exception as e:
-            logger.error(f"获取数据库大小失败: {str(e)}")
+            log.error(f"获取数据库大小失败: {str(e)}")
             return 0
     async def commandstats(self) -> dict:
         """获取命令统计信息
@@ -213,7 +213,7 @@ class RedisCURD:
         try:
             return await self.redis.info("commandstats")
         except Exception as e:
-            logger.error(f"获取命令统计信息失败: {str(e)}")
+            log.error(f"获取命令统计信息失败: {str(e)}")
             return {}
     
     async def hash_set(self, name: str, key: str, value: Any) -> bool:
@@ -231,7 +231,7 @@ class RedisCURD:
             self.redis.hset(name=name, key=key, value=value)
             return True
         except Exception as e:
-            logger.error(f"设置哈希缓存失败: {str(e)}")
+            log.error(f"设置哈希缓存失败: {str(e)}")
             return False
         
     async def hash_get(self, name: str, keys: list[str]) -> Awaitable[List[Any]] | List[Any]:
@@ -248,5 +248,5 @@ class RedisCURD:
             data = self.redis.hmget(name=name, keys=keys)
             return data
         except Exception as e:
-            logger.error(f"获取哈希缓存失败: {str(e)}")
+            log.error(f"获取哈希缓存失败: {str(e)}")
             return []

@@ -3,7 +3,7 @@ import request from "@/utils/request";
 const API_PATH = "/system/position";
 
 const PositionAPI = {
-  getPositionList(query?: PositionPageQuery) {
+  listPosition(query?: PositionPageQuery) {
     return request<ApiResponse<PageResult<PositionTable[]>>>({
       url: `${API_PATH}/list`,
       method: "get",
@@ -11,7 +11,7 @@ const PositionAPI = {
     });
   },
 
-  getPositionDetail(query: number) {
+  detailPosition(query: number) {
     return request<ApiResponse<PositionTable>>({
       url: `${API_PATH}/detail/${query}`,
       method: "get",
@@ -42,7 +42,7 @@ const PositionAPI = {
     });
   },
 
-  batchAvailablePosition(body: BatchType) {
+  batchPosition(body: BatchType) {
     return request<ApiResponse>({
       url: `${API_PATH}/available/setting`,
       method: "patch",

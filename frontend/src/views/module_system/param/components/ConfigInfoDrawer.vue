@@ -369,7 +369,7 @@ const submitChanges = async () => {
         .filter(Boolean);
       // 转换为JSON字符串格式保存
       const apiWhitelistJson = JSON.stringify(apiWhitelistArray);
-      await ParamsAPI.updateConfig(apiWhitelistConfigs.value.white_api_list_path.id, {
+      await ParamsAPI.updateParams(apiWhitelistConfigs.value.white_api_list_path.id, {
         ...apiWhitelistConfigs.value.white_api_list_path,
         config_value: apiWhitelistJson,
       });
@@ -382,7 +382,7 @@ const submitChanges = async () => {
         .filter(Boolean);
       // 转换为JSON字符串格式保存
       const ipBlacklistJson = JSON.stringify(ipBlacklistArray);
-      await ParamsAPI.updateConfig(ipBlacklistConfigs.value.ip_black_list.id, {
+      await ParamsAPI.updateParams(ipBlacklistConfigs.value.ip_black_list.id, {
         ...ipBlacklistConfigs.value.ip_black_list,
         config_value: ipBlacklistJson,
       });
@@ -395,7 +395,7 @@ const submitChanges = async () => {
         .filter(Boolean);
       // 转换为JSON字符串格式保存
       const demoIpWhitelistJson = JSON.stringify(demoIpWhitelistArray);
-      await ParamsAPI.updateConfig(demoConfigs.value.ip_white_list.id, {
+      await ParamsAPI.updateParams(demoConfigs.value.ip_white_list.id, {
         ...demoConfigs.value.ip_white_list,
         config_value: demoIpWhitelistJson,
       });
@@ -412,7 +412,7 @@ const submitChanges = async () => {
         securityPrivacyConfigs.value[key as keyof typeof securityPrivacyConfigs.value] ||
         userAgreementConfigs.value[key as keyof typeof userAgreementConfigs.value] ||
         demoConfigs.value[key as keyof typeof demoConfigs.value];
-      return item && item.id ? ParamsAPI.updateConfig(item.id, { ...item }) : Promise.resolve();
+      return item && item.id ? ParamsAPI.updateParams(item.id, { ...item }) : Promise.resolve();
     });
     await Promise.all(otherUpdatePromises);
 

@@ -7,7 +7,7 @@ from redis.asyncio.client import Redis
 from app.common.enums import RedisInitKeyConfig
 from app.core.redis_crud import RedisCURD
 from app.core.security import decode_access_token
-from app.core.logger import logger
+from app.core.logger import log
 from .param import OnlineQueryParam
 
 
@@ -40,7 +40,7 @@ class OnlineService:
                 if cls._match_search_conditions(session_info, search):
                     online_users.append(session_info)
             except Exception as e:
-                logger.error(f"解析在线用户数据失败: {e}")
+                log.error(f"解析在线用户数据失败: {e}")
                 continue
         # 按照 login_time 倒序排序
         online_users.sort(key=lambda x: x.get('login_time', ''), reverse=True)
@@ -65,7 +65,7 @@ class OnlineService:
         await RedisCURD(redis).delete(f"{RedisInitKeyConfig.REFRESH_TOKEN.key}:{session_id}")
 
 
-        logger.info(f"强制下线用户会话: {session_id}")
+        log.info(f"强制下线用户会话: {session_id}")
         return True
     
     @classmethod
@@ -83,7 +83,7 @@ class OnlineService:
         await RedisCURD(redis).clear(f"{RedisInitKeyConfig.ACCESS_TOKEN.key}:*")
         await RedisCURD(redis).clear(f"{RedisInitKeyConfig.REFRESH_TOKEN.key}:*")
 
-        logger.info(f"清除所有在线用户会话成功")
+        log.info(f"清除所有在线用户会话成功")
         return True
 
     

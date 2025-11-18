@@ -39,7 +39,6 @@
               >
                 <template #trigger>
                   <el-button
-                    v-hasPerm="['module_system:user:update']"
                     type="primary"
                     :icon="Camera"
                     class="upload-trigger"
@@ -190,7 +189,6 @@
 
                   <el-form-item>
                     <el-button
-                      v-hasPerm="['module_system:user:update']"
                       type="primary"
                       :loading="infoSubmitting"
                       icon="edit"
@@ -268,7 +266,6 @@
 
                   <el-form-item>
                     <el-button
-                      v-hasPerm="['current:profile:change_password']"
                       type="primary"
                       :loading="passwordChanging"
                       icon="edit"

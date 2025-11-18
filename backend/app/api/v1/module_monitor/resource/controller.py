@@ -10,7 +10,7 @@ from app.utils.common_util import bytes2file_response
 from app.core.base_params import PaginationQueryParam
 from app.core.dependencies import AuthPermission
 from app.core.router_class import OperationLogRoute
-from app.core.logger import logger
+from app.core.logger import log
 
 from .param import ResourceSearchQueryParam
 from .service import ResourceService
@@ -58,7 +58,7 @@ async def get_directory_list_controller(
         page_size=page.page_size
     )
     
-    logger.info(f"获取目录列表成功: {getattr(search, 'name', None) or ''}")
+    log.info(f"获取目录列表成功: {getattr(search, 'name', None) or ''}")
     return SuccessResponse(data=result_dict, msg="获取目录列表成功")
 
 
@@ -88,7 +88,7 @@ async def upload_file_controller(
         target_path=target_path,
         base_url=str(request.base_url)
     )
-    logger.info(f"上传文件成功: {result_dict['filename']}")
+    log.info(f"上传文件成功: {result_dict['filename']}")
     return SuccessResponse(data=result_dict, msg="上传文件成功")
 
 
@@ -121,7 +121,7 @@ async def download_file_controller(
     import os
     filename = os.path.basename(file_path)
     
-    logger.info(f"下载文件成功: {filename}")
+    log.info(f"下载文件成功: {filename}")
     return FileResponse(
         path=file_path,
         filename=filename,
@@ -148,7 +148,7 @@ async def delete_files_controller(
     - JSONResponse: 包含删除结果的JSON响应。
     """
     await ResourceService.delete_file_service(paths=paths)
-    logger.info(f"删除文件成功: {paths}")
+    log.info(f"删除文件成功: {paths}")
     return SuccessResponse(msg="删除文件成功")
 
 
@@ -171,7 +171,7 @@ async def move_file_controller(
     - JSONResponse: 包含移动结果的JSON响应。
     """
     await ResourceService.move_file_service(data=data)
-    logger.info(f"移动文件成功: {data.source_path} -> {data.target_path}")
+    log.info(f"移动文件成功: {data.source_path} -> {data.target_path}")
     return SuccessResponse(msg="移动文件成功")
 
 
@@ -194,7 +194,7 @@ async def copy_file_controller(
     - JSONResponse: 包含复制结果的JSON响应。
     """
     await ResourceService.copy_file_service(data=data)
-    logger.info(f"复制文件成功: {data.source_path} -> {data.target_path}")
+    log.info(f"复制文件成功: {data.source_path} -> {data.target_path}")
     return SuccessResponse(msg="复制文件成功")
 
 
@@ -217,7 +217,7 @@ async def rename_file_controller(
     - JSONResponse: 包含重命名结果的JSON响应。
     """
     await ResourceService.rename_file_service(data=data)
-    logger.info(f"重命名文件成功: {data.old_path} -> {data.new_name}")
+    log.info(f"重命名文件成功: {data.old_path} -> {data.new_name}")
     return SuccessResponse(msg="重命名文件成功")
 
 
@@ -240,7 +240,7 @@ async def create_directory_controller(
     - JSONResponse: 包含创建目录结果的JSON响应。
     """
     await ResourceService.create_directory_service(data=data)
-    logger.info(f"创建目录成功: {data.parent_path}/{data.dir_name}")
+    log.info(f"创建目录成功: {data.parent_path}/{data.dir_name}")
     return SuccessResponse(msg="创建目录成功")
 
 
@@ -271,7 +271,7 @@ async def export_resource_list_controller(
     )
     export_result = await ResourceService.export_resource_service(data_list=result_dict_list)
     
-    logger.info("导出资源列表成功")
+    log.info("导出资源列表成功")
     return StreamResponse(
         data=bytes2file_response(export_result),
         media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',

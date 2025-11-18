@@ -3,7 +3,7 @@ import request from "@/utils/request";
 const API_PATH = "/system/log";
 
 const LogAPI = {
-  getLogList(query: LogPageQuery) {
+  listLog(query: LogPageQuery) {
     return request<ApiResponse<PageResult<LogTable[]>>>({
       url: `${API_PATH}/list`,
       method: "get",
@@ -11,7 +11,7 @@ const LogAPI = {
     });
   },
 
-  getLogDetail(query: number) {
+  detailLog(query: number) {
     return request<ApiResponse<LogTable>>({
       url: `${API_PATH}/detail/${query}`,
       method: "get",

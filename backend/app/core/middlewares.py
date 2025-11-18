@@ -11,7 +11,7 @@ from starlette.middleware.base import BaseHTTPMiddleware, RequestResponseEndpoin
 
 from app.common.response import ErrorResponse
 from app.config.setting import settings
-from app.core.logger import logger
+from app.core.logger import log
 from app.core.exceptions import CustomException
 
 from app.api.v1.module_system.params.service import ParamsService
@@ -49,7 +49,7 @@ class RequestLogMiddleware(BaseHTTPMiddleware):
             f"请求方法: {request.method}",
             f"请求路径: {request.url.path}",
         ]
-        logger.info(log_fields)
+        log.info(log_fields)
 
         try:
             # 初始化响应变量
@@ -89,7 +89,7 @@ class RequestLogMiddleware(BaseHTTPMiddleware):
                 ip_black_list = system_config["ip_black_list"]
                 
             except Exception as e:
-                logger.warning(f"获取系统配置失败: {e}")
+                log.error(f"获取系统配置失败: {e}")
             
             # 检查是否需要拦截请求
             should_block = False
@@ -126,12 +126,12 @@ class RequestLogMiddleware(BaseHTTPMiddleware):
                 f"响应内容长度: {content_length}, "
                 f"处理时间: {process_time * 1000}ms"
             )
-            logger.info(response_info)
+            log.info(response_info)
             
             return response
         
         except CustomException as e:
-            logger.error(f"中间件处理异常: {str(e)}")
+            log.error(f"中间件处理异常: {str(e)}")
             return ErrorResponse(msg=f"系统异常，请联系管理员", data=str(e))
 
 

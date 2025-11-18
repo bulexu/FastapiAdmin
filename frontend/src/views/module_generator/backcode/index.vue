@@ -117,7 +117,7 @@
             <el-col :span="1.5">
               <el-tooltip content="刷新">
                 <el-button
-                  v-hasPerm="['module_generator:gencode:refresh']"
+                  v-hasPerm="['module_generator:gencode:query']"
                   type="primary"
                   icon="refresh"
                   circle
@@ -230,7 +230,7 @@
               删除
             </el-button>
             <el-button
-              v-hasPerm="['module_generator:gencode:sync']"
+              v-hasPerm="['module_generator:db:sync']"
               link
               type="success"
               icon="Refresh"
@@ -313,8 +313,8 @@
           />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" icon="Search" @click="handleImportQuery">搜索</el-button>
-          <el-button icon="Refresh" @click="handleImportReset">重置</el-button>
+          <el-button v-hasPerm="['module_generator:dblist:query']" type="primary" icon="Search" @click="handleImportQuery">搜索</el-button>
+          <el-button v-hasPerm="['module_generator:dblist:query']" icon="Refresh" @click="handleImportReset">重置</el-button>
         </el-form-item>
       </el-form>
       <el-row>
@@ -1325,10 +1325,10 @@ async function handlePreviewTable(row?: GenTableSchema): Promise<void> {
     await loadTableDetail(selectedTableId);
     editVisible.value = true;
 
-    const menu_response = await MenuAPI.getMenuList();
+    const menu_response = await MenuAPI.listMenu();
     menuOptions.value = formatTree(filterMenuTypes(menu_response.data.data));
 
-    const dict_response = await DictAPI.getDictTypeList({ page_no: 1, page_size: 100 });
+    const dict_response = await DictAPI.listDictType({ page_no: 1, page_size: 100 });
     dictOptions.value = dict_response.data.data.items;
   } else {
     ElMessage.error("请选择要修改的数据");
@@ -1632,7 +1632,7 @@ function handleClose(): void {
 async function loadTableDetail(id: number | string) {
   try {
     loading.value = true;
-    const response = await GencodeAPI.getGenTableDetail(Number(id));
+    const response = await GencodeAPI.detailTable(Number(id));
 
     if (response?.data?.data) {
       const data = response.data.data;

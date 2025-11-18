@@ -7,7 +7,7 @@ export const ApplicationAPI = {
    * 获取应用详情
    * @param id 应用ID
    */
-  getApplicationDetail(id: number) {
+  detailApp(id: number) {
     return request<ApiResponse<ApplicationInfo>>({
       url: `${API_PATH}/detail/${id}`,
       method: "get",
@@ -18,7 +18,7 @@ export const ApplicationAPI = {
    * 查询应用列表
    * @param query 查询参数
    */
-  getApplicationList(query: ApplicationPageQuery) {
+  listApp(query: ApplicationPageQuery) {
     return request<ApiResponse<PageResult<ApplicationInfo[]>>>({
       url: `${API_PATH}/list`,
       method: "get",
@@ -30,7 +30,7 @@ export const ApplicationAPI = {
    * 创建应用
    * @param body 应用信息
    */
-  createApplication(body: ApplicationForm) {
+  createApp(body: ApplicationForm) {
     return request<ApiResponse>({
       url: `${API_PATH}/create`,
       method: "post",
@@ -43,7 +43,7 @@ export const ApplicationAPI = {
    * @param id 应用ID
    * @param body 应用信息
    */
-  updateApplication(id: number, body: ApplicationForm) {
+  updateApp(id: number, body: ApplicationForm) {
     return request<ApiResponse>({
       url: `${API_PATH}/update/${id}`,
       method: "put",
@@ -55,7 +55,7 @@ export const ApplicationAPI = {
    * 删除应用
    * @param body 应用ID数组
    */
-  deleteApplication(body: number[]) {
+  deleteApp(body: number[]) {
     return request<ApiResponse>({
       url: `${API_PATH}/delete`,
       method: "delete",
@@ -67,7 +67,7 @@ export const ApplicationAPI = {
    * 批量修改应用状态
    * @param body 批量操作参数
    */
-  batchAvailableApplication(body: BatchType) {
+  batchApp(body: BatchType) {
     return request<ApiResponse>({
       url: `${API_PATH}/available/setting`,
       method: "patch",

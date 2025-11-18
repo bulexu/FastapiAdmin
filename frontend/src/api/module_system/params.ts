@@ -19,7 +19,7 @@ const ParamsAPI = {
     });
   },
 
-  getConfigList(query: ConfigPageQuery) {
+  listParams(query: ConfigPageQuery) {
     return request<ApiResponse<PageResult<ConfigTable[]>>>({
       url: `${API_PATH}/list`,
       method: "get",
@@ -27,14 +27,14 @@ const ParamsAPI = {
     });
   },
 
-  getConfigDetail(query: number) {
+  detailParams(query: number) {
     return request<ApiResponse<ConfigTable>>({
       url: `${API_PATH}/detail/${query}`,
       method: "get",
     });
   },
 
-  createConfig(body: ConfigForm) {
+  createParams(body: ConfigForm) {
     return request<ApiResponse>({
       url: `${API_PATH}/create`,
       method: "post",
@@ -42,7 +42,7 @@ const ParamsAPI = {
     });
   },
 
-  updateConfig(id: number, body: ConfigForm) {
+  updateParams(id: number, body: ConfigForm) {
     return request<ApiResponse>({
       url: `${API_PATH}/update/${id}`,
       method: "put",
@@ -50,7 +50,7 @@ const ParamsAPI = {
     });
   },
 
-  deleteConfig(body: number[]) {
+  deleteParams(body: number[]) {
     return request<ApiResponse>({
       url: `${API_PATH}/delete`,
       method: "delete",
@@ -58,7 +58,7 @@ const ParamsAPI = {
     });
   },
 
-  exportConfig(body: ConfigPageQuery) {
+  exportParams(body: ConfigPageQuery) {
     return request<Blob>({
       url: `${API_PATH}/export`,
       method: "post",

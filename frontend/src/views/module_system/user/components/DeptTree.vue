@@ -79,7 +79,7 @@ const loading = ref(true);
 
 onBeforeMount(() => {
   loading.value = true;
-  DeptAPI.getDeptList(queryFormData)
+  DeptAPI.listDept(queryFormData)
     .then((response) => {
       deptOptions.value = formatTree(response.data.data);
     })

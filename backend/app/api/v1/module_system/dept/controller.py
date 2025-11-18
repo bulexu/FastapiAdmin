@@ -7,7 +7,7 @@ from app.common.response import SuccessResponse
 from app.core.router_class import OperationLogRoute
 from app.core.dependencies import AuthPermission
 from app.core.base_schema import BatchSetAvailable
-from app.core.logger import logger
+from app.core.logger import log
 
 from ..auth.schema import AuthSchema
 from .param import DeptQueryParam
@@ -41,7 +41,7 @@ async def get_dept_tree_controller(
     """
     order_by = [{"order": "asc"}]
     result_dict_list = await DeptService.get_dept_tree_service(search=search, auth=auth, order_by=order_by)
-    logger.info(f"查询部门树成功")
+    log.info(f"查询部门树成功")
     return SuccessResponse(data=result_dict_list, msg="查询部门树成功")
 
 
@@ -64,7 +64,7 @@ async def get_obj_detail_controller(
     - CustomException: 查询部门详情失败时抛出异常。
     """
     result_dict = await DeptService.get_dept_detail_service(id=id, auth=auth)
-    logger.info(f"查询部门详情成功 {id}")
+    log.info(f"查询部门详情成功 {id}")
     return SuccessResponse(data=result_dict, msg="查询部门详情成功")
 
 
@@ -87,7 +87,7 @@ async def create_obj_controller(
     - CustomException: 创建部门失败时抛出异常。
     """
     result_dict = await DeptService.create_dept_service(data=data, auth=auth)
-    logger.info(f"创建部门成功: {result_dict}")
+    log.info(f"创建部门成功: {result_dict}")
     return SuccessResponse(data=result_dict, msg="创建部门成功")
 
 
@@ -112,7 +112,7 @@ async def update_obj_controller(
     - CustomException: 修改部门失败时抛出异常。
     """
     result_dict = await DeptService.update_dept_service(auth=auth, id=id, data=data)
-    logger.info(f"修改部门成功: {result_dict}")
+    log.info(f"修改部门成功: {result_dict}")
     return SuccessResponse(data=result_dict, msg="修改部门成功")
 
 
@@ -135,7 +135,7 @@ async def delete_obj_controller(
     - CustomException: 删除部门失败时抛出异常。
     """
     await DeptService.delete_dept_service(ids=ids, auth=auth)
-    logger.info(f"删除部门成功: {ids}")
+    log.info(f"删除部门成功: {ids}")
     return SuccessResponse(msg="删除部门成功")
 
 
@@ -158,5 +158,5 @@ async def batch_set_available_obj_controller(
     - CustomException: 批量修改部门状态失败时抛出异常。
     """
     await DeptService.batch_set_available_service(data=data, auth=auth)
-    logger.info(f"批量修改部门状态成功: {data.ids}")
+    log.info(f"批量修改部门状态成功: {data.ids}")
     return SuccessResponse(msg="批量修改部门状态成功")

@@ -129,7 +129,7 @@
                       更多
                     </el-button>
                     <template #dropdown>
-                      <el-dropdown-menu v-hasPerm="['module_system:user:filter']">
+                      <el-dropdown-menu>
                         <el-dropdown-item icon="Check" @click="handleMoreClick(true)">
                           批量启用
                         </el-dropdown-item>
@@ -170,7 +170,7 @@
                 <el-col :span="1.5">
                   <el-tooltip content="刷新">
                     <el-button
-                      v-hasPerm="['module_system:user:refresh']"
+                      v-hasPerm="['module_system:user:query']"
                       type="default"
                       icon="refresh"
                       circle
@@ -514,7 +514,6 @@
         <div class="dialog-footer">
           <el-button
             v-if="dialogVisible.type === 'create' || dialogVisible.type === 'update'"
-            v-hasPerm="['module_system:user:create']"
             type="primary"
             @click="handleSubmit"
           >
@@ -522,7 +521,6 @@
           </el-button>
           <el-button
             v-else
-            v-hasPerm="['module_system:user:detail']"
             type="primary"
             @click="handleCloseDialog"
           >
@@ -693,7 +691,7 @@ const exportColumns = [
 const curdContentConfig = {
   permPrefix: "module_system:user",
   cols: exportColumns as any,
-  importTemplate: () => UserAPI.downloadTemplate(),
+  importTemplate: () => UserAPI.downloadTemplateUser(),
   exportsAction: async (params: any) => {
     const query: any = { ...params };
     if (typeof query.status === "string") {
@@ -703,7 +701,7 @@ const curdContentConfig = {
     query.page_size = 9999;
     const all: any[] = [];
     while (true) {
-      const res = await UserAPI.getUserList(query);
+      const res = await UserAPI.listUser(query);
       const items = res.data?.data?.items || [];
       const total = res.data?.data?.total || 0;
       all.push(...items);
@@ -740,7 +738,7 @@ async function handleRefresh() {
 async function loadingData() {
   loading.value = true;
   try {
-    const response = await UserAPI.getUserList(queryFormData);
+    const response = await UserAPI.listUser(queryFormData);
     pageTableData.value = response.data.data.items;
     total.value = response.data.data.total;
   } catch (error: any) {
@@ -838,7 +836,7 @@ async function handleCloseDialog() {
 async function handleOpenDialog(type: "create" | "update" | "detail", id?: number) {
   dialogVisible.type = type;
   if (id) {
-    const response = await UserAPI.getUserDetail(id);
+    const response = await UserAPI.detailUser(id);
     if (type === "detail") {
       dialogVisible.title = "用户详情";
       Object.assign(detailFormData.value, response.data.data);
@@ -860,12 +858,12 @@ async function handleOpenDialog(type: "create" | "update" | "detail", id?: numbe
   }
 
   // 获取部门树
-  const deptResponse = await DeptAPI.getDeptList(queryFormData);
+  const deptResponse = await DeptAPI.listDept(queryFormData);
   const treeData = deptResponse.data.data;
   deptOptions.value = formatTree(treeData);
 
   // 获取角色列表
-  const roleResponse = await RoleAPI.getRoleList();
+  const roleResponse = await RoleAPI.listRole();
   roleOptions.value = roleResponse.data.data.items
     .filter((item) => item.id !== undefined && item.name !== undefined)
     .map((item) => ({
@@ -876,7 +874,7 @@ async function handleOpenDialog(type: "create" | "update" | "detail", id?: numbe
     .filter((opt) => !opt.disabled);
 
   // 获取岗位列表
-  const positionResponse = await PositionAPI.getPositionList();
+  const positionResponse = await PositionAPI.listPosition();
   positionOptions.value = positionResponse.data.data.items
     .filter((item) => item.id !== undefined && item.name !== undefined)
     .map((item) => ({
@@ -954,7 +952,7 @@ async function handleMoreClick(status: boolean) {
       .then(async () => {
         try {
           loading.value = true;
-          await UserAPI.batchAvailableUser({ ids: selectIds.value, status });
+          await UserAPI.batchUser({ ids: selectIds.value, status });
           handleResetQuery();
         } catch (error: any) {
           console.error(error);

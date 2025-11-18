@@ -114,7 +114,7 @@
                   更多
                 </el-button>
                 <template #dropdown>
-                  <el-dropdown-menu v-hasPerm="['module_system:role:filter']">
+                  <el-dropdown-menu>
                     <el-dropdown-item icon="Check" @click="handleMoreClick(true)">
                       批量启用
                     </el-dropdown-item>
@@ -143,7 +143,7 @@
             <el-col :span="1.5">
               <el-tooltip content="刷新">
                 <el-button
-                  v-hasPerm="['module_system:role:refresh']"
+                  v-hasPerm="['module_system:role:query']"
                   type="primary"
                   icon="refresh"
                   circle
@@ -308,7 +308,7 @@
               分配权限
             </el-button>
             <el-button
-              v-hasPerm="['module_system:role:detail']"
+              v-hasPerm="['module_system:role:query']"
               type="info"
               size="small"
               link
@@ -458,7 +458,7 @@
       <template #footer>
         <div class="dialog-footer">
           <el-button @click="handleCloseDialog">取 消</el-button>
-          <el-button v-hasPerm="['module_system:role:submit']" type="primary" @click="handleSubmit">
+          <el-button type="primary" @click="handleSubmit">
             确 定
           </el-button>
         </div>
@@ -574,7 +574,7 @@ const rules = reactive({
 async function loadingData() {
   loading.value = true;
   try {
-    const response = await RoleAPI.getRoleList(queryFormData);
+    const response = await RoleAPI.listRole(queryFormData);
     pageTableData.value = response.data.data.items;
     total.value = response.data.data.total;
   } catch (error: any) {
@@ -662,7 +662,7 @@ async function handleCloseDialog() {
 async function handleOpenDialog(type: "create" | "update" | "detail", id?: number) {
   dialogVisible.type = type;
   if (id) {
-    const response = await RoleAPI.getRoleDetail(id);
+    const response = await RoleAPI.detailRole(id);
     if (type === "detail") {
       dialogVisible.title = "角色详情";
       Object.assign(detailFormData.value, response.data.data);
@@ -745,7 +745,7 @@ async function handleMoreClick(status: boolean) {
       .then(async () => {
         try {
           loading.value = true;
-          await RoleAPI.batchAvailableRole({ ids: selectIds.value, status });
+          await RoleAPI.batchRole({ ids: selectIds.value, status });
           handleResetQuery();
         } catch (error: any) {
           console.error(error);
@@ -796,7 +796,7 @@ const curdContentConfig = {
     query.page_size = 1000;
     const all: any[] = [];
     while (true) {
-      const res = await RoleAPI.getRoleList(query);
+      const res = await RoleAPI.listRole(query);
       const items = res.data?.data?.items || [];
       const total = res.data?.data?.total || 0;
       all.push(...items);

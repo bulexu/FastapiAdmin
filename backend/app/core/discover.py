@@ -21,7 +21,7 @@ from typing import Dict, Iterable, Optional, Set, Tuple
 
 from fastapi import APIRouter
 
-from app.core.logger import logger
+from app.core.logger import log
 
 # ----- 约定与配置 -----
 MODULE_PREFIX = "module_"
@@ -53,7 +53,7 @@ def _get_v1_base_dir_and_pkg() -> Tuple[Path, str]:
         base_pkg = v1_pkg.__name__
         return base_dir, base_pkg
     except Exception as e:
-        logger.error(f"❌️ 定位 app.api.v1 失败: {e}")
+        log.error(f"❌️ 定位 app.api.v1 失败: {e}")
         raise
 
 
@@ -133,10 +133,10 @@ def _discover_and_register() -> None:
             mod = importlib.import_module(mod_path)
             imported_modules += 1
         except ModuleNotFoundError:
-            logger.warning(f"❌️ 未找到控制器模块: {mod_path}")
+            log.error(f"❌️ 未找到控制器模块: {mod_path}")
             continue
         except Exception as e:
-            logger.error(f"❌️ 导入控制器失败: {mod_path} -> {e}")
+            log.error(f"❌️ 导入控制器失败: {mod_path} -> {e}")
             continue
 
         container = containers.setdefault(prefix, APIRouter(prefix=prefix))
@@ -145,7 +145,7 @@ def _discover_and_register() -> None:
             included_routers += added
             container_counts[prefix] = container_counts.get(prefix, 0) + added
         except Exception as e:
-            logger.error(f"❌️ 注册控制器路由失败: {mod_path} -> {e}")
+            log.error(f"❌️ 注册控制器路由失败: {mod_path} -> {e}")
 
     # 将容器路由按前缀名称排序后注册到根路由，保证顺序稳定
     for prefix in sorted(containers.keys()):
@@ -156,9 +156,9 @@ def _discover_and_register() -> None:
         _seen_router_ids.add(rid)
         router.include_router(container)
         # 更丰富的注册日志（含路由数量）
-        logger.info(f"✅️ 已注册模块容器: {prefix}")
+        log.info(f"✅️ 已注册模块容器: {prefix}")
 
-    logger.info(
+    log.info(
         (
             f"✅️ 路由发现完成: 扫描文件 {scanned_files}, "
             f"导入模块 {imported_modules}, 注册路由 {included_routers}, "

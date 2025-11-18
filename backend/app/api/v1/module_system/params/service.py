@@ -14,7 +14,7 @@ from app.utils.excel_util import ExcelUtil
 from app.utils.upload_util import UploadUtil
 from app.core.base_schema import UploadResponseSchema
 from app.core.exceptions import CustomException
-from app.core.logger import logger
+from app.core.logger import log
 
 from ..auth.schema import AuthSchema
 from .param import ParamsQueryParam
@@ -123,10 +123,10 @@ class ParamsService:
                 value="",
             )
             if not result:
-                logger.error(f"同步配置到缓存失败: {new_obj_dict}")
+                log.error(f"同步配置到缓存失败: {new_obj_dict}")
                 raise CustomException(msg="同步配置到缓存失败")
         except Exception as e:
-            logger.error(f"创建字典类型失败: {e}")
+            log.error(f"创建字典类型失败: {e}")
             raise CustomException(msg=f"创建字典类型失败 {e}")
         
         return new_obj_dict
@@ -165,10 +165,10 @@ class ParamsService:
                 value=value,
             )
             if not result:
-                logger.error(f"同步配置到缓存失败: {new_obj_dict}")
+                log.error(f"同步配置到缓存失败: {new_obj_dict}")
                 raise CustomException(msg="同步配置到缓存失败")
         except Exception as e:
-            logger.error(f"更新系统配置失败: {e}")
+            log.error(f"更新系统配置失败: {e}")
             raise CustomException(msg="更新系统配置失败")
 
         return new_obj_dict
@@ -207,9 +207,9 @@ class ParamsService:
             redis_key = f"{RedisInitKeyConfig.SYSTEM_CONFIG.key}:{exist_obj.config_key}"
             try:
                 await RedisCURD(redis).delete(redis_key)
-                logger.info(f"删除系统配置成功: {id}")
+                log.info(f"删除系统配置成功: {id}")
             except Exception as e:
-                logger.error(f"删除系统配置失败: {e}")
+                log.error(f"删除系统配置失败: {e}")
                 raise CustomException(msg="删除字典类型失败")
     
     @classmethod
@@ -294,10 +294,10 @@ class ParamsService:
                             value=value,
                         )
                         if not result:
-                            logger.error(f"❌️ 初始化系统配置失败: {config_obj_dict}")
+                            log.error(f"❌️ 初始化系统配置失败: {config_obj_dict}")
                             raise CustomException(msg="初始化系统配置失败")
                 except Exception as e:
-                    logger.error(f"❌️ 初始化系统配置失败: {e}")
+                    log.error(f"❌️ 初始化系统配置失败: {e}")
                     raise CustomException(msg="初始化系统配置失败")
 
     @classmethod
@@ -321,7 +321,7 @@ class ParamsService:
                 new_config = json.loads(config)  
                 configs.append(new_config)
             except Exception as e:
-                logger.error(f"解析系统配置数据失败: {e}")
+                log.error(f"解析系统配置数据失败: {e}")
                 continue
         
         return configs
@@ -362,7 +362,7 @@ class ParamsService:
                 demo_config = json.loads(config_values[0])
                 config_result["demo_enable"] = demo_config.get("config_value", False) if isinstance(demo_config, dict) else False
             except json.JSONDecodeError:
-                logger.error(f"解析演示模式配置失败")
+                log.error(f"解析演示模式配置失败")
         
         # 解析IP白名单配置
         if config_values[1]:
@@ -372,7 +372,7 @@ class ParamsService:
                 # 确保是列表类型
                 config_result["ip_white_list"] = json.loads(ip_white_config.get("config_value", [])) 
             except json.JSONDecodeError:
-                logger.error(f"解析IP白名单配置失败")
+                log.error(f"解析IP白名单配置失败")
         # 解析IP黑名单
         # 解析API路径白名单
         if config_values[2]:
@@ -381,7 +381,7 @@ class ParamsService:
                 # 确保是列表类型
                 config_result["white_api_list_path"] = json.loads(white_api_config.get("config_value", []))
             except json.JSONDecodeError:
-                logger.error(f"解析API白名单配置失败")
+                log.error(f"解析API白名单配置失败")
         
         # 解析IP黑名单
         if config_values[3]:
@@ -390,5 +390,5 @@ class ParamsService:
                 # 确保是列表类型
                 config_result["ip_black_list"] = json.loads(black_ip_config.get("config_value", []))
             except json.JSONDecodeError:
-                logger.error(f"解析IP黑名单配置失败")
+                log.error(f"解析IP黑名单配置失败")
         return config_result

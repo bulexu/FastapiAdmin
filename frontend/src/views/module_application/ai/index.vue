@@ -18,7 +18,6 @@
           </div>
           <el-button
             v-if="messages.length > 0"
-            v-hasPerm="['ai:mcp:clear']"
             text
             :icon="Delete"
             @click="clearCurrentChat"
@@ -26,7 +25,6 @@
             清空对话
           </el-button>
           <el-button
-            v-hasPerm="['ai:mcp:connection']"
             text
             :icon="Setting"
             @click="toggleConnection"

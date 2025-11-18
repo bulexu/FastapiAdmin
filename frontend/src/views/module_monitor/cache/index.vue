@@ -129,7 +129,7 @@
                   </div>
                   <div>
                     <el-button
-                      v-hasPerm="['module_monitor:cache:refresh']"
+                      v-hasPerm="['module_monitor:cache:query']"
                       type="primary"
                       link
                       icon="RefreshRight"
@@ -151,7 +151,7 @@
                 <el-table-column prop="cache_name" label="缓存名称" show-overflow-tooltip>
                   <template #default="{ row }">
                     <el-button
-                      v-hasPerm="['module_monitor:cache:view']"
+                      v-hasPerm="['module_monitor:cache:query']"
                       type="primary"
                       link
                       @click="getCacheKeyList(row)"
@@ -203,7 +203,7 @@
                   </div>
                   <div>
                     <el-button
-                      v-hasPerm="['module_monitor:cache:refresh']"
+                      v-hasPerm="['module_monitor:cache:query']"
                       type="primary"
                       link
                       icon="RefreshRight"
@@ -276,7 +276,7 @@
                   </div>
                   <div>
                     <el-button
-                      v-hasPerm="['module_monitor:cache:delete_all']"
+                      v-hasPerm="['module_monitor:cache:delete']"
                       type="danger"
                       link
                       icon="delete"

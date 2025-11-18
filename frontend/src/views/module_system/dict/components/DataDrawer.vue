@@ -200,6 +200,7 @@
         <el-table-column fixed="right" label="操作" align="center" min-width="200">
           <template #default="scope">
             <el-button
+              v-hasPerm="['module_system:dict_data:query']"
               type="info"
               size="small"
               link
@@ -517,7 +518,7 @@ async function loadingData() {
   loading.value = true;
   try {
     // 在查询参数中添加 dictType
-    const response = await DictAPI.getDictDataList(queryFormData);
+    const response = await DictAPI.listDictData(queryFormData);
     pageTableData.value = response.data.data.items;
     total.value = response.data.data.total;
   } catch (error: any) {
@@ -589,7 +590,7 @@ async function handleCloseDialog() {
 async function handleOpenDialog(type: "create" | "update" | "detail", id?: number) {
   dialogVisible.type = type;
   if (id) {
-    const response = await DictAPI.getDictDataDetail(id);
+    const response = await DictAPI.detailDictData(id);
     if (type === "detail") {
       dialogVisible.title = "字典数据详情";
       Object.assign(detailFormData.value, response.data.data);
@@ -682,7 +683,7 @@ async function handleMoreClick(status: boolean) {
       .then(async () => {
         try {
           loading.value = true;
-          await DictAPI.batchAvailableDictData({ ids: selectIds.value, status });
+          await DictAPI.batchDictData({ ids: selectIds.value, status });
           handleResetQuery();
         } catch (error: any) {
           console.error(error);
@@ -723,7 +724,7 @@ const curdContentConfig = {
     query.page_size = 1000;
     const all: any[] = [];
     while (true) {
-      const res = await DictAPI.getDictDataList(query);
+      const res = await DictAPI.listDictData(query);
       const items = res.data?.data?.items || [];
       const total = res.data?.data?.total || 0;
       all.push(...items);

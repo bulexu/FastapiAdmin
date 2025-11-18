@@ -6,7 +6,7 @@ from fastapi.responses import JSONResponse, FileResponse
 
 from app.core.dependencies import AuthPermission
 from app.core.router_class import OperationLogRoute
-from app.core.logger import logger
+from app.core.logger import log
 from app.common.response import SuccessResponse, UploadFileResponse
 from app.utils.upload_util import UploadUtil
 
@@ -31,7 +31,7 @@ async def upload_controller(
     - JSONResponse: 包含上传文件详情的JSON响应
     """
     result_dict = await FileService.upload_service(base_url=str(request.base_url), file=file)
-    logger.info(f"上传文件成功 {result_dict}")
+    log.info(f"上传文件成功 {result_dict}")
     return SuccessResponse(data=result_dict, msg="上传文件成功")
 
 @FileRouter.post("/download", summary="下载文件", description="下载文件", dependencies=[Depends(AuthPermission(["module_common:file:download"]))])
@@ -54,5 +54,5 @@ async def download_controller(
     result = await FileService.download_service(file_path=file_path)
     if delete:
         background_tasks.add_task(UploadUtil.delete_file, Path(file_path))
-    logger.info(f"下载文件成功")
+    log.info(f"下载文件成功")
     return UploadFileResponse(file_path=result.file_path, filename=result.file_name)

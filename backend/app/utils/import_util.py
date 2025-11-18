@@ -8,7 +8,7 @@ from functools import lru_cache
 from sqlalchemy import inspect as sa_inspect
 from typing import Any, List, Set, Type
 
-from app.config.setting import settings
+from app.config.path_conf import BASE_DIR
 
 
 class ImportUtil:
@@ -19,7 +19,7 @@ class ImportUtil:
 
         :return: 项目根目录路径
         """
-        return settings.BASE_DIR
+        return BASE_DIR
 
     @classmethod
     def is_valid_model(cls, obj: Any, base_class: Type) -> bool:

@@ -5,7 +5,7 @@ from sqlalchemy import and_, select, text
 from typing import List, Optional, Sequence, Dict, Union, Any
 from sqlglot.expressions import Expression
 
-from app.core.logger import logger
+from app.core.logger import log
 from app.config.setting import settings
 from app.core.base_crud import CRUDBase
 
@@ -262,7 +262,7 @@ class GenTableCRUD(CRUDBase[GenTableModel, GenTableSchema, GenTableSchema]):
             else:
                 gen_db_table_list = (await self.db.execute(text(query_sql), {"table_names": tuple(unique_table_names)})).fetchall()
         except Exception as e:
-            logger.error(f"查询表信息时发生错误: {e}")
+            log.error(f"查询表信息时发生错误: {e}")
             # 查询错误时直接抛出，不需要事务处理
             raise
         
@@ -299,7 +299,7 @@ class GenTableCRUD(CRUDBase[GenTableModel, GenTableSchema, GenTableSchema]):
             result = await self.db.execute(query, {"table_name": table_name})
             return result.scalar() is not None
         except Exception as e:
-            logger.error(f"检查表格存在性时发生错误: {e}")
+            log.error(f"检查表格存在性时发生错误: {e}")
             # 出错时返回False，避免误报表已存在
             return False
             
@@ -324,7 +324,7 @@ class GenTableCRUD(CRUDBase[GenTableModel, GenTableSchema, GenTableSchema]):
                 await self.db.execute(text(sql))
             return True
         except Exception as e:
-            logger.error(f"创建表时发生错误: {e}")
+            log.error(f"创建表时发生错误: {e}")
             return False
 
 
@@ -487,7 +487,7 @@ class GenTableColumnCRUD(CRUDBase[GenTableColumnModel, GenTableColumnSchema, Gen
                     )
             return columns_list
         except Exception as e:
-            logger.error(f"获取表{table_name}的字段列表时出错: {str(e)}")
+            log.error(f"获取表{table_name}的字段列表时出错: {str(e)}")
             # 确保即使出错也返回空列表而不是None
             raise
 

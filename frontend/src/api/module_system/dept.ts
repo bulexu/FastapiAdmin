@@ -3,7 +3,7 @@ import request from "@/utils/request";
 const API_PATH = "/system/dept";
 
 const DeptAPI = {
-  getDeptList(query?: DeptPageQuery) {
+  listDept(query?: DeptPageQuery) {
     return request<ApiResponse<DeptTable[]>>({
       url: `${API_PATH}/tree`,
       method: "get",
@@ -11,7 +11,7 @@ const DeptAPI = {
     });
   },
 
-  getDeptDetail(query: number) {
+  detailDept(query: number) {
     return request<ApiResponse<DeptTable>>({
       url: `${API_PATH}/detail/${query}`,
       method: "get",
@@ -42,7 +42,7 @@ const DeptAPI = {
     });
   },
 
-  batchAvailableDept(body: BatchType) {
+  batchDept(body: BatchType) {
     return request<ApiResponse>({
       url: `${API_PATH}/available/setting`,
       method: "patch",

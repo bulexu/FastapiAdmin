@@ -10,7 +10,7 @@ from sqlalchemy.exc import SQLAlchemyError
 
 from app.common.constant import RET
 from app.common.response import ErrorResponse
-from app.core.logger import logger
+from app.core.logger import log
 
 
 class CustomException(Exception):
@@ -74,7 +74,7 @@ def handle_exception(app: FastAPI):
         返回:
         - JSONResponse: 包含错误信息的 JSON 响应。
         """
-        logger.error(f"请求地址: {request.url}, 错误信息: {exc.msg}, 错误详情: {exc.data}")
+        log.error(f"请求地址: {request.url}, 错误信息: {exc.msg}, 错误详情: {exc.data}")
         return ErrorResponse(msg=exc.msg, code=exc.code, status_code=exc.status_code, data=exc.data)
 
     @app.exception_handler(HTTPException)
@@ -88,7 +88,7 @@ def handle_exception(app: FastAPI):
         返回:
         - JSONResponse: 包含错误信息的 JSON 响应。
         """
-        logger.error(f"请求地址: {request.url}, 错误详情: {exc.detail}")
+        log.error(f"请求地址: {request.url}, 错误详情: {exc.detail}")
         return ErrorResponse(msg=exc.detail, status_code=exc.status_code)
 
     @app.exception_handler(RequestValidationError)
@@ -117,7 +117,7 @@ def handle_exception(app: FastAPI):
                 msg = msg.split(",", 1)[1].strip()
             else:
                 msg = msg.replace("Value error", "").strip()
-        logger.error(f"请求地址: {request.url}, 错误信息: {msg}, 错误详情: {exc}")
+        log.error(f"请求地址: {request.url}, 错误信息: {msg}, 错误详情: {exc}")
         return ErrorResponse(msg=str(msg), status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, data=exc.body)
 
     @app.exception_handler(ResponseValidationError)
@@ -131,7 +131,7 @@ def handle_exception(app: FastAPI):
         返回:
         - JSONResponse: 包含错误信息的 JSON 响应。
         """
-        logger.error(f"请求地址: {request.url}, 错误详情: {exc}")
+        log.error(f"请求地址: {request.url}, 错误详情: {exc}")
         return ErrorResponse(msg=str(exc), status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, data=exc.body)
 
     @app.exception_handler(SQLAlchemyError)
@@ -146,7 +146,7 @@ def handle_exception(app: FastAPI):
         - JSONResponse: 包含错误信息的 JSON 响应。
         """
         error_msg = f'数据库操作失败: {exc}'
-        logger.error(f"请求地址: {request.url}, 错误详情: {error_msg}")
+        log.error(f"请求地址: {request.url}, 错误详情: {error_msg}")
         return ErrorResponse(msg=error_msg, status_code=status.HTTP_400_BAD_REQUEST, data=str(exc))
 
     @app.exception_handler(ValueError)
@@ -160,7 +160,7 @@ def handle_exception(app: FastAPI):
         返回:
         - JSONResponse: 包含错误信息的 JSON 响应。
         """
-        logger.error(f"请求地址: {request.url}, 错误详情: {exc}")
+        log.error(f"请求地址: {request.url}, 错误详情: {exc}")
         return ErrorResponse(msg=str(exc))
 
     @app.exception_handler(FieldValidationError)
@@ -174,7 +174,7 @@ def handle_exception(app: FastAPI):
         返回:
         - JSONResponse: 包含错误信息的 JSON 响应。
         """
-        logger.error(f"请求地址: {request.url}, 错误信息: {exc.message}, 错误详情: {exc}")
+        log.error(f"请求地址: {request.url}, 错误信息: {exc.message}, 错误详情: {exc}")
         return ErrorResponse(msg=str(exc))
 
     @app.exception_handler(Exception)
@@ -188,5 +188,5 @@ def handle_exception(app: FastAPI):
         返回:
         - JSONResponse: 包含错误信息的 JSON 响应。
         """
-        logger.error(f"请求地址: {request.url}, 错误详情: {exc}")
+        log.error(f"请求地址: {request.url}, 错误详情: {exc}")
         return ErrorResponse(msg='服务器内部错误', status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, data=str(exc))

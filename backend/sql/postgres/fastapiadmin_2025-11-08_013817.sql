@@ -2889,7 +2889,7 @@ COPY public.system_menu (id, name, type, "order", status, permission, icon, rout
 10	岗位管理	2	3	t	module_system:position:query	el-icon-Coordinate	Position	/system/position	system/position/index	\N	f	t	f	岗位管理	null	f	2	初始化数据	2025-11-08 01:37:41.109202	2025-11-08 01:37:41.109202
 11	角色管理	2	4	t	module_system:role:query	role	Role	/system/role	system/role/index	\N	f	t	f	角色管理	null	f	2	初始化数据	2025-11-08 01:37:41.109203	2025-11-08 01:37:41.109203
 12	用户管理	2	5	t	module_system:user:query	el-icon-User	User	/system/user	system/user/index	\N	f	t	f	用户管理	null	f	2	初始化数据	2025-11-08 01:37:41.109203	2025-11-08 01:37:41.109204
-13	日志管理	2	6	t	module_system:log:query	el-icon-Aim	Log	/system/log	system/log/index	\N	f	t	f	日志管理	null	f	2	初始化数据	2025-11-08 01:37:41.109204	2025-11-08 01:37:41.109204
+13	日志管理	2	6	t	:query	el-icon-Aim	Log	/system/log	system/log/index	\N	f	t	f	日志管理	null	f	2	初始化数据	2025-11-08 01:37:41.109204	2025-11-08 01:37:41.109204
 14	公告管理	2	7	t	module_system:notice:query	bell	Notice	/system/notice	system/notice/index	\N	f	t	f	公告管理	null	f	2	初始化数据	2025-11-08 01:37:41.109205	2025-11-08 01:37:41.109205
 15	参数管理	2	8	t	module_system:param:query	setting	Params	/system/param	system/param/index	\N	f	t	f	参数管理	null	f	2	初始化数据	2025-11-08 01:37:41.109206	2025-11-08 01:37:41.109206
 16	字典管理	2	9	t	module_system:dict_type:query	dict	Dict	/system/dict	system/dict/index	\N	f	t	f	字典管理	null	f	2	初始化数据	2025-11-08 01:37:41.109206	2025-11-08 01:37:41.109207
@@ -2902,7 +2902,7 @@ COPY public.system_menu (id, name, type, "order", status, permission, icon, rout
 23	缓存监控	2	3	t	module_monitor:cache:query	el-icon-Stopwatch	MonitorCache	/monitor/cache	monitor/cache/index	\N	f	f	f	缓存监控	null	f	4	初始化数据	2025-11-08 01:37:41.109211	2025-11-08 01:37:41.109211
 24	文件管理	2	4	t	module_monitor:resource:query	el-icon-Files	Resource	/monitor/resource	monitor/resource/index	\N	f	t	f	文件管理	null	f	4	初始化数据	2025-11-08 01:37:41.109212	2025-11-08 01:37:41.109212
 25	代码生成	2	1	t	module_generator:gencode:query	code	Backcode	/gencode/backcode	gencode/backcode/index	\N	f	t	f	代码生成	null	f	5	代码生成	2025-11-08 01:37:41.109213	2025-11-08 01:37:41.109213
-26	示例管理	2	3	t	module_generator:demo:query	el-icon-DataLine	Demo	/gencode/demo	gencode/demo/index	\N	f	t	f	示例管理	null	f	5	初始化数据	2025-11-08 01:37:41.109213	2025-11-08 01:37:41.109214
+26	示例管理	2	3	t	module_example:demo:query	el-icon-DataLine	Demo	/gencode/demo	gencode/demo/index	\N	f	t	f	示例管理	null	f	5	初始化数据	2025-11-08 01:37:41.109213	2025-11-08 01:37:41.109214
 27	Swagger文档	4	1	t	module_common:docs:query	api	Docs	/common/docs	common/docs/index	\N	f	f	f	Swagger文档	null	f	6	初始化数据	2025-11-08 01:37:41.109214	2025-11-08 01:37:41.109214
 28	Redoc文档	4	2	t	module_common:redoc:query	el-icon-Document	Redoc	/common/redoc	common/redoc/index	\N	f	f	f	Redoc文档	null	f	6	初始化数据	2025-11-08 01:37:41.109215	2025-11-08 01:37:41.109215
 29	创建菜单	3	1	t	module_system:menu:create	\N	\N	\N	\N	\N	f	t	f	创建菜单	null	f	8	初始化数据	2025-11-08 01:37:41.115178	2025-11-08 01:37:41.115179
@@ -2981,13 +2981,13 @@ COPY public.system_menu (id, name, type, "order", status, permission, icon, rout
 102	生成代码到指定路径	3	7	t	module_generator:gencode:code	\N	\N	\N	\N	\N	f	t	f	生成代码到指定路径	null	f	25	生成代码到指定路径	2025-11-08 01:37:41.11523	2025-11-08 01:37:41.11523
 103	查询数据库表列表	3	8	t	module_generator:dblist:query	\N	\N	\N	\N	\N	f	t	f	查询数据库表列表	null	f	25	查询数据库表列表	2025-11-08 01:37:41.11523	2025-11-08 01:37:41.115231
 104	同步数据库	3	9	t	module_generator:db:sync	\N	\N	\N	\N	\N	f	t	f	同步数据库	null	f	25	同步数据库	2025-11-08 01:37:41.115231	2025-11-08 01:37:41.115231
-105	创建示例	3	1	t	module_generator:demo:create	\N	\N	\N	\N	\N	f	t	f	创建示例	null	f	26	初始化数据	2025-11-08 01:37:41.115232	2025-11-08 01:37:41.115232
-106	更新示例	3	2	t	module_generator:demo:update	\N	\N	\N	\N	\N	f	t	f	更新示例	null	f	26	初始化数据	2025-11-08 01:37:41.115232	2025-11-08 01:37:41.115233
-107	删除示例	3	3	t	module_generator:demo:delete	\N	\N	\N	\N	\N	f	t	f	删除示例	null	f	26	初始化数据	2025-11-08 01:37:41.115233	2025-11-08 01:37:41.115234
-108	批量修改示例状态	3	4	t	module_generator:demo:patch	\N	\N	\N	\N	\N	f	t	f	批量修改示例状态	null	f	26	初始化数据	2025-11-08 01:37:41.115234	2025-11-08 01:37:41.115234
-109	导出示例	3	5	t	module_generator:demo:export	\N	\N	\N	\N	\N	f	t	f	导出示例	null	f	26	初始化数据	2025-11-08 01:37:41.115235	2025-11-08 01:37:41.115235
-110	导入示例	3	6	t	module_generator:demo:import	\N	\N	\N	\N	\N	f	t	f	导入示例	null	f	26	初始化数据	2025-11-08 01:37:41.115235	2025-11-08 01:37:41.115236
-111	下载导入示例模版	3	7	t	module_generator:demo:download	\N	\N	\N	\N	\N	f	t	f	下载导入示例模版	null	f	26	初始化数据	2025-11-08 01:37:41.115236	2025-11-08 01:37:41.115236
+105	创建示例	3	1	t	module_example:demo:create	\N	\N	\N	\N	\N	f	t	f	创建示例	null	f	26	初始化数据	2025-11-08 01:37:41.115232	2025-11-08 01:37:41.115232
+106	更新示例	3	2	t	module_example:demo:update	\N	\N	\N	\N	\N	f	t	f	更新示例	null	f	26	初始化数据	2025-11-08 01:37:41.115232	2025-11-08 01:37:41.115233
+107	删除示例	3	3	t	module_example:demo:delete	\N	\N	\N	\N	\N	f	t	f	删除示例	null	f	26	初始化数据	2025-11-08 01:37:41.115233	2025-11-08 01:37:41.115234
+108	批量修改示例状态	3	4	t	module_example:demo:patch	\N	\N	\N	\N	\N	f	t	f	批量修改示例状态	null	f	26	初始化数据	2025-11-08 01:37:41.115234	2025-11-08 01:37:41.115234
+109	导出示例	3	5	t	module_example:demo:export	\N	\N	\N	\N	\N	f	t	f	导出示例	null	f	26	初始化数据	2025-11-08 01:37:41.115235	2025-11-08 01:37:41.115235
+110	导入示例	3	6	t	module_example:demo:import	\N	\N	\N	\N	\N	f	t	f	导入示例	null	f	26	初始化数据	2025-11-08 01:37:41.115235	2025-11-08 01:37:41.115236
+111	下载导入示例模版	3	7	t	module_example:demo:download	\N	\N	\N	\N	\N	f	t	f	下载导入示例模版	null	f	26	初始化数据	2025-11-08 01:37:41.115236	2025-11-08 01:37:41.115236
 \.
 
 

@@ -13,7 +13,7 @@ from app.core.exceptions import CustomException
 from app.core.database import async_db_session
 from app.core.redis_crud import RedisCURD
 from app.core.security import OAuth2Schema, decode_access_token
-from app.core.logger import logger
+from app.core.logger import log
 
 from app.api.v1.module_system.user.schema import UserOutSchema
 from app.api.v1.module_system.user.model import UserModel
@@ -170,7 +170,7 @@ class AuthPermission:
 
         # 权限验证 - 满足任一权限即可
         if not any(perm in user_permissions for perm in self.permissions):
-            logger.error(f"用户缺少任何所需的权限: {self.permissions}")
+            log.error(f"用户缺少任何所需的权限: {self.permissions}")
             raise CustomException(msg="无权限操作", code=10403, status_code=403)
 
         return auth

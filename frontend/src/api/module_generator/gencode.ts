@@ -31,7 +31,7 @@ const GencodeAPI = {
   },
 
   // 查询表详细信息
-  getGenTableDetail(table_id: number) {
+  detailTable(table_id: number) {
     return request<ApiResponse<GenTableSchema>>({
       url: `${API_PATH}/detail/${table_id}`,
       method: "get",

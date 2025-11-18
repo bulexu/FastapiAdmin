@@ -7,7 +7,8 @@ from typing import Dict, List
 from sqlalchemy import select, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.logger import logger
+from app.config.path_conf import SCRIPT_DIR
+from app.core.logger import log
 from app.core.database import async_db_session, async_engine
 from app.core.base_model import MappedBase
 from app.config.setting import settings
@@ -50,12 +51,12 @@ class InitializeData:
             # 使用引擎创建所有表
             async with async_engine.begin() as conn:
                 await conn.run_sync(MappedBase.metadata.create_all)
-            logger.info("✅️ 数据库表结构初始化完成")
+            log.info("✅️ 数据库表结构初始化完成")
         except asyncio.exceptions.TimeoutError:
-            logger.error("❌️ 数据库表结构初始化超时")
+            log.error("❌️ 数据库表结构初始化超时")
             raise
         except Exception as e:
-            logger.error(f"❌️ 数据库表结构初始化失败: {str(e)}")
+            log.error(f"❌️ 数据库表结构初始化失败: {str(e)}")
             raise
 
     async def __init_data(self, db: AsyncSession) -> None:
@@ -72,12 +73,12 @@ class InitializeData:
             count_result = await db.execute(select(func.count()).select_from(model))
             existing_count = count_result.scalar()
             if existing_count and existing_count > 0:
-                logger.warning(f"⚠️  跳过 {table_name} 表数据初始化（表已存在 {existing_count} 条记录）")
+                log.error(f"⚠️  跳过 {table_name} 表数据初始化（表已存在 {existing_count} 条记录）")
                 continue
 
             data = await self.__get_data(table_name)
             if not data:
-                logger.warning(f"⚠️  跳过 {table_name} 表，无初始化数据")
+                log.error(f"⚠️  跳过 {table_name} 表，无初始化数据")
                 continue
             
             try:
@@ -91,10 +92,10 @@ class InitializeData:
                     objs = [model(**item) for item in data]
                 db.add_all(objs)
                 await db.flush()
-                logger.info(f"✅️ 已向 {table_name} 表写入初始化数据")
+                log.info(f"✅️ 已向 {table_name} 表写入初始化数据")
 
             except Exception as e:
-                logger.error(f"❌️ 初始化 {table_name} 表数据失败: {str(e)}")
+                log.error(f"❌️ 初始化 {table_name} 表数据失败: {str(e)}")
                 raise
 
     def __create_objects_with_children(self, data: List[Dict], model_class) -> List:
@@ -138,7 +139,7 @@ class InitializeData:
         返回:
         - List[Dict]: 解析后的 JSON 数据列表。
         """
-        json_path = Path.joinpath(settings.SCRIPT_DIR, f'{filename}.json')
+        json_path = SCRIPT_DIR / f'{filename}.json'
         if not json_path.exists():
             return []
 
@@ -146,10 +147,10 @@ class InitializeData:
             with open(json_path, 'r', encoding='utf-8') as f:
                 return json.loads(f.read())
         except json.JSONDecodeError as e:
-            logger.error(f"❌️ 解析 {json_path} 失败: {str(e)}")
+            log.error(f"❌️ 解析 {json_path} 失败: {str(e)}")
             raise
         except Exception as e:
-            logger.error(f"❌️ 读取 {json_path} 失败: {str(e)}")
+            log.error(f"❌️ 读取 {json_path} 失败: {str(e)}")
             raise
 
     async def init_db(self) -> None:

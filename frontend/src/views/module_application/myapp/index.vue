@@ -33,7 +33,7 @@
         </el-form-item>
         <el-form-item class="search-buttons">
           <el-button
-            v-hasPerm="['application:myapp:query']"
+            v-hasPerm="['module_module_application:myapp:query']"
             type="primary"
             icon="search"
             native-type="submit"
@@ -41,7 +41,7 @@
             查询
           </el-button>
           <el-button
-            v-hasPerm="['application:myapp:query']"
+            v-hasPerm="['module_application:myapp:query']"
             icon="refresh"
             @click="handleResetQuery"
           >
@@ -76,7 +76,7 @@
             应用市场
           </span>
           <el-button
-            v-hasPerm="['application:myapp:create']"
+            v-hasPerm="['module_application:myapp:create']"
             type="primary"
             icon="plus"
             @click="handleCreateApp"
@@ -119,14 +119,14 @@
                   <!-- 操作按钮 -->
                   <div v-if="hoveredCard === app.id" class="card-actions" @click.stop>
                     <el-button
-                      v-hasPerm="['application:myapp:update']"
+                      v-hasPerm="['module_application:myapp:update']"
                       type="primary"
                       link
                       icon="Edit"
                       @click="handleAppAction('edit', app)"
                     ></el-button>
                     <el-button
-                      v-hasPerm="['application:myapp:delete']"
+                      v-hasPerm="['module_application:myapp:delete']"
                       type="danger"
                       link
                       icon="Delete"
@@ -322,7 +322,7 @@ const formatTime = (time: string | undefined) => {
 async function loadApplicationList() {
   loading.value = true;
   try {
-    const response = await ApplicationAPI.getApplicationList(queryFormData);
+    const response = await ApplicationAPI.listApp(queryFormData);
     applicationList.value = response.data.data.items;
     total.value = response.data.data.total;
   } catch (error) {
@@ -375,7 +375,7 @@ async function handleDeleteApp(app: ApplicationInfo) {
       type: "warning",
     });
 
-    await ApplicationAPI.deleteApplication([app.id!]);
+    await ApplicationAPI.deleteApp([app.id!]);
     await loadApplicationList();
   } catch (error) {
     if (error !== "cancel") {
@@ -478,9 +478,9 @@ async function handleSubmit() {
     await formRef.value?.validate();
 
     if (dialogType.value === "create") {
-      await ApplicationAPI.createApplication(formData);
+      await ApplicationAPI.createApp(formData);
     } else {
-      await ApplicationAPI.updateApplication(currentApp.value!.id!, formData);
+      await ApplicationAPI.updateApp(currentApp.value!.id!, formData);
     }
 
     dialogVisible.value = false;

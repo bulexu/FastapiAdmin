@@ -273,21 +273,22 @@
         </div>
       </template>
     </el-dialog>
-  <!-- 导入弹窗 -->
-  <ImportModal 
-    v-model="importDialogVisible" 
-    :content-config="curdContentConfig"
-    @upload="handleUpload" 
-  />
+    
+    <!-- 导入弹窗 -->
+    <ImportModal 
+      v-model="importDialogVisible" 
+      :content-config="curdContentConfig"
+      @upload="handleUpload" 
+    />
 
-  <!-- 导出弹窗 -->
-  <ExportModal 
-    v-model="exportsDialogVisible"
-    :content-config="curdContentConfig"
-    :query-params="queryFormData"
-    :page-data="pageTableData"
-    :selection-data="selectionRows"
-  />
+    <!-- 导出弹窗 -->
+    <ExportModal 
+      v-model="exportsDialogVisible"
+      :content-config="curdContentConfig"
+      :query-params="queryFormData"
+      :page-data="pageTableData"
+      :selection-data="selectionRows"
+    />
   </div>
 </template>
 
@@ -301,7 +302,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { ResultEnum } from '@/enums/api/result.enum'
 import { QuestionFilled, ArrowUp, ArrowDown, Check, CircleClose } from '@element-plus/icons-vue'
 import { formatToDateTime } from '@/utils/dateUtil'
-import {{ class_name }}API from '@/api/{{ module_name }}/{{ business_name }}'
+import {{ class_name }}API, { {{ class_name }}PageQuery, {{ class_name }}Table, {{ class_name }}Form } from '@/api/{{ module_name }}/{{ business_name }}'
 import { useDictStore } from '@/store/index'
 import SingleImageUpload from '@/components/Upload/SingleImageUpload.vue'
 import ImportModal from '@/components/CURD/ImportModal.vue'
@@ -317,7 +318,7 @@ const queryFormRef = ref()
 const dataFormRef = ref()
 const total = ref(0)
 const selectIds = ref<number[]>([])
-const selectionRows = ref<any[]>([])
+const selectionRows = ref<{{ class_name }}Table[]>([]);
 const loading = ref(false)
 
 // 字典仓库与需要加载的字典类型
@@ -330,8 +331,8 @@ const dictTypes = [
   {% endfor %}
 ]
 
-// 表格数据
-const pageTableData = ref<any[]>([])
+// 分页表单
+const pageTableData = ref<{{ class_name }}Table[]>([]);
 
 // 表格列配置（根据列生成，可显隐）
 const tableColumns = ref([
@@ -358,7 +359,7 @@ const exportColumns = [
 const curdContentConfig = {
   permPrefix: '{{ module_name }}:{{ business_name }}',
   cols: exportColumns as any,
-  importTemplate: () => {{ class_name }}API.downloadTemplate(),
+  importTemplate: () => {{ class_name }}API.downloadTemplate{{ class_name }}(),
   exportsAction: async (params: any) => {
     const query: any = { ...params };
     if (typeof query.status === 'string') {
@@ -368,7 +369,7 @@ const curdContentConfig = {
     query.page_size = 9999;
     const all: any[] = [];
     while (true) {
-      const res = await {{ class_name }}API.list(query)
+      const res = await {{ class_name }}API.list{{ class_name }}(query)
       const items = res.data?.data?.items || []
       const total = res.data?.data?.total || 0
       all.push(...items)
@@ -387,7 +388,7 @@ const dialogVisible = reactive({
 })
 
 // 编辑表单
-const formData = reactive({
+const formData = reactive<{{ class_name }}Form>({
   id: undefined,
   {% for column in columns %}
   {% if column.is_insert == "1" or column.is_edit == "1" %}
@@ -397,7 +398,7 @@ const formData = reactive({
 })
 
 // 定义初始表单数据常量
-const initialFormData = {
+const initialFormData: {{ class_name }}Form = {
   id: undefined,
   {% for column in columns %}
   {% if column.is_insert == "1" or column.is_edit == "1" %}
@@ -429,7 +430,8 @@ const rules = reactive({
 })
 
 // 详情表单
-const detailFormData = ref<any>({});
+const detailFormData = ref<{{ class_name }}Table>({});
+
 
 // 统一日期范围
 const dateRange = ref<[Date, Date] | []>([]);
@@ -445,7 +447,7 @@ function handleDateRangeChange(range: [Date, Date]) {
 }
 
 // 查询参数
-const queryFormData = reactive({
+const queryFormData = reactive<{{ class_name }}PageQuery>({
   page_no: 1,
   page_size: 10,
   {% for column in columns %}
@@ -462,7 +464,7 @@ const queryFormData = reactive({
 async function loadingData() {
   loading.value = true;
   try {
-    const response = await {{ class_name }}API.list(queryFormData);
+    const response = await {{ class_name }}API.list{{ class_name }}(queryFormData);
     pageTableData.value = response.data.data.items;
     total.value = response.data.data.total;
   } catch (error) {
@@ -509,7 +511,7 @@ async function handleCloseDialog() {
 async function handleOpenDialog(type: 'create' | 'update' | 'detail', id?: number) {
   dialogVisible.type = type
   if (id) {
-    const response = await {{ class_name }}API.detail(id);
+    const response = await {{ class_name }}API.detail{{ class_name }}(id);
     if (type === 'detail') {
       dialogVisible.title = '详情';
       Object.assign(detailFormData.value, response.data.data);
@@ -532,13 +534,13 @@ async function handleSubmit() {
       try {
         const id = formData.id
         if (id) {
-          await {{ class_name }}API.update(id, { id, ...formData });
+          await {{ class_name }}API.update{{ class_name }}(id, { id, ...formData });
           dialogVisible.visible = false;
           resetForm();
           handleCloseDialog();
           handleResetQuery();
         } else {
-          await {{ class_name }}API.create(formData);
+          await {{ class_name }}API.create{{ class_name }}(formData);
           dialogVisible.visible = false;
           resetForm();
           handleCloseDialog();
@@ -563,7 +565,7 @@ async function handleDelete(ids: number[]) {
     .then(async () => {
       try {
         loading.value = true;
-        await {{ class_name }}API.delete(ids);
+        await {{ class_name }}API.delete{{ class_name }}(ids);
         handleResetQuery()
       } catch (error) {
         console.error(error)
@@ -586,7 +588,7 @@ async function handleMoreClick(status: boolean) {
     }).then(async () => {
       try {
         loading.value = true
-        await {{ class_name }}API.batchAvailable({ ids: selectIds.value, status });
+        await {{ class_name }}API.batchAvailable{{ class_name }}({ ids: selectIds.value, status });
         handleResetQuery()
       } catch (error) {
         console.error(error)
@@ -616,7 +618,7 @@ function handleOpenExportsModal() {
 // 处理上传
 const handleUpload = async (formData: FormData) => {
   try {
-    const response = await {{ class_name }}API.import(formData);
+    const response = await {{ class_name }}API.import{{ class_name }}(formData);
     if (response.data.code === ResultEnum.SUCCESS) {
       ElMessage.success(`${response.data.msg}，${response.data.data}`)
       importDialogVisible.value = false

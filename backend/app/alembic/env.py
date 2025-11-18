@@ -5,12 +5,13 @@ from sqlalchemy.ext.asyncio import create_async_engine
 from sqlalchemy import pool
 from alembic import context
 
+from app.config.path_conf import ALEMBIC_VERSION_DIR
 from app.utils.import_util import ImportUtil
 from app.core.base_model import MappedBase
 from app.config.setting import settings
 
 # 确保 alembic 版本目录存在
-settings.ALEMBIC_VERSION_DIR.mkdir(parents=True, exist_ok=True)
+ALEMBIC_VERSION_DIR.mkdir(parents=True, exist_ok=True)
 
 # 清除MappedBase.metadata中的表定义，避免重复注册
 if hasattr(MappedBase, 'metadata') and MappedBase.metadata.tables:

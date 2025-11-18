@@ -3,22 +3,22 @@ import request from "@/utils/request";
 const API_PATH = "/system/tenant";
 
 const TenantAPI = {
-  list(query: ObjPageQuery) {
-    return request<ApiResponse<PageResult<ObjTable[]>>>({
+  listTenant(query: TenantPageQuery) {
+    return request<ApiResponse<PageResult<TenantTable[]>>>({
       url: `${API_PATH}/list`,
       method: "get",
       params: query,
     });
   },
 
-  detail(query: number) {
-    return request<ApiResponse<ObjTable>>({
+  detailTenant(query: number) {
+    return request<ApiResponse<TenantTable>>({
       url: `${API_PATH}/detail/${query}`,
       method: "get",
     });
   },
 
-  create(body: ObjForm) {
+  createTenant(body: TenantForm) {
     return request<ApiResponse>({
       url: `${API_PATH}/create`,
       method: "post",
@@ -26,7 +26,7 @@ const TenantAPI = {
     });
   },
 
-  update(id: number, body: ObjForm) {
+  updateTenant(id: number, body: TenantForm) {
     return request<ApiResponse>({
       url: `${API_PATH}/update/${id}`,
       method: "put",
@@ -34,7 +34,7 @@ const TenantAPI = {
     });
   },
 
-  delete(body: number[]) {
+  deleteTenant(body: number[]) {
     return request<ApiResponse>({
       url: `${API_PATH}/delete`,
       method: "delete",
@@ -42,7 +42,7 @@ const TenantAPI = {
     });
   },
 
-  batch(body: BatchType) {
+  batchTenant(body: BatchType) {
     return request<ApiResponse>({
       url: `${API_PATH}/available/setting`,
       method: "patch",
@@ -50,7 +50,7 @@ const TenantAPI = {
     });
   },
 
-  export(body: ObjPageQuery) {
+  exportTenant(body: TenantPageQuery) {
     return request<Blob>({
       url: `${API_PATH}/export`,
       method: "post",
@@ -59,7 +59,7 @@ const TenantAPI = {
     });
   },
 
-  download() {
+  downloadTenant() {
     return request<ApiResponse>({
       url: `${API_PATH}/download/template`,
       method: "post",
@@ -67,7 +67,7 @@ const TenantAPI = {
     });
   },
 
-  import(body: FormData) {
+  importTenant(body: FormData) {
     return request<ApiResponse>({
       url: `${API_PATH}/import`,
       method: "post",
@@ -81,7 +81,7 @@ const TenantAPI = {
 
 export default TenantAPI;
 
-export interface ObjPageQuery extends PageQuery {
+export interface TenantPageQuery extends PageQuery {
   /** 示例标题 */
   name?: string;
   /** 示例状态 */
@@ -94,7 +94,7 @@ export interface ObjPageQuery extends PageQuery {
   creator?: number;
 }
 
-export interface ObjTable {
+export interface TenantTable {
   index?: number;
   id?: number;
   name?: string;
@@ -106,7 +106,7 @@ export interface ObjTable {
   // creator?: creatorType;
 }
 
-export interface ObjForm {
+export interface TenantForm {
   id?: number;
   name?: string;
   code?: string;

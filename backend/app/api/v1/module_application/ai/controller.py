@@ -8,7 +8,7 @@ from app.common.request import PaginationService
 from app.core.base_params import PaginationQueryParam
 from app.core.dependencies import AuthPermission
 from app.core.router_class import OperationLogRoute
-from app.core.logger import logger
+from app.core.logger import log
 
 from app.api.v1.module_system.auth.schema import AuthSchema
 from .param import McpQueryParam
@@ -34,7 +34,7 @@ async def chat_controller(
     - StreamingResponse: 流式响应,每次返回一个聊天响应
     """
     user_name = auth.user.name if auth.user else "未知用户"
-    logger.info(f"用户 {user_name} 发起智能对话: {query.message[:50]}...")
+    log.info(f"用户 {user_name} 发起智能对话: {query.message[:50]}...")
     
     async def generate_response():
         try:
@@ -43,7 +43,7 @@ async def chat_controller(
                 if chunk:
                     yield chunk.encode('utf-8') if isinstance(chunk, str) else chunk
         except Exception as e:
-            logger.error(f"流式响应出错: {str(e)}")
+            log.error(f"流式响应出错: {str(e)}")
             yield f"抱歉，处理您的请求时出现了错误: {str(e)}".encode('utf-8')
     
     return StreamResponse(generate_response(), media_type="text/plain; charset=utf-8")
@@ -64,7 +64,7 @@ async def detail_controller(
     - JSONResponse: 包含 MCP 服务器详情的 JSON 响应
     """
     result_dict = await McpService.detail_service(auth=auth, id=id)
-    logger.info(f"获取 MCP 服务器详情成功 {id}")
+    log.info(f"获取 MCP 服务器详情成功 {id}")
     return SuccessResponse(data=result_dict, msg="获取 MCP 服务器详情成功")
 
 
@@ -87,7 +87,7 @@ async def list_controller(
     """
     result_dict_list = await McpService.list_service(auth=auth, search=search, order_by=page.order_by)
     result_dict = await PaginationService.paginate(data_list=result_dict_list, page_no=page.page_no, page_size=page.page_size)
-    logger.info(f"查询 MCP 服务器列表成功")
+    log.info(f"查询 MCP 服务器列表成功")
     return SuccessResponse(data=result_dict, msg="查询 MCP 服务器列表成功")
 
 
@@ -107,7 +107,7 @@ async def create_controller(
     - JSONResponse: 包含创建 MCP 服务器结果的 JSON 响应
     """
     result_dict = await McpService.create_service(auth=auth, data=data)
-    logger.info(f"创建 MCP 服务器成功: {result_dict}")
+    log.info(f"创建 MCP 服务器成功: {result_dict}")
     return SuccessResponse(data=result_dict, msg="创建 MCP 服务器成功")
 
 
@@ -129,7 +129,7 @@ async def update_controller(
     - JSONResponse: 包含修改 MCP 服务器结果的 JSON 响应
     """
     result_dict = await McpService.update_service(auth=auth, id=id, data=data)
-    logger.info(f"修改 MCP 服务器成功: {result_dict}")
+    log.info(f"修改 MCP 服务器成功: {result_dict}")
     return SuccessResponse(data=result_dict, msg="修改 MCP 服务器成功")
 
 
@@ -149,7 +149,7 @@ async def delete_controller(
     - JSONResponse: 包含删除 MCP 服务器结果的 JSON 响应
     """
     await McpService.delete_service(auth=auth, ids=ids)
-    logger.info(f"删除 MCP 服务器成功: {ids}")
+    log.info(f"删除 MCP 服务器成功: {ids}")
     return SuccessResponse(msg="删除 MCP 服务器成功")
 
 
@@ -172,9 +172,9 @@ async def websocket_chat_controller(
                     if chunk:
                         await websocket.send_text(chunk)
             except Exception as e:
-                logger.error(f"处理聊天查询出错: {str(e)}")
+                log.error(f"处理聊天查询出错: {str(e)}")
                 await websocket.send_text(f"抱歉，处理您的请求时出现了错误: {str(e)}")
     except Exception as e:
-        logger.error(f"WebSocket聊天出错: {str(e)}")
+        log.error(f"WebSocket聊天出错: {str(e)}")
     finally:
         await websocket.close()

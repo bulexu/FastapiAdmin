@@ -3,7 +3,7 @@ import request from "@/utils/request";
 const API_PATH = "/system/role";
 
 const RoleAPI = {
-  getRoleList(query?: TablePageQuery) {
+  listRole(query?: TablePageQuery) {
     return request<ApiResponse<PageResult<RoleTable[]>>>({
       url: `${API_PATH}/list`,
       method: "get",
@@ -11,7 +11,7 @@ const RoleAPI = {
     });
   },
 
-  getRoleDetail(query: number) {
+  detailRole(query: number) {
     return request<ApiResponse<RoleTable>>({
       url: `${API_PATH}/detail/${query}`,
       method: "get",
@@ -42,7 +42,7 @@ const RoleAPI = {
     });
   },
 
-  batchAvailableRole(body: BatchType) {
+  batchRole(body: BatchType) {
     return request<ApiResponse>({
       url: `${API_PATH}/available/setting`,
       method: "patch",

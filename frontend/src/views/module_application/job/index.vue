@@ -126,7 +126,7 @@
             <el-col :span="1.5">
               <el-tooltip content="清除">
                 <el-button
-                  v-hasPerm="['module_application:job:clear']"
+                  v-hasPerm="['module_application:job:delete']"
                   type="danger"
                   icon="delete"
                   circle
@@ -137,7 +137,6 @@
             <el-col :span="1.5">
               <el-tooltip content="刷新">
                 <el-button
-                  v-hasPerm="['module_application:job:refresh']"
                   type="primary"
                   icon="refresh"
                   circle
@@ -255,7 +254,7 @@
               >
                 删除
               </el-button>
-              <el-dropdown v-hasPerm="['module_application:job:status']" trigger="click">
+              <el-dropdown v-hasPerm="['module_application:job:update']" trigger="click">
                 <el-button type="warning" size="small" link icon="ArrowDown">更多</el-button>
                 <template #dropdown>
                   <el-dropdown-menu>
@@ -589,7 +588,7 @@
           </el-button>
           <el-button
             v-else
-            v-hasPerm="['module_application:job:detail']"
+            v-hasPerm="['module_application:job:query']"
             type="primary"
             @click="handleCloseDialog"
           >
@@ -732,7 +731,7 @@ async function handleRefresh() {
 async function loadingData() {
   loading.value = true;
   try {
-    const response = await JobAPI.getJobList(queryFormData);
+    const response = await JobAPI.listJob(queryFormData);
     pageTableData.value = response.data.data.items;
     total.value = response.data.data.total;
   } catch (error: any) {
@@ -809,7 +808,7 @@ async function handleCloseDialog() {
 async function handleOpenDialog(type: "create" | "update" | "detail", id?: number) {
   dialogVisible.type = type;
   if (id) {
-    const response = await JobAPI.getJobDetail(id);
+    const response = await JobAPI.detailJob(id);
     if (type === "detail") {
       dialogVisible.title = "任务详情";
       Object.assign(detailFormData.value, response.data.data);
@@ -965,7 +964,7 @@ const curdContentConfig = {
     query.page_size = 1000;
     const all: any[] = [];
     while (true) {
-      const res = await JobAPI.getJobList(query);
+      const res = await JobAPI.listJob(query);
       const items = res.data?.data?.items || [];
       const total = res.data?.data?.total || 0;
       all.push(...items);

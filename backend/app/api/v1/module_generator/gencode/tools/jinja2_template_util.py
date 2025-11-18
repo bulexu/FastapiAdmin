@@ -1,12 +1,12 @@
 # -*- coding:utf-8 -*-
 
-import os
 from datetime import datetime
 from jinja2.environment import Environment
 from jinja2 import Environment, FileSystemLoader, select_autoescape, Template
 from typing import List, Any, Set
 
 from app.common.constant import GenConstant
+from app.config.path_conf import TEMPLATE_DIR
 from app.config.setting import settings
 from app.utils.common_util import CamelCaseUtil, SnakeCaseUtil
 from app.utils.string_util import StringUtil
@@ -41,14 +41,9 @@ class Jinja2TemplateUtil:
         """
         try:
             if cls._env is None:
-                # 确保模板目录存在
-                template_dir = settings.TEMPLATE_DIR
-                if not os.path.exists(template_dir):
-                    raise RuntimeError(f'模板目录不存在: {template_dir}')
-
                 cls._env = Environment(
-                    loader=FileSystemLoader(settings.TEMPLATE_DIR),
-                    autoescape=select_autoescape(['html', 'xml', 'jinja', 'j2']), # 自动转义HTML
+                    loader=FileSystemLoader(TEMPLATE_DIR),
+                    autoescape=False, # 自动转义HTML
                     trim_blocks=True,   # 删除多余的空行
                     lstrip_blocks=True,  # 删除行首空格
                     keep_trailing_newline=True,  # 保留行尾换行符

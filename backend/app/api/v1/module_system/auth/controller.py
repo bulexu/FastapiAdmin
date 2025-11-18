@@ -10,7 +10,7 @@ from redis.asyncio.client import Redis
 from app.common.response import ErrorResponse, SuccessResponse
 from app.core.router_class import OperationLogRoute
 from app.core.security import CustomOAuth2PasswordRequestForm
-from app.core.logger import logger
+from app.core.logger import log
 from app.config.setting import settings
 from app.core.dependencies import (
     db_getter,
@@ -56,7 +56,7 @@ async def login_for_access_token_controller(
     """
     login_token = await LoginService.authenticate_user_service(request=request, redis=redis, login_form=login_form, db=db)
 
-    logger.info(f"用户{login_form.username}登录成功")
+    log.info(f"用户{login_form.username}登录成功")
 
     # 如果是文档请求，则不记录日志:http://localhost:8000/api/v1/docs
     if settings.DOCS_URL in request.headers.get("referer", ""):
@@ -87,7 +87,7 @@ async def get_new_token_controller(
     # 解析当前的访问Token以获取用户名
     new_token = await LoginService.refresh_token_service(db=db, request=request, redis=redis, refresh_token=payload)
     token_dict = new_token.model_dump()
-    logger.info(f"刷新token成功: {token_dict}")
+    log.info(f"刷新token成功: {token_dict}")
     return SuccessResponse(data=token_dict, msg="刷新成功")
 
 
@@ -109,7 +109,7 @@ async def get_captcha_for_login_controller(
     """
     # 获取验证码
     captcha = await CaptchaService.get_captcha_service(redis=redis)
-    logger.info(f"获取验证码成功")
+    log.info(f"获取验证码成功")
     return SuccessResponse(data=captcha, msg="获取验证码成功")
 
 
@@ -132,6 +132,6 @@ async def logout_controller(
     - CustomException: 退出登录失败时抛出异常。
     """
     if await LoginService.logout_service(redis=redis, token=payload):
-        logger.info('退出成功')
+        log.info('退出成功')
         return SuccessResponse(msg='退出成功')
     return ErrorResponse(msg='退出失败')

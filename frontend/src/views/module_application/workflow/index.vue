@@ -339,11 +339,11 @@ defineOptions({
 });
 
 import { ref, reactive, onMounted } from "vue";
-import ExampleAPI, {
-  ExampleTable,
-  ExampleForm,
-  ExamplePageQuery,
-} from "@/api/module_generator/demo";
+import DemoAPI, {
+  DemoTable,
+  DemoForm,
+  DemoPageQuery,
+} from "@/api/module_example/demo";
 import DatePicker from "@/components/DatePicker/index.vue";
 import { formatToDateTime } from "@/utils/dateUtil";
 
@@ -356,7 +356,7 @@ const isExpand = ref(false);
 const isExpandable = ref(true);
 
 // 分页表单
-const pageTableData = ref<ExampleTable[]>([]);
+const pageTableData = ref<DemoTable[]>([]);
 
 // 表格列配置
 const tableColumns = ref([
@@ -372,7 +372,7 @@ const tableColumns = ref([
 ]);
 
 // 详情表单
-const detailFormData = ref<ExampleTable>({});
+const detailFormData = ref<DemoTable>({});
 
 // 日期范围临时变量
 const dateRange = ref<[Date, Date] | []>([]);
@@ -390,7 +390,7 @@ function handleDateRangeChange(range: [Date, Date]) {
 }
 
 // 分页查询参数
-const queryFormData = reactive<ExamplePageQuery>({
+const queryFormData = reactive<DemoPageQuery>({
   page_no: 1,
   page_size: 10,
   name: undefined,
@@ -400,7 +400,7 @@ const queryFormData = reactive<ExamplePageQuery>({
 });
 
 // 编辑表单
-const formData = reactive<ExampleForm>({
+const formData = reactive<DemoForm>({
   id: undefined,
   name: "",
   status: true,
@@ -429,7 +429,7 @@ async function handleRefresh() {
 async function loadingData() {
   loading.value = true;
   try {
-    const response = await ExampleAPI.getExampleList(queryFormData);
+    const response = await DemoAPI.getDemoList(queryFormData);
     pageTableData.value = response.data.data.items;
     total.value = response.data.data.total;
   } catch (error: any) {
@@ -457,7 +457,7 @@ async function handleResetQuery() {
 }
 
 // 定义初始表单数据常量
-const initialFormData: ExampleForm = {
+const initialFormData: DemoForm = {
   id: undefined,
   name: "",
   status: true,
@@ -489,7 +489,7 @@ async function handleCloseDialog() {
 async function handleOpenDialog(type: "create" | "update" | "detail", id?: number) {
   dialogVisible.type = type;
   if (id) {
-    const response = await ExampleAPI.getExampleDetail(id);
+    const response = await DemoAPI.getDemoDetail(id);
     if (type === "detail") {
       dialogVisible.title = "详情";
       Object.assign(detailFormData.value, response.data.data);
@@ -514,7 +514,7 @@ async function handleSubmit() {
       const id = formData.id;
       if (id) {
         try {
-          await ExampleAPI.updateExample(id, { id, ...formData });
+          await DemoAPI.updateDemo(id, { id, ...formData });
           dialogVisible.visible = false;
           resetForm();
           handleCloseDialog();
@@ -526,7 +526,7 @@ async function handleSubmit() {
         }
       } else {
         try {
-          await ExampleAPI.createExample(formData);
+          await DemoAPI.createDemo(formData);
           dialogVisible.visible = false;
           resetForm();
           handleCloseDialog();
@@ -551,7 +551,7 @@ async function handleDelete(ids: number[]) {
     .then(async () => {
       try {
         loading.value = true;
-        await ExampleAPI.deleteExample(ids);
+        await DemoAPI.deleteDemo(ids);
         handleResetQuery();
       } catch (error: any) {
         console.error(error);
@@ -575,7 +575,7 @@ async function handleMoreClick(status: boolean) {
       .then(async () => {
         try {
           loading.value = true;
-          await ExampleAPI.batchAvailableExample({ ids: selectIds.value, status });
+          await DemoAPI.batchDemo({ ids: selectIds.value, status });
           handleResetQuery();
         } catch (error: any) {
           console.error(error);

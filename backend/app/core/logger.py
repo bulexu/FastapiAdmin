@@ -2,9 +2,9 @@
 
 import logging
 import sys
-from pathlib import Path
 from loguru import logger
 
+from app.config.path_conf import LOG_DIR
 from app.config.setting import settings
 
 
@@ -76,7 +76,7 @@ def setup_logging():
     )
 
     # 步骤4：创建日志目录
-    log_dir = Path(settings.LOGGER_DIR)
+    log_dir = LOG_DIR
     # 确保日志目录存在,如果不存在则创建
     log_dir.mkdir(parents=True, exist_ok=True)
 
@@ -86,9 +86,9 @@ def setup_logging():
         format=log_format,
         level="INFO",
         rotation="00:00",  # 每天午夜轮转
-        retention=settings.LOG_RETENTION_DAYS,
+        retention=30,      # 日志保留天数，超过此天数的日志文件将被自动清理
         compression="gz",
-        encoding=settings.ENCODING,
+        encoding="utf-8",
         enqueue=True
     )
 
@@ -98,19 +98,21 @@ def setup_logging():
         format=log_format,
         level="ERROR",
         rotation="00:00",  # 每天午夜轮转
-        retention=settings.LOG_RETENTION_DAYS,
+        retention=30,      # 日志保留天数，超过此天数的日志文件将被自动清理
         compression="gz",
-        encoding=settings.ENCODING,
+        encoding="utf-8",
         enqueue=True,
         backtrace=True,
         diagnose=True
     )
 
     # 步骤7：配置标准库日志
-    logging.basicConfig(handlers=[InterceptHandler()], level=settings.LOGGER_LEVEL, force=True)
+    logging.basicConfig(handlers=[InterceptHandler()], level="DEBUG" if settings.DEBUG else "INFO", force=True)
     logger_name_list = [name for name in logging.root.manager.loggerDict]
     # 步骤8：配置第三方库日志
     for logger_name in logger_name_list:
         _logger = logging.getLogger(logger_name)
         _logger.handlers = [InterceptHandler()]
         _logger.propagate = False
+
+log = logger

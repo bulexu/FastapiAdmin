@@ -1,24 +1,24 @@
 import request from "@/utils/request";
 
-const API_PATH = "/generator/demo";
+const API_PATH = "/example/demo";
 
-const ExampleAPI = {
-  getExampleList(query: ExamplePageQuery) {
-    return request<ApiResponse<PageResult<ExampleTable[]>>>({
+const DemoAPI = {
+  getDemoList(query: DemoPageQuery) {
+    return request<ApiResponse<PageResult<DemoTable[]>>>({
       url: `${API_PATH}/list`,
       method: "get",
       params: query,
     });
   },
 
-  getExampleDetail(query: number) {
-    return request<ApiResponse<ExampleTable>>({
+  getDemoDetail(query: number) {
+    return request<ApiResponse<DemoTable>>({
       url: `${API_PATH}/detail/${query}`,
       method: "get",
     });
   },
 
-  createExample(body: ExampleForm) {
+  createDemo(body: DemoForm) {
     return request<ApiResponse>({
       url: `${API_PATH}/create`,
       method: "post",
@@ -26,7 +26,7 @@ const ExampleAPI = {
     });
   },
 
-  updateExample(id: number, body: ExampleForm) {
+  updateDemo(id: number, body: DemoForm) {
     return request<ApiResponse>({
       url: `${API_PATH}/update/${id}`,
       method: "put",
@@ -34,7 +34,7 @@ const ExampleAPI = {
     });
   },
 
-  deleteExample(body: number[]) {
+  deleteDemo(body: number[]) {
     return request<ApiResponse>({
       url: `${API_PATH}/delete`,
       method: "delete",
@@ -42,7 +42,7 @@ const ExampleAPI = {
     });
   },
 
-  batchAvailableExample(body: BatchType) {
+  batchDemo(body: BatchType) {
     return request<ApiResponse>({
       url: `${API_PATH}/available/setting`,
       method: "patch",
@@ -50,7 +50,7 @@ const ExampleAPI = {
     });
   },
 
-  exportExample(body: ExamplePageQuery) {
+  exportDemo(body: DemoPageQuery) {
     return request<Blob>({
       url: `${API_PATH}/export`,
       method: "post",
@@ -59,7 +59,7 @@ const ExampleAPI = {
     });
   },
 
-  downloadTemplate() {
+  downloadTemplateDemo() {
     return request<ApiResponse>({
       url: `${API_PATH}/download/template`,
       method: "post",
@@ -67,7 +67,7 @@ const ExampleAPI = {
     });
   },
 
-  importExample(body: FormData) {
+  importDemo(body: FormData) {
     return request<ApiResponse>({
       url: `${API_PATH}/import`,
       method: "post",
@@ -79,9 +79,9 @@ const ExampleAPI = {
   },
 };
 
-export default ExampleAPI;
+export default DemoAPI;
 
-export interface ExamplePageQuery extends PageQuery {
+export interface DemoPageQuery extends PageQuery {
   /** 示例标题 */
   name?: string;
   /** 示例状态 */
@@ -94,7 +94,7 @@ export interface ExamplePageQuery extends PageQuery {
   creator?: number;
 }
 
-export interface ExampleTable {
+export interface DemoTable {
   index?: number;
   id?: number;
   name?: string;
@@ -105,7 +105,7 @@ export interface ExampleTable {
   creator?: creatorType;
 }
 
-export interface ExampleForm {
+export interface DemoForm {
   id?: number;
   name?: string;
   status?: boolean;

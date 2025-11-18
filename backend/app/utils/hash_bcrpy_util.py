@@ -10,7 +10,7 @@ from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 from itsdangerous import URLSafeSerializer
 
-from app.core.logger import logger
+from app.core.logger import log
 
 
 # 密码加密配置
@@ -184,7 +184,7 @@ class ItsDCipher:
         try:
             ciphertext = serializer.dumps(plaintext)
         except Exception as e:
-            logger.error(f'ItsDangerous encrypt failed: {e}')
+            log.error(f'ItsDangerous encrypt failed: {e}')
             ciphertext = Md5Cipher.encrypt(plaintext)
         return ciphertext
 
@@ -205,6 +205,6 @@ class ItsDCipher:
         try:
             plaintext = serializer.loads(ciphertext)
         except Exception as e:
-            logger.error(f'ItsDangerous decrypt failed: {e}')
+            log.error(f'ItsDangerous decrypt failed: {e}')
             plaintext = ciphertext
         return plaintext

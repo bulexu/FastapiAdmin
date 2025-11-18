@@ -29,7 +29,7 @@ class MenuModel(ModelMixin):
     __loader_options__ = ["roles"]
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True, comment='主键ID')
-    name: Mapped[str] = mapped_column(String(50), nullable=False, comment='菜单名称', unique=True)
+    name: Mapped[str] = mapped_column(String(50), nullable=False, comment='菜单名称')
     type: Mapped[int] = mapped_column(Integer, nullable=False, default=2, comment='菜单类型(1:目录 2:菜单 3:按钮/权限 4:链接)')
     order: Mapped[int] = mapped_column(Integer, nullable=False, default=999, comment='显示排序')
     status: Mapped[bool] = mapped_column(Boolean(), default=True, nullable=False, comment="是否启用(True:启用 False:禁用)")

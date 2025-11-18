@@ -3,9 +3,9 @@
 from typing import List, Dict, Optional, Any
 
 from app.core.exceptions import CustomException
-from app.utils.ai_util import AIClient
 
 from app.api.v1.module_system.auth.schema import AuthSchema
+from .tools.ai_util import AIClient
 from .schema import McpCreateSchema, McpUpdateSchema, McpOutSchema, ChatQuerySchema
 from .param import McpQueryParam
 from .crud import McpCRUD

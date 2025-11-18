@@ -10,7 +10,7 @@ from app.core.base_params import PaginationQueryParam
 from app.core.router_class import OperationLogRoute
 from app.core.dependencies import AuthPermission
 from app.core.base_schema import BatchSetAvailable
-from app.core.logger import logger
+from app.core.logger import log
 
 from ..auth.schema import AuthSchema
 from .service import PositionService
@@ -46,7 +46,7 @@ async def get_obj_list_controller(
         order_by = page.order_by
     result_dict_list = await PositionService.get_position_list_service(search=search, auth=auth, order_by=order_by)
     result_dict = await PaginationService.paginate(data_list= result_dict_list, page_no= page.page_no, page_size = page.page_size)
-    logger.info(f"查询岗位列表成功")
+    log.info(f"查询岗位列表成功")
     return SuccessResponse(data=result_dict, msg="查询岗位列表成功")
 
 
@@ -66,7 +66,7 @@ async def get_obj_detail_controller(
     - JSONResponse: 岗位详情对象
     """
     result_dict = await PositionService.get_position_detail_service(id=id, auth=auth)
-    logger.info(f"查询岗位详情成功 {id}")
+    log.info(f"查询岗位详情成功 {id}")
     return SuccessResponse(data=result_dict, msg="获取岗位详情成功")
 
 
@@ -86,7 +86,7 @@ async def create_obj_controller(
     - JSONResponse: 岗位详情对象
     """
     result_dict = await PositionService.create_position_service(data=data, auth=auth)
-    logger.info(f"创建岗位成功: {result_dict}")
+    log.info(f"创建岗位成功: {result_dict}")
     return SuccessResponse(data=result_dict, msg="创建岗位成功")
 
 
@@ -108,7 +108,7 @@ async def update_obj_controller(
     - JSONResponse: 岗位详情对象
     """
     result_dict = await PositionService.update_position_service(id=id, data=data, auth=auth)
-    logger.info(f"修改岗位成功: {result_dict}")
+    log.info(f"修改岗位成功: {result_dict}")
     return SuccessResponse(data=result_dict, msg="修改岗位成功")
 
 
@@ -128,7 +128,7 @@ async def delete_obj_controller(
     - JSONResponse: 成功消息
     """
     await PositionService.delete_position_service(ids=ids, auth=auth)
-    logger.info(f"删除岗位成功: {ids}")
+    log.info(f"删除岗位成功: {ids}")
     return SuccessResponse(msg="删除岗位成功")
 
 
@@ -148,7 +148,7 @@ async def batch_set_available_obj_controller(
     - JSONResponse: 成功消息
     """
     await PositionService.set_position_available_service(data=data, auth=auth)
-    logger.info(f"批量修改岗位状态成功: {data.ids}")
+    log.info(f"批量修改岗位状态成功: {data.ids}")
     return SuccessResponse(msg="批量修改岗位状态成功")
 
 
@@ -169,7 +169,7 @@ async def export_obj_list_controller(
     """
     position_query_result = await PositionService.get_position_list_service(search=search, auth=auth)
     position_export_result = await PositionService.export_position_list_service(position_list=position_query_result)
-    logger.info('导出岗位成功')
+    log.info('导出岗位成功')
 
     return StreamResponse(
         data=bytes2file_response(position_export_result),

@@ -38,7 +38,7 @@
         <!-- 查询、重置、展开/收起按钮 -->
         <el-form-item>
           <el-button
-            v-hasPerm="['module_generator:demo:query']"
+            v-hasPerm="['module_example:demo:query']"
             type="primary"
             icon="search"
             @click="handleQuery"
@@ -46,7 +46,7 @@
             查询
           </el-button>
           <el-button
-            v-hasPerm="['module_generator:demo:query']"
+            v-hasPerm="['module_example:demo:query']"
             icon="refresh"
             @click="handleResetQuery"
           >
@@ -89,7 +89,7 @@
           <el-row :gutter="10">
             <el-col :span="1.5">
               <el-button
-                v-hasPerm="['module_generator:demo:create']"
+                v-hasPerm="['module_example:demo:create']"
                 type="success"
                 icon="plus"
                 @click="handleOpenDialog('create')"
@@ -99,7 +99,7 @@
             </el-col>
             <el-col :span="1.5">
               <el-button
-                v-hasPerm="['module_generator:demo:delete']"
+                v-hasPerm="['module_example:demo:delete']"
                 type="danger"
                 icon="delete"
                 :disabled="selectIds.length === 0"
@@ -109,7 +109,7 @@
               </el-button>
             </el-col>
             <el-col :span="1.5">
-              <el-dropdown v-hasPerm="['module_generator:demo:batch']" trigger="click">
+              <el-dropdown v-hasPerm="['module_example:demo:patch']" trigger="click">
                 <el-button type="default" :disabled="selectIds.length === 0" icon="ArrowDown">
                   更多
                 </el-button>
@@ -132,7 +132,7 @@
             <el-col :span="1.5">
               <el-tooltip content="导入">
                 <el-button
-                  v-hasPerm="['module_generator:demo:import']"
+                  v-hasPerm="['module_example:demo:import']"
                   type="success"
                   icon="upload"
                   circle
@@ -143,7 +143,7 @@
             <el-col :span="1.5">
               <el-tooltip content="导出">
                 <el-button
-                  v-hasPerm="['module_generator:demo:export']"
+                  v-hasPerm="['module_example:demo:export']"
                   type="warning"
                   icon="download"
                   circle
@@ -165,7 +165,7 @@
             <el-col :span="1.5">
               <el-tooltip content="刷新">
                 <el-button
-                  v-hasPerm="['module_generator:demo:refresh']"
+                  v-hasPerm="['module_example:demo:query']"
                   type="primary"
                   icon="refresh"
                   circle
@@ -275,7 +275,7 @@
         >
           <template #default="scope">
             <el-button
-              v-hasPerm="['module_generator:demo:detail']"
+              v-hasPerm="['module_example:demo:query']"
               type="info"
               size="small"
               link
@@ -285,7 +285,7 @@
               详情
             </el-button>
             <el-button
-              v-hasPerm="['module_generator:demo:update']"
+              v-hasPerm="['module_example:demo:update']"
               type="primary"
               size="small"
               link
@@ -295,7 +295,7 @@
               编辑
             </el-button>
             <el-button
-              v-hasPerm="['module_generator:demo:delete']"
+              v-hasPerm="['module_example:demo:delete']"
               type="danger"
               size="small"
               link
@@ -388,7 +388,6 @@
           <el-button @click="handleCloseDialog">取消</el-button>
           <el-button
             v-if="dialogVisible.type !== 'detail'"
-            v-hasPerm="['module_generator:demo:submit']"
             type="primary"
             @click="handleSubmit"
           >
@@ -396,7 +395,6 @@
           </el-button>
           <el-button
             v-else
-            v-hasPerm="['smodule_generator:demo:detail']"
             type="primary"
             @click="handleCloseDialog"
           >
@@ -426,18 +424,18 @@
 
 <script setup lang="ts">
 defineOptions({
-  name: "Example",
+  name: "Demo",
   inheritAttrs: false,
 });
 
 import { ref, reactive, onMounted } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { ResultEnum } from "@/enums/api/result.enum";
-import ExampleAPI, {
-  ExampleTable,
-  ExampleForm,
-  ExamplePageQuery,
-} from "@/api/module_generator/demo";
+import DemoAPI, {
+  DemoTable,
+  DemoForm,
+  DemoPageQuery,
+} from "@/api/module_example/demo";
 import ImportModal from "@/components/CURD/ImportModal.vue";
 import ExportModal from "@/components/CURD/ExportModal.vue";
 import DatePicker from "@/components/DatePicker/index.vue";
@@ -450,13 +448,13 @@ const queryFormRef = ref();
 const dataFormRef = ref();
 const total = ref(0);
 const selectIds = ref<number[]>([]);
-const selectionRows = ref<ExampleTable[]>([]);
+const selectionRows = ref<DemoTable[]>([]);
 const loading = ref(false);
 const isExpand = ref(false);
 const isExpandable = ref(true);
 
 // 分页表单
-const pageTableData = ref<ExampleTable[]>([]);
+const pageTableData = ref<DemoTable[]>([]);
 
 // 表格列配置
 const tableColumns = ref([
@@ -482,9 +480,9 @@ const exportColumns = [
 
 // 导入/导出配置
 const curdContentConfig = {
-  permPrefix: "module_generator:demo",
+  permPrefix: "module_example:demo",
   cols: exportColumns as any,
-  importTemplate: () => ExampleAPI.downloadTemplate(),
+  importTemplate: () => DemoAPI.downloadTemplateDemo(),
   exportsAction: async (params: any) => {
     const query: any = { ...params };
     if (typeof query.status === "string") {
@@ -494,7 +492,7 @@ const curdContentConfig = {
     query.page_size = 9999;
     const all: any[] = [];
     while (true) {
-      const res = await ExampleAPI.getExampleList(query);
+      const res = await DemoAPI.getDemoList(query);
       const items = res.data?.data?.items || [];
       const total = res.data?.data?.total || 0;
       all.push(...items);
@@ -505,7 +503,7 @@ const curdContentConfig = {
   },
 } as unknown as IContentConfig;
 // 详情表单
-const detailFormData = ref<ExampleTable>({});
+const detailFormData = ref<DemoTable>({});
 // 日期范围临时变量
 const dateRange = ref<[Date, Date] | []>([]);
 
@@ -522,7 +520,7 @@ function handleDateRangeChange(range: [Date, Date]) {
 }
 
 // 分页查询参数
-const queryFormData = reactive<ExamplePageQuery>({
+const queryFormData = reactive<DemoPageQuery>({
   page_no: 1,
   page_size: 10,
   name: undefined,
@@ -533,7 +531,7 @@ const queryFormData = reactive<ExamplePageQuery>({
 });
 
 // 编辑表单
-const formData = reactive<ExampleForm>({
+const formData = reactive<DemoForm>({
   id: undefined,
   name: "",
   status: true,
@@ -578,7 +576,7 @@ async function handleRefresh() {
 async function loadingData() {
   loading.value = true;
   try {
-    const response = await ExampleAPI.getExampleList(queryFormData);
+    const response = await DemoAPI.getDemoList(queryFormData);
     pageTableData.value = response.data.data.items;
     total.value = response.data.data.total;
   } catch (error: any) {
@@ -611,7 +609,7 @@ async function handleResetQuery() {
 }
 
 // 定义初始表单数据常量
-const initialFormData: ExampleForm = {
+const initialFormData: DemoForm = {
   id: undefined,
   name: "",
   status: true,
@@ -644,7 +642,7 @@ async function handleCloseDialog() {
 async function handleOpenDialog(type: "create" | "update" | "detail", id?: number) {
   dialogVisible.type = type;
   if (id) {
-    const response = await ExampleAPI.getExampleDetail(id);
+    const response = await DemoAPI.getDemoDetail(id);
     if (type === "detail") {
       dialogVisible.title = "详情";
       Object.assign(detailFormData.value, response.data.data);
@@ -669,7 +667,7 @@ async function handleSubmit() {
       const id = formData.id;
       if (id) {
         try {
-          await ExampleAPI.updateExample(id, { id, ...formData });
+          await DemoAPI.updateDemo(id, { id, ...formData });
           dialogVisible.visible = false;
           resetForm();
           handleCloseDialog();
@@ -681,7 +679,7 @@ async function handleSubmit() {
         }
       } else {
         try {
-          await ExampleAPI.createExample(formData);
+          await DemoAPI.createDemo(formData);
           dialogVisible.visible = false;
           resetForm();
           handleCloseDialog();
@@ -706,7 +704,7 @@ async function handleDelete(ids: number[]) {
     .then(async () => {
       try {
         loading.value = true;
-        await ExampleAPI.deleteExample(ids);
+        await DemoAPI.deleteDemo(ids);
         handleResetQuery();
       } catch (error: any) {
         console.error(error);
@@ -730,7 +728,7 @@ async function handleMoreClick(status: boolean) {
       .then(async () => {
         try {
           loading.value = true;
-          await ExampleAPI.batchAvailableExample({ ids: selectIds.value, status });
+          await DemoAPI.batchDemo({ ids: selectIds.value, status });
           handleResetQuery();
         } catch (error: any) {
           console.error(error);
@@ -747,7 +745,7 @@ async function handleMoreClick(status: boolean) {
 // 处理上传
 const handleUpload = async (formData: FormData) => {
   try {
-    const response = await ExampleAPI.importExample(formData);
+    const response = await DemoAPI.importDemo(formData);
     if (response.data.code === ResultEnum.SUCCESS) {
       ElMessage.success(`${response.data.msg}，${response.data.data}`);
       importDialogVisible.value = false;

@@ -16,6 +16,7 @@ class ResponseSchema(BaseModel):
     status_code: int = Field(default=status.HTTP_200_OK, description="HTTP状态码")
     success: bool = Field(default=True, description='操作是否成功')
 
+
 class SuccessResponse(JSONResponse):
     """成功响应类"""
 

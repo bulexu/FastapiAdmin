@@ -10,7 +10,7 @@ from app.core.database import async_db_session
 from app.core.base_schema import BatchSetAvailable
 from app.core.redis_crud import RedisCURD
 from app.core.exceptions import CustomException
-from app.core.logger import logger
+from app.core.logger import log
 
 from app.api.v1.module_system.auth.schema import AuthSchema
 from .schema import DictDataCreateSchema,DictDataOutSchema,DictDataUpdateSchema,DictTypeCreateSchema,DictTypeOutSchema,DictTypeUpdateSchema
@@ -81,9 +81,9 @@ class DictTypeService:
                     key=redis_key,
                     value="",
                 )
-            logger.info(f"创建字典类型成功: {new_obj_dict}")
+            log.info(f"创建字典类型成功: {new_obj_dict}")
         except Exception as e:
-            logger.error(f"创建字典类型失败: {e}")
+            log.error(f"创建字典类型失败: {e}")
             raise CustomException(msg=f"创建字典类型失败 {e}")
         
         return new_obj_dict
@@ -146,9 +146,9 @@ class DictTypeService:
                     key=redis_key,
                     value=value,
                 )
-            logger.info(f"更新字典类型成功并刷新缓存: {new_obj_dict}")
+            log.info(f"更新字典类型成功并刷新缓存: {new_obj_dict}")
         except Exception as e:
-            logger.error(f"更新字典类型缓存失败: {e}")
+            log.error(f"更新字典类型缓存失败: {e}")
             raise CustomException(msg=f"更新字典类型缓存失败 {e}")
         
         return new_obj_dict
@@ -181,9 +181,9 @@ class DictTypeService:
             redis_key = f"{RedisInitKeyConfig.SYSTEM_DICT.key}:{exist_obj.dict_type}"
             try:
                 await RedisCURD(redis).delete(redis_key)
-                logger.info(f"删除字典类型成功: {id}")
+                log.info(f"删除字典类型成功: {id}")
             except Exception as e:
-                logger.error(f"删除字典类型失败: {e}")
+                log.error(f"删除字典类型失败: {e}")
                 raise CustomException(msg=f"删除字典类型失败")
         await DictTypeCRUD(auth).delete_obj_crud(ids=ids)
     
@@ -286,14 +286,14 @@ class DictDataService:
                 auth = AuthSchema(db=session)
                 obj_list = await DictTypeCRUD(auth).get_obj_list_crud()
                 if not obj_list:
-                    logger.warning("❗️ 未找到任何字典类型数据")
+                    log.error("❗️ 未找到任何字典类型数据")
                     return
                 for obj in obj_list:
                     dict_type = obj.dict_type
                     dict_data_list = await DictDataCRUD(auth).get_obj_list_crud(search={'dict_type': dict_type})
                     
                     if not dict_data_list:
-                        logger.warning(f"❗️ 字典类型 {dict_type} 未找到对应的字典数据")
+                        log.error(f"❗️ 字典类型 {dict_type} 未找到对应的字典数据")
                         continue
                     
                     dict_data = [DictDataOutSchema.model_validate(row).model_dump() for row in dict_data_list if row]
@@ -307,7 +307,7 @@ class DictDataService:
                                 value=value,
                             )
                     except Exception as e:
-                        logger.error(f"❌️ 初始化字典数据失败: {e}")
+                        log.error(f"❌️ 初始化字典数据失败: {e}")
                         raise CustomException(msg=f"初始化字典数据失败 {e}")
     
     @classmethod
@@ -357,9 +357,9 @@ class DictDataService:
                     key=redis_key,
                     value=value,
                 )
-            logger.info(f"创建字典数据写入缓存成功: {obj}")
+            log.info(f"创建字典数据写入缓存成功: {obj}")
         except Exception as e:
-            logger.error(f"创建字典数据写入缓存失败: {e}")
+            log.error(f"创建字典数据写入缓存失败: {e}")
             raise CustomException(msg=f"创建字典数据失败 {e}")
 
         return DictDataOutSchema.model_validate(obj).model_dump()
@@ -399,7 +399,7 @@ class DictDataService:
                             value=value,
                         )
                 except Exception as e:
-                    logger.error(f"更新字典数据类型变更时刷新旧缓存失败: {e}")
+                    log.error(f"更新字典数据类型变更时刷新旧缓存失败: {e}")
                 
         obj = await DictDataCRUD(auth).update_obj_crud(id=id, data=data)
         redis_key = f"{RedisInitKeyConfig.SYSTEM_DICT.key}:{data.dict_type}"
@@ -413,9 +413,9 @@ class DictDataService:
                     key=redis_key,
                     value=value,
                 )
-            logger.info(f"更新字典数据写入缓存成功: {obj}")
+            log.info(f"更新字典数据写入缓存成功: {obj}")
         except Exception as e:
-            logger.error(f"更新字典数据写入缓存失败: {e}")
+            log.error(f"更新字典数据写入缓存失败: {e}")
             raise CustomException(msg=f"更新字典数据失败 {e}")
 
         return DictDataOutSchema.model_validate(obj).model_dump()
@@ -449,9 +449,9 @@ class DictDataService:
             try:
                 # 删除Redis缓存
                 await RedisCURD(redis).delete(redis_key)
-                logger.info(f"删除字典数据成功: {id}")
+                log.info(f"删除字典数据成功: {id}")
             except Exception as e:
-                logger.error(f"删除字典数据失败: {e}")
+                log.error(f"删除字典数据失败: {e}")
                 raise CustomException(msg=f"删除字典数据失败 {e}")
         await DictDataCRUD(auth).delete_obj_crud(ids=ids)
 

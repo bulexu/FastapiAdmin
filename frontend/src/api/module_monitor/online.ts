@@ -4,7 +4,7 @@ const API_PATH = "/monitor/online";
 
 const OnlineAPI = {
   // 查询在线用户列表
-  getOnlineList(query: OnlineUserPageQuery) {
+  listOnline(query: OnlineUserPageQuery) {
     return request<ApiResponse<PageResult<OnlineUserTable[]>>>({
       url: `${API_PATH}/list`,
       method: "get",

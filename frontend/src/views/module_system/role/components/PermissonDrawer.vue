@@ -204,15 +204,15 @@ const init = async () => {
 
   try {
     // 获取全部部门树
-    const deptResponse = await DeptAPI.getDeptList();
+    const deptResponse = await DeptAPI.listDept();
     deptTreeData.value = formatTree(listToTree(deptResponse.data.data));
 
     // 获取全部菜单树
-    const menuResponse = await MenuAPI.getMenuList();
+    const menuResponse = await MenuAPI.listMenu();
     menuTreeData.value = formatTree(listToTree(menuResponse.data.data));
 
     // 获取角色详情
-    const roleResponse = await RoleAPI.getRoleDetail(props.roleId);
+    const roleResponse = await RoleAPI.detailRole(props.roleId);
 
     // 更新权限状态
     permissionState.value = {

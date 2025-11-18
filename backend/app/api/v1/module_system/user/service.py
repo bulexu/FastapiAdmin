@@ -8,7 +8,7 @@ import pandas as pd
 from app.core.exceptions import CustomException
 from app.utils.hash_bcrpy_util import PwdUtil
 from app.core.base_schema import BatchSetAvailable, UploadResponseSchema
-from app.core.logger import logger
+from app.core.logger import log
 from app.utils.common_util import traversal_to_tree
 from app.utils.excel_util import ExcelUtil
 from app.utils.upload_util import UploadUtil
@@ -570,7 +570,7 @@ class UserService:
             return result
             
         except Exception as e:
-            logger.error(f"批量导入用户失败: {str(e)}")
+            log.error(f"批量导入用户失败: {str(e)}")
             raise CustomException(msg=f"导入失败: {str(e)}")
 
     @classmethod

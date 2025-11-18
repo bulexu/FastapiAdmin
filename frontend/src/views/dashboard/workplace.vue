@@ -307,9 +307,9 @@ const getNoticeTypeColor = (type: string | undefined) => {
 };
 
 // 获取通知公告列表
-const getNoticeList = async () => {
+const listNotice = async () => {
   try {
-    const response = await NoticeAPI.getNoticeList({
+    const response = await NoticeAPI.listNotice({
       page_no: 1,
       page_size: 10,
       status: true, // 只获取启用的公告
@@ -391,7 +391,7 @@ const updateQuickLinks = (links: QuickLink[]) => {
 
 // 组件挂载时获取数据和添加监听器
 onMounted(() => {
-  getNoticeList();
+  listNotice();
   quickStartManager.addListener(updateQuickLinks);
 });
 

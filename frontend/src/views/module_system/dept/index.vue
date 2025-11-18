@@ -252,7 +252,7 @@
               新增
             </el-button>
             <el-button
-              v-hasPerm="['module_system:dept:detail']"
+              v-hasPerm="['module_system:dept:query']"
               type="info"
               size="small"
               link
@@ -381,7 +381,6 @@
           <!-- 详情弹窗不需要确定按钮的提交逻辑 -->
           <el-button
             v-if="dialogVisible.type !== 'detail'"
-            v-hasPerm="['module_system:dept:submit']"
             type="primary"
             @click="handleSubmit"
           >
@@ -389,7 +388,6 @@
           </el-button>
           <el-button
             v-else
-            v-hasPerm="['module_system:dept:detail']"
             type="primary"
             @click="handleCloseDialog"
           >
@@ -481,7 +479,7 @@ const rules = reactive({
 async function handleRefresh() {
   loading.value = true;
   try {
-    const response = await DeptAPI.getDeptList(queryFormData);
+    const response = await DeptAPI.listDept(queryFormData);
     pageTableData.value = response.data.data;
   } catch (error: any) {
     console.error(error);
@@ -494,7 +492,7 @@ async function handleRefresh() {
 async function loadingData() {
   loading.value = true;
   try {
-    const response = await DeptAPI.getDeptList(queryFormData);
+    const response = await DeptAPI.listDept(queryFormData);
     pageTableData.value = response.data.data;
     // 加载部门选项
     deptOptions.value = formatTree(response.data.data);
@@ -582,7 +580,7 @@ async function handleOpenDialog(
 ) {
   dialogVisible.type = type;
   if (id) {
-    const response = await DeptAPI.getDeptDetail(id);
+    const response = await DeptAPI.detailDept(id);
     if (type === "detail") {
       dialogVisible.title = "部门详情";
       Object.assign(detailFormData.value, response.data.data);
@@ -664,7 +662,7 @@ async function handleMoreClick(status: boolean) {
       .then(async () => {
         try {
           loading.value = true;
-          await DeptAPI.batchAvailableDept({ ids: selectIds.value, status });
+          await DeptAPI.batchDept({ ids: selectIds.value, status });
           handleResetQuery();
         } catch (error: any) {
           console.error(error);

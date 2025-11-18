@@ -9,7 +9,7 @@ from app.common.response import SuccessResponse,ErrorResponse
 from app.core.dependencies import AuthPermission, redis_getter
 from app.core.base_params import PaginationQueryParam
 from app.core.router_class import OperationLogRoute
-from app.core.logger import logger
+from app.core.logger import log
 
 from .param import OnlineQueryParam
 from .service import OnlineService
@@ -42,7 +42,7 @@ async def get_online_list_controller(
     """
     result_dict_list = await OnlineService.get_online_list_service(redis=redis, search=search)
     result_dict = await PaginationService.paginate(data_list= result_dict_list, page_no= paging_query.page_no, page_size = paging_query.page_size)
-    logger.info('获取成功')
+    log.info('获取成功')
 
     return SuccessResponse(data=result_dict,msg='获取成功')
 
@@ -69,10 +69,10 @@ async def delete_online_controller(
     """
     is_ok = await OnlineService.delete_online_service(redis=redis, session_id=session_id)
     if is_ok:
-        logger.info("强制下线成功")
+        log.info("强制下线成功")
         return SuccessResponse(msg="强制下线成功")
     else:
-        logger.info("强制下线失败")
+        log.info("强制下线失败")
         return ErrorResponse(msg="强制下线失败")
 
 @OnlineRouter.delete(
@@ -95,8 +95,8 @@ async def clear_online_controller(
     """
     is_ok = await OnlineService.clear_online_service(redis=redis)
     if is_ok:
-        logger.info("清除所有在线用户成功")
+        log.info("清除所有在线用户成功")
         return SuccessResponse(msg="清除所有在线用户成功")
     else:
-        logger.info("清除所有在线用户失败")
+        log.info("清除所有在线用户失败")
         return ErrorResponse(msg="清除所有在线用户失败")

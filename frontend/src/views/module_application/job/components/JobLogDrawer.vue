@@ -81,7 +81,7 @@
               </el-button>
             </el-col>
             <el-col :span="1.5">
-              <el-button type="warning" icon="delete" @click="handleClearLog">清空日志</el-button>
+              <el-button v-hasPerm="['module_application:job:delete']" type="warning" icon="delete" @click="handleClearLog">清空日志</el-button>
             </el-col>
           </el-row>
         </div>
@@ -90,7 +90,7 @@
             <el-col :span="1.5">
               <el-tooltip content="导出">
                 <!-- 将直接导出改为打开导出弹窗 -->
-                <el-button type="warning" icon="download" circle @click="handleOpenExportsModal" />
+                <el-button v-hasPerm="['module_application:job:export']" type="warning" icon="download" circle @click="handleOpenExportsModal" />
               </el-tooltip>
             </el-col>
             <el-col :span="1.5">
@@ -163,6 +163,7 @@
         <el-table-column fixed="right" label="操作" align="center" min-width="150">
           <template #default="scope">
             <el-button
+              v-hasPerm="['module_application:job:query']"
               type="info"
               size="small"
               link
@@ -172,6 +173,7 @@
               详情
             </el-button>
             <el-button
+              v-hasPerm="['module_application:job:delete']"
               type="danger"
               size="small"
               link
@@ -342,7 +344,7 @@ async function loadingData() {
   loading.value = true;
   try {
     // 调用任务日志列表接口
-    const response = await JobAPI.getJobLogList(queryFormData);
+    const response = await JobAPI.listJobLog(queryFormData);
     pageTableData.value = response.data.data.items;
     total.value = response.data.data.total;
   } catch (error: any) {
@@ -389,7 +391,7 @@ async function handleCloseDialog() {
 async function handleOpenDialog(type: "detail", id?: number) {
   dialogVisible.type = type;
   if (id) {
-    const response = await JobAPI.getJobLogDetail(id);
+    const response = await JobAPI.detailJobLog(id);
     dialogVisible.title = "任务日志详情";
     Object.assign(detailFormData.value, response.data.data);
   }
@@ -478,7 +480,7 @@ const curdContentConfig = {
     query.page_size = 1000;
     const all: any[] = [];
     while (true) {
-      const res = await JobAPI.getJobLogList(query);
+      const res = await JobAPI.listJobLog(query);
       const items = res.data?.data?.items || [];
       const total = res.data?.data?.total || 0;
       all.push(...items);

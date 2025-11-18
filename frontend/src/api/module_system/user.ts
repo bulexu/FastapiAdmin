@@ -60,7 +60,7 @@ export const UserAPI = {
     });
   },
 
-  getUserList(query: UserPageQuery) {
+  listUser(query: UserPageQuery) {
     return request<ApiResponse<PageResult<UserInfo[]>>>({
       url: `${API_PATH}/list`,
       method: "get",
@@ -68,7 +68,7 @@ export const UserAPI = {
     });
   },
 
-  getUserDetail(query: number) {
+  detailUser(query: number) {
     return request<ApiResponse<UserInfo>>({
       url: `${API_PATH}/detail/${query}`,
       method: "get",
@@ -99,7 +99,7 @@ export const UserAPI = {
     });
   },
 
-  batchAvailableUser(body: BatchType) {
+  batchUser(body: BatchType) {
     return request<ApiResponse>({
       url: `${API_PATH}/available/setting`,
       method: "patch",
@@ -116,7 +116,7 @@ export const UserAPI = {
     });
   },
 
-  downloadTemplate() {
+  downloadTemplateUser() {
     return request<ApiResponse>({
       url: `${API_PATH}/import/template`,
       method: "post",

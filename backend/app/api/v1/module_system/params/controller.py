@@ -10,7 +10,7 @@ from app.utils.common_util import bytes2file_response
 from app.core.base_params import PaginationQueryParam
 from app.core.dependencies import AuthPermission, redis_getter
 from app.core.router_class import OperationLogRoute
-from app.core.logger import logger
+from app.core.logger import log
 
 from ..auth.schema import AuthSchema
 from .param import ParamsQueryParam
@@ -36,7 +36,7 @@ async def get_type_detail_controller(
     - JSONResponse: 包含参数详情的 JSON 响应
     """
     result_dict = await ParamsService.get_obj_detail_service(id=id, auth=auth)
-    logger.info(f"获取参数详情成功 {id}")
+    log.info(f"获取参数详情成功 {id}")
     return SuccessResponse(data=result_dict, msg="获取参数详情成功")
 
 
@@ -56,7 +56,7 @@ async def get_obj_by_key_controller(
     - JSONResponse: 包含参数详情的 JSON 响应
     """
     result_dict = await ParamsService.get_obj_by_key_service(config_key=config_key, auth=auth)
-    logger.info(f"根据配置键获取参数详情成功 {config_key}")
+    log.info(f"根据配置键获取参数详情成功 {config_key}")
     return SuccessResponse(data=result_dict, msg="根据配置键获取参数详情成功")
 
 
@@ -76,7 +76,7 @@ async def get_config_value_by_key_controller(
     - JSONResponse: 包含参数值的 JSON 响应
     """
     result_value = await ParamsService.get_config_value_by_key_service(config_key=config_key, auth=auth)
-    logger.info(f"根据配置键获取参数值成功 {config_key}")
+    log.info(f"根据配置键获取参数值成功 {config_key}")
     return SuccessResponse(data=result_value, msg="根据配置键获取参数值成功")
 
 
@@ -99,7 +99,7 @@ async def get_obj_list_controller(
     """
     result_dict_list = await ParamsService.get_obj_list_service(auth=auth, search=search, order_by=page.order_by)
     result_dict = await PaginationService.paginate(data_list= result_dict_list, page_no= page.page_no, page_size = page.page_size)
-    logger.info(f"获取参数列表成功")
+    log.info(f"获取参数列表成功")
     return SuccessResponse(data=result_dict, msg="查询参数列表成功")
 
 
@@ -121,7 +121,7 @@ async def create_obj_controller(
     - JSONResponse: 包含创建参数结果的 JSON 响应
     """
     result_dict = await ParamsService.create_obj_service(auth=auth, redis=redis, data=data)
-    logger.info(f"创建参数成功: {result_dict}")
+    log.info(f"创建参数成功: {result_dict}")
     return SuccessResponse(data=result_dict, msg="创建参数成功")
 
 
@@ -145,7 +145,7 @@ async def update_objs_controller(
     - JSONResponse: 包含修改参数结果的 JSON 响应
     """
     result_dict = await ParamsService.update_obj_service(auth=auth, redis=redis, id=id, data=data)
-    logger.info(f"更新参数成功 {result_dict}")
+    log.info(f"更新参数成功 {result_dict}")
     return SuccessResponse(data=result_dict, msg="更新参数成功")
 
 
@@ -167,7 +167,7 @@ async def delete_obj_controller(
     - JSONResponse: 包含删除参数结果的 JSON 响应
     """
     await ParamsService.delete_obj_service(auth=auth, redis=redis, ids=ids)
-    logger.info(f"删除参数成功: {ids}")
+    log.info(f"删除参数成功: {ids}")
     return SuccessResponse(msg="删除参数成功")
 
 
@@ -188,7 +188,7 @@ async def export_obj_list_controller(
     """
     result_dict_list = await ParamsService.get_obj_list_service(search=search, auth=auth)
     export_result = await ParamsService.export_obj_service(data_list=result_dict_list)
-    logger.info('导出参数成功')
+    log.info('导出参数成功')
 
     return StreamResponse(
         data=bytes2file_response(export_result),
@@ -215,7 +215,7 @@ async def upload_file_controller(
     - JSONResponse: 包含上传文件结果的 JSON 响应
     """
     result_str = await ParamsService.upload_service(base_url=str(request.base_url), file=file)
-    logger.info(f"上传文件: {result_str}")
+    log.info(f"上传文件: {result_str}")
     return SuccessResponse(data=result_str, msg='上传文件成功')
 
 
@@ -233,5 +233,5 @@ async def get_init_obj_controller(
     - JSONResponse: 获取初始化缓存参数的 JSON 响应
     """
     result_dict = await ParamsService.get_init_config_service(redis=redis)
-    logger.info(f"获取初始化缓存参数成功 {result_dict}")
+    log.info(f"获取初始化缓存参数成功 {result_dict}")
     return SuccessResponse(data=result_dict, msg="获取初始化缓存参数成功")

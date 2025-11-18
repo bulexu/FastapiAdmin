@@ -8,7 +8,7 @@ import pandas as pd
 from app.core.base_schema import BatchSetAvailable
 from app.core.exceptions import CustomException
 from app.utils.excel_util import ExcelUtil
-from app.core.logger import logger
+from app.core.logger import log
 
 from app.api.v1.module_system.auth.schema import AuthSchema
 from .schema import TenantCreateSchema, TenantUpdateSchema, TenantOutSchema
@@ -286,7 +286,7 @@ class TenantService:
             return result
             
         except Exception as e:
-            logger.error(f"批量导入用户失败: {str(e)}")
+            log.error(f"批量导入用户失败: {str(e)}")
             raise CustomException(msg=f"导入失败: {str(e)}")
 
     @classmethod

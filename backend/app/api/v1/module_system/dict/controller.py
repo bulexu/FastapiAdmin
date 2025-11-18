@@ -10,7 +10,7 @@ from app.core.base_params import PaginationQueryParam
 from app.core.base_schema import BatchSetAvailable
 from app.core.dependencies import AuthPermission, redis_getter
 from app.core.router_class import OperationLogRoute
-from app.core.logger import logger
+from app.core.logger import log
 from app.common.request import PaginationService
 from app.utils.common_util import bytes2file_response
 
@@ -46,7 +46,7 @@ async def get_type_detail_controller(
     - CustomException: 获取字典类型详情失败时抛出异常。
     """
     result_dict = await DictTypeService.get_obj_detail_service(id=id, auth=auth)
-    logger.info(f"获取字典类型详情成功 {id}")
+    log.info(f"获取字典类型详情成功 {id}")
     return SuccessResponse(data=result_dict, msg="获取字典类型详情成功")
 
 @DictRouter.get("/type/list", summary="查询字典类型", description="查询字典类型")
@@ -71,7 +71,7 @@ async def get_type_list_controller(
     """
     result_dict_list = await DictTypeService.get_obj_list_service(auth=auth, search=search, order_by=page.order_by)
     result_dict = await PaginationService.paginate(data_list= result_dict_list, page_no= page.page_no, page_size = page.page_size)
-    logger.info(f"查询字典类型列表成功")
+    log.info(f"查询字典类型列表成功")
     return SuccessResponse(data=result_dict, msg="查询字典类型列表成功")
 
 @DictRouter.get("/type/optionselect", summary="获取全部字典类型", description="获取全部字典类型")
@@ -91,7 +91,7 @@ async def get_type_loptionselect_controller(
     - CustomException: 获取字典类型列表失败时抛出异常。
     """
     result_dict_list = await DictTypeService.get_obj_list_service(auth=auth)
-    logger.info(f"获取字典类型列表成功")
+    log.info(f"获取字典类型列表成功")
     return SuccessResponse(data=result_dict_list, msg="获取字典类型列表成功")
 
 @DictRouter.post("/type/create", summary="创建字典类型", description="创建字典类型")
@@ -115,7 +115,7 @@ async def create_type_controller(
     - CustomException: 创建字典类型失败时抛出异常。
     """
     result_dict = await DictTypeService.create_obj_service(auth=auth, redis=redis, data=data)
-    logger.info(f"创建字典类型成功: {result_dict}")
+    log.info(f"创建字典类型成功: {result_dict}")
     return SuccessResponse(data=result_dict, msg="创建字典类型成功")
 
 @DictRouter.put("/type/update/{id}", summary="修改字典类型", description="修改字典类型")
@@ -141,7 +141,7 @@ async def update_type_controller(
     - CustomException: 修改字典类型失败时抛出异常。
     """
     result_dict = await DictTypeService.update_obj_service(auth=auth, redis=redis, id=id, data=data)
-    logger.info(f"修改字典类型成功: {result_dict}")
+    log.info(f"修改字典类型成功: {result_dict}")
     return SuccessResponse(data=result_dict, msg="修改字典类型成功")
 
 @DictRouter.delete("/type/delete", summary="删除字典类型", description="删除字典类型")
@@ -165,7 +165,7 @@ async def delete_type_controller(
     - CustomException: 删除字典类型失败时抛出异常。
     """
     await DictTypeService.delete_obj_service(auth=auth, redis=redis, ids=ids)
-    logger.info(f"删除字典类型成功: {ids}")
+    log.info(f"删除字典类型成功: {ids}")
     return SuccessResponse(msg="删除字典类型成功")
 
 @DictRouter.patch("/type/available/setting", summary="批量修改字典类型状态", description="批量修改字典类型状态")
@@ -187,7 +187,7 @@ async def batch_set_available_dict_type_controller(
     - CustomException: 批量修改字典类型状态失败时抛出异常。
     """
     await DictTypeService.set_obj_available_service(auth=auth, data=data)
-    logger.info(f"批量修改字典类型状态成功: {data.ids}")
+    log.info(f"批量修改字典类型状态成功: {data.ids}")
     return SuccessResponse(msg="批量修改字典类型状态成功")
 
 @DictRouter.post('/type/export', summary="导出字典类型", description="导出字典类型")
@@ -211,7 +211,7 @@ async def export_type_list_controller(
     # 获取全量数据
     result_dict_list = await DictTypeService.get_obj_list_service(search=search, auth=auth)
     export_result = await DictTypeService.export_obj_service(data_list=result_dict_list)
-    logger.info('导出字典类型成功')
+    log.info('导出字典类型成功')
 
     return StreamResponse(
         data=bytes2file_response(export_result),
@@ -240,7 +240,7 @@ async def get_data_detail_controller(
     - CustomException: 获取字典数据详情失败时抛出异常。
     """
     result_dict = await DictDataService.get_obj_detail_service(id=id, auth=auth)
-    logger.info(f"获取字典数据详情成功 {id}")
+    log.info(f"获取字典数据详情成功 {id}")
     return SuccessResponse(data=result_dict, msg="获取字典数据详情成功")
 
 @DictRouter.get("/data/list", summary="查询字典数据", description="查询字典数据")
@@ -268,7 +268,7 @@ async def get_data_list_controller(
         order_by = page.order_by
     result_dict_list = await DictDataService.get_obj_list_service(auth=auth, search=search, order_by=order_by)
     result_dict = await PaginationService.paginate(data_list= result_dict_list, page_no= page.page_no, page_size = page.page_size)
-    logger.info(f"查询字典数据列表成功")
+    log.info(f"查询字典数据列表成功")
     return SuccessResponse(data=result_dict, msg="查询字典数据列表成功")
 
 @DictRouter.post("/data/create", summary="创建字典数据", description="创建字典数据")
@@ -292,7 +292,7 @@ async def create_data_controller(
     - CustomException: 创建字典数据失败时抛出异常。
     """
     result_dict = await DictDataService.create_obj_service(auth=auth, redis=redis, data=data)
-    logger.info(f"创建字典数据成功: {result_dict}")
+    log.info(f"创建字典数据成功: {result_dict}")
     return SuccessResponse(data=result_dict, msg="创建字典数据成功")
 
 @DictRouter.put("/data/update/{id}", summary="修改字典数据", description="修改字典数据")
@@ -318,7 +318,7 @@ async def update_data_controller(
     - CustomException: 修改字典数据失败时抛出异常。
     """
     result_dict = await DictDataService.update_obj_service(auth=auth, redis=redis, id=id, data=data)
-    logger.info(f"修改字典数据成功: {result_dict}")
+    log.info(f"修改字典数据成功: {result_dict}")
     return SuccessResponse(data=result_dict, msg="修改字典数据成功")
 
 @DictRouter.delete("/data/delete", summary="删除字典数据", description="删除字典数据")
@@ -342,7 +342,7 @@ async def delete_data_controller(
     - CustomException: 删除字典数据失败时抛出异常。
     """
     await DictDataService.delete_obj_service(auth=auth, redis=redis, ids=ids)
-    logger.info(f"删除字典数据成功: {ids}")
+    log.info(f"删除字典数据成功: {ids}")
     return SuccessResponse(msg="删除字典数据成功")
 
 @DictRouter.patch("/data/available/setting", summary="批量修改字典数据状态", description="批量修改字典数据状态")
@@ -364,7 +364,7 @@ async def batch_set_available_dict_data_controller(
     - CustomException: 批量修改字典数据状态失败时抛出异常。
     """
     await DictDataService.set_obj_available_service(auth=auth, data=data)
-    logger.info(f"批量修改字典数据状态成功: {data.ids}")
+    log.info(f"批量修改字典数据状态成功: {data.ids}")
     return SuccessResponse(msg="批量修改字典数据状态成功")
 
 @DictRouter.post('/data/export', summary="导出字典数据", description="导出字典数据")
@@ -389,7 +389,7 @@ async def export_data_list_controller(
     """
     result_dict_list = await DictDataService.get_obj_list_service(auth=auth, search=search, order_by=page.order_by)
     export_result = await DictDataService.export_obj_service(data_list=result_dict_list)
-    logger.info('导出字典数据成功')
+    log.info('导出字典数据成功')
 
     return StreamResponse(
         data=bytes2file_response(export_result),
@@ -420,7 +420,7 @@ async def get_init_dict_data_controller(
     dict_data_query_result = await DictDataService.get_init_dict_service(
         redis=redis, dict_type=dict_type
     )
-    logger.info(f"获取初始化字典数据成功：{dict_data_query_result}")
+    log.info(f"获取初始化字典数据成功：{dict_data_query_result}")
 
     # 确保数据是字符串类型再进行 JSON 解析
     if isinstance(dict_data_query_result, bytes):

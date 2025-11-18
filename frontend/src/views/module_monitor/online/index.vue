@@ -59,7 +59,7 @@
           <el-row :gutter="10">
             <el-col :span="1.5">
               <el-button
-                v-hasPerm="['module_monitor:online:force_logout']"
+                v-hasPerm="['module_monitor:online:delete']"
                 type="danger"
                 icon="delete"
                 @click="handleClear"
@@ -74,7 +74,7 @@
             <el-col :span="1.5">
               <el-tooltip content="刷新">
                 <el-button
-                  v-hasPerm="['module_monitor:online:refresh']"
+                  v-hasPerm="['module_monitor:online:delete']"
                   type="primary"
                   icon="refresh"
                   circle
@@ -202,7 +202,7 @@
         >
           <template #default="scope">
             <el-button
-              v-hasPerm="['module_monitor:online:force_logout']"
+              v-hasPerm="['module_monitor:online:delete']"
               type="danger"
               size="small"
               link
@@ -280,7 +280,7 @@ async function handleRefresh() {
 async function loadingData() {
   loading.value = true;
   try {
-    const response = await OnlineAPI.getOnlineList(queryFormData);
+    const response = await OnlineAPI.listOnline(queryFormData);
     pageTableData.value = response.data.data.items;
     total.value = response.data.data.total;
   } catch (error: any) {

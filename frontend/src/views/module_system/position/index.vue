@@ -270,7 +270,7 @@
         >
           <template #default="scope">
             <el-button
-              v-hasPerm="['module_system:position:detail']"
+              v-hasPerm="['module_system:position:query']"
               type="info"
               size="small"
               link
@@ -388,7 +388,6 @@
           <el-button @click="handleCloseDialog">取消</el-button>
           <el-button
             v-if="dialogVisible.type !== 'detail'"
-            v-hasPerm="['module_system:position:submit']"
             type="primary"
             @click="handleSubmit"
           >
@@ -396,7 +395,6 @@
           </el-button>
           <el-button
             v-else
-            v-hasPerm="['module_system:position:detail']"
             type="primary"
             @click="handleCloseDialog"
           >
@@ -523,7 +521,7 @@ async function handleRefresh() {
 async function loadingData() {
   loading.value = true;
   try {
-    const response = await PositionAPI.getPositionList(queryFormData);
+    const response = await PositionAPI.listPosition(queryFormData);
     pageTableData.value = response.data.data.items;
     total.value = response.data.data.total;
   } catch (error: any) {
@@ -590,7 +588,7 @@ async function handleCloseDialog() {
 async function handleOpenDialog(type: "create" | "update" | "detail", id?: number) {
   dialogVisible.type = type;
   if (id) {
-    const response = await PositionAPI.getPositionDetail(id);
+    const response = await PositionAPI.detailPosition(id);
     if (type === "detail") {
       dialogVisible.title = "岗位详情";
       Object.assign(detailFormData.value, response.data.data);
@@ -672,7 +670,7 @@ async function handleMoreClick(status: boolean) {
       .then(async () => {
         try {
           loading.value = true;
-          await PositionAPI.batchAvailablePosition({ ids: selectIds.value, status });
+          await PositionAPI.batchPosition({ ids: selectIds.value, status });
           handleResetQuery();
         } catch (error: any) {
           console.error(error);
@@ -709,7 +707,7 @@ const curdContentConfig = {
     query.page_size = 1000;
     const all: any[] = [];
     while (true) {
-      const res = await PositionAPI.getPositionList(query);
+      const res = await PositionAPI.listPosition(query);
       const items = res.data?.data?.items || [];
       const total = res.data?.data?.total || 0;
       all.push(...items);
@@ -734,6 +732,6 @@ onMounted(() => {
 exportColumns as any, exportsAction: async (params: any) => { const query: any = { ...params }; if
 (typeof query.status === 'string') { query.status = query.status === 'true'; } query.page_no = 1;
 query.page_size = 1000; const all: any[] = []; while (true) { const res = await
-PositionAPI.getPositionList(query); const items = res.data?.data?.items || []; const total =
+PositionAPI.listPosition(query); const items = res.data?.data?.items || []; const total =
 res.data?.data?.total || 0; all.push(...items); if (all.length >= total || items.length === 0)
 break; query.page_no += 1; } return all; }, } as unknown as IContentConfig;

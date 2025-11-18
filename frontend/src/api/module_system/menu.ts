@@ -3,7 +3,7 @@ import request from "@/utils/request";
 const API_PATH = "/system/menu";
 
 const MenuAPI = {
-  getMenuList(query?: MenuPageQuery) {
+  listMenu(query?: MenuPageQuery) {
     return request<ApiResponse<MenuTable[]>>({
       url: `${API_PATH}/tree`,
       method: "get",
@@ -11,7 +11,7 @@ const MenuAPI = {
     });
   },
 
-  getMenuDetail(query: number) {
+  detailMenu(query: number) {
     return request<ApiResponse<MenuTable>>({
       url: `${API_PATH}/detail/${query}`,
       method: "get",
@@ -42,7 +42,7 @@ const MenuAPI = {
     });
   },
 
-  batchAvailableMenu(body: BatchType) {
+  batchMenu(body: BatchType) {
     return request<ApiResponse>({
       url: `${API_PATH}/available/setting`,
       method: "patch",

@@ -158,7 +158,7 @@
             <el-col :span="1.5">
               <el-tooltip content="刷新">
                 <el-button
-                  v-hasPerm="['module_system:notice:refresh']"
+                  v-hasPerm="['module_system:notice:query']"
                   type="primary"
                   icon="refresh"
                   circle
@@ -297,7 +297,7 @@
         >
           <template #default="scope">
             <el-button
-              v-hasPerm="['module_system:notice:detail']"
+              v-hasPerm="['module_system:notice:query']"
               type="info"
               size="small"
               link
@@ -437,7 +437,6 @@
           <el-button @click="handleCloseDialog">取消</el-button>
           <el-button
             v-if="dialogVisible.type !== 'detail'"
-            v-hasPerm="['module_system:notice:submit']"
             type="primary"
             @click="handleSubmit"
           >
@@ -445,7 +444,6 @@
           </el-button>
           <el-button
             v-else
-            v-hasPerm="['module_system:notice:detail']"
             type="primary"
             @click="handleCloseDialog"
           >
@@ -573,7 +571,7 @@ async function handleRefresh() {
 async function loadingData() {
   loading.value = true;
   try {
-    const response = await NoticeAPI.getNoticeList(queryFormData);
+    const response = await NoticeAPI.listNotice(queryFormData);
     pageTableData.value = response.data.data.items;
     total.value = response.data.data.total;
   } catch (error: any) {
@@ -641,7 +639,7 @@ async function handleCloseDialog() {
 async function handleOpenDialog(type: "create" | "update" | "detail", id?: number) {
   dialogVisible.type = type;
   if (id) {
-    const response = await NoticeAPI.getNoticeDetail(id);
+    const response = await NoticeAPI.detailNotice(id);
     if (type === "detail") {
       dialogVisible.title = "公告通知详情";
       Object.assign(detailFormData.value, response.data.data);
@@ -732,7 +730,7 @@ async function handleMoreClick(status: boolean) {
       .then(async () => {
         try {
           loading.value = true;
-          await NoticeAPI.batchAvailableNotice({ ids: selectIds.value, status });
+          await NoticeAPI.batchNotice({ ids: selectIds.value, status });
           handleResetQuery();
         } catch (error: any) {
           console.error(error);
@@ -769,7 +767,7 @@ const curdContentConfig = {
     query.page_size = 1000;
     const all: any[] = [];
     while (true) {
-      const res = await NoticeAPI.getNoticeList(query);
+      const res = await NoticeAPI.listNotice(query);
       const items = res.data?.data?.items || [];
       const total = res.data?.data?.total || 0;
       all.push(...items);

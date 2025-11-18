@@ -40,7 +40,7 @@
         </el-form-item>
         <el-form-item class="search-buttons">
           <el-button
-            v-hasPerm="['module_system:config:query']"
+            v-hasPerm="['module_system:param:query']"
             type="primary"
             icon="search"
             native-type="submit"
@@ -48,7 +48,7 @@
             查询
           </el-button>
           <el-button
-            v-hasPerm="['module_system:config:query']"
+            v-hasPerm="['module_system:param:query']"
             icon="refresh"
             @click="handleResetQuery"
           >
@@ -91,7 +91,7 @@
           <el-row :gutter="10">
             <el-col :span="1.5">
               <el-button
-                v-hasPerm="['module_system:config:create']"
+                v-hasPerm="['module_system:param:create']"
                 type="success"
                 icon="plus"
                 @click="handleOpenDialog('create')"
@@ -101,7 +101,7 @@
             </el-col>
             <el-col :span="1.5">
               <el-button
-                v-hasPerm="['module_system:config:delete']"
+                v-hasPerm="['module_system:param:delete']"
                 type="danger"
                 icon="delete"
                 :disabled="selectIds.length === 0"
@@ -117,7 +117,7 @@
             <el-col :span="1.5">
               <el-tooltip content="导出">
                 <el-button
-                  v-hasPerm="['module_system:config:export']"
+                  v-hasPerm="['module_system:param:export']"
                   type="warning"
                   icon="download"
                   circle
@@ -128,7 +128,7 @@
             <el-col :span="1.5">
               <el-tooltip content="刷新">
                 <el-button
-                  v-hasPerm="['module_system:config:refresh']"
+                  v-hasPerm="['module_system:param:refresh']"
                   type="primary"
                   icon="refresh"
                   circle
@@ -137,7 +137,7 @@
               </el-tooltip>
             </el-col>
             <el-col :span="1.5">
-              <el-dropdown v-hasPerm="['module_system:config:filter']" trigger="click">
+              <el-dropdown v-hasPerm="['module_system:param:query']" trigger="click">
                 <el-button type="default" icon="operation" circle />
                 <template #dropdown>
                   <el-dropdown-menu>
@@ -264,7 +264,7 @@
         >
           <template #default="scope">
             <el-button
-              v-hasPerm="['module_system:config:detail']"
+              v-hasPerm="['module_system:param:query']"
               type="info"
               size="small"
               link
@@ -274,7 +274,7 @@
               详情
             </el-button>
             <el-button
-              v-hasPerm="['module_system:config:update']"
+              v-hasPerm="['module_system:param:update']"
               type="primary"
               size="small"
               link
@@ -284,7 +284,7 @@
               编辑
             </el-button>
             <el-button
-              v-hasPerm="['module_system:config:delete']"
+              v-hasPerm="['module_system:param:delete']"
               type="danger"
               size="small"
               link
@@ -388,7 +388,7 @@
           <el-button @click="handleCloseDialog">取消</el-button>
           <el-button
             v-if="dialogVisible.type !== 'detail'"
-            v-hasPerm="['module_system:config:create']"
+            v-hasPerm="['module_system:param:create']"
             type="primary"
             @click="handleSubmit"
           >
@@ -396,7 +396,7 @@
           </el-button>
           <el-button
             v-else
-            v-hasPerm="['module_system:config:detail']"
+            v-hasPerm="['module_system:param:detail']"
             type="primary"
             @click="handleCloseDialog"
           >
@@ -522,7 +522,7 @@ async function handleRefresh() {
 async function loadingData() {
   loading.value = true;
   try {
-    const response = await ParamsAPI.getConfigList(queryFormData);
+    const response = await ParamsAPI.listParams(queryFormData);
     pageTableData.value = response.data.data.items;
     total.value = response.data.data.total;
   } catch (error: any) {
@@ -590,7 +590,7 @@ async function handleCloseDialog() {
 async function handleOpenDialog(type: "create" | "update" | "detail", id?: number) {
   dialogVisible.type = type;
   if (id) {
-    const response = await ParamsAPI.getConfigDetail(id);
+    const response = await ParamsAPI.detailParams(id);
     if (type === "detail") {
       dialogVisible.title = "系统配置详情";
       Object.assign(detailFormData.value, response.data.data);
@@ -615,7 +615,7 @@ async function handleSubmit() {
       const id = formData.id;
       if (id) {
         try {
-          await ParamsAPI.updateConfig(id, formData);
+          await ParamsAPI.updateParams(id, formData);
           dialogVisible.visible = false;
           resetForm();
           handleResetQuery();
@@ -626,7 +626,7 @@ async function handleSubmit() {
         }
       } else {
         try {
-          await ParamsAPI.createConfig(formData);
+          await ParamsAPI.createParams(formData);
           dialogVisible.visible = false;
           resetForm();
           handleResetQuery();
@@ -650,7 +650,7 @@ async function handleDelete(ids: number[]) {
     .then(async () => {
       try {
         loading.value = true;
-        await ParamsAPI.deleteConfig(ids);
+        await ParamsAPI.deleteParams(ids);
         handleResetQuery();
       } catch (error: any) {
         console.error(error);
@@ -681,7 +681,7 @@ const exportColumns = [
 
 // 导入/导出配置（用于导出弹窗）
 const curdContentConfig = {
-  permPrefix: "module_system:config",
+  permPrefix: "module_system:param",
   cols: exportColumns as any,
   exportsAction: async (params: any) => {
     const query: any = { ...params };
@@ -692,7 +692,7 @@ const curdContentConfig = {
     query.page_size = 1000;
     const all: any[] = [];
     while (true) {
-      const res = await ParamsAPI.getConfigList(query);
+      const res = await ParamsAPI.listParams(query);
       const items = res.data?.data?.items || [];
       const total = res.data?.data?.total || 0;
       all.push(...items);

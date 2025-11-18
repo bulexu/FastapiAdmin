@@ -116,7 +116,7 @@
             <el-col :span="1.5">
               <el-tooltip content="刷新">
                 <el-button
-                  v-hasPerm="['module_system:log:refresh']"
+                  v-hasPerm="['module_system:log:query']"
                   type="default"
                   icon="refresh"
                   circle
@@ -204,7 +204,7 @@
         <el-table-column label="操作" fixed="right" align="center" min-width="150">
           <template #default="scope">
             <el-button
-              v-hasPerm="['module_system:log:detail']"
+              v-hasPerm="['module_system:log:query']"
               type="info"
               size="small"
               link
@@ -434,7 +434,7 @@ const getMethodType = (method?: string) => {
 async function loadingData() {
   loading.value = true;
   try {
-    const response = await LogAPI.getLogList(queryFormData);
+    const response = await LogAPI.listLog(queryFormData);
     pageTableData.value = response.data.data.items;
     total.value = response.data.data.total;
   } catch (error: any) {
@@ -491,7 +491,7 @@ async function handleCloseDialog() {
 async function handleOpenDialog(type: "create" | "update" | "detail", id: number) {
   dialogVisible.type = type;
   if (id) {
-    const response = await LogAPI.getLogDetail(id);
+    const response = await LogAPI.detailLog(id);
     if (type === "detail") {
       dialogVisible.title = "日志详情";
       Object.assign(formData.value, response.data.data);
@@ -554,7 +554,7 @@ const curdContentConfig = {
     query.page_size = 1000;
     const all: any[] = [];
     while (true) {
-      const res = await LogAPI.getLogList(query);
+      const res = await LogAPI.listLog(query);
       const items = res.data?.data?.items || [];
       const total = res.data?.data?.total || 0;
       all.push(...items);

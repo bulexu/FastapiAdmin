@@ -9,12 +9,7 @@ from alembic.config import Config
 
 from app.common.enums import EnvironmentEnum
 from app.config.setting import settings
-from app.core.logger import setup_logging
-from app.utils.common_util import worship
-
-
-# 全局标志，用于跟踪日志是否已初始化
-LOGGING_INITIALIZED = False
+from app.utils.banner import worship
 
 
 shell_app = typer.Typer()
@@ -23,7 +18,6 @@ shell_app = typer.Typer()
 alembic_cfg = Config("alembic.ini")
 
 def create_app() -> FastAPI:
-    global LOGGING_INITIALIZED
     from app.plugin.init_app import (
         register_middlewares,
         register_exceptions,
@@ -32,13 +26,13 @@ def create_app() -> FastAPI:
         reset_api_docs,
         lifespan
     )
-    # 初始化日志系统（确保每个工作进程都会初始化日志，但避免重复初始化）
-    if not LOGGING_INITIALIZED:
-        setup_logging()
-        LOGGING_INITIALIZED = True
     # 创建FastAPI应用
     app = FastAPI(**settings.FASTAPI_CONFIG, lifespan=lifespan)
-
+    
+    from app.core.logger import setup_logging
+    
+    # 初始化日志
+    setup_logging()
     # 注册异常处理器
     register_exceptions(app)
     # 注册中间件
@@ -52,19 +46,15 @@ def create_app() -> FastAPI:
 
     return app
 
-@shell_app.command()
+@shell_app.command(name="run", help="启动 FastapiAdmin 服务")
 def run(env: EnvironmentEnum = typer.Option(EnvironmentEnum.DEV, "--env", help="运行环境 (dev, prod)")) -> None:
-    typer.echo("项目启动中..")
-    # 设置环境变量
+    typer.echo(worship())
+    # 设置环境变量 - 必须在导入settings之前设置
     os.environ["ENVIRONMENT"] = env.value
-    # 初始化日志系统（确保uvicorn主进程的日志也被正确配置）
-    setup_logging()
-    worship()
-    
     # 启动uvicorn服务
     uvicorn.run(app=f'main:create_app', **settings.UVICORN_CONFIG)
 
-@shell_app.command()
+@shell_app.command(name="revision", help="生成新的 Alembic 迁移脚本")
 def revision(env: EnvironmentEnum = typer.Option(EnvironmentEnum.DEV, "--env", help="运行环境 (dev, prod)")) -> None:
     """
     生成新的 Alembic 迁移脚本。
@@ -73,7 +63,7 @@ def revision(env: EnvironmentEnum = typer.Option(EnvironmentEnum.DEV, "--env", h
     command.revision(alembic_cfg, autogenerate=True, message="迁移脚本")
     typer.echo(f"迁移脚本已生成")
 
-@shell_app.command()
+@shell_app.command(name="upgrade", help="应用最新的 Alembic 迁移")
 def upgrade(env: EnvironmentEnum = typer.Option(EnvironmentEnum.DEV, "--env", help="运行环境 (dev, prod)")) -> None:
     """
     应用最新的 Alembic 迁移。

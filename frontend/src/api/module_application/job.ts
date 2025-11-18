@@ -3,7 +3,7 @@ import request from "@/utils/request";
 const API_PATH = "/application/job";
 
 const JobAPI = {
-  getJobList(query: JobPageQuery) {
+  listJob(query: JobPageQuery) {
     return request<ApiResponse<PageResult<JobTable[]>>>({
       url: `${API_PATH}/list`,
       method: "get",
@@ -11,7 +11,7 @@ const JobAPI = {
     });
   },
 
-  getJobDetail(query: number) {
+  detailJob(query: number) {
     return request<ApiResponse<JobTable>>({
       url: `${API_PATH}/detail/${query}`,
       method: "get",
@@ -75,7 +75,7 @@ const JobAPI = {
   },
 
   // 获取定时任务日志详情
-  getJobLogDetail(id: number) {
+  detailJobLog(id: number) {
     return request<ApiResponse<JobLogDetail>>({
       url: `${API_PATH}/log/detail/${id}`,
       method: "get",
@@ -83,7 +83,7 @@ const JobAPI = {
   },
 
   // 查询定时任务日志列表
-  getJobLogList(query: JobLogPageQuery) {
+  listJobLog(query: JobLogPageQuery) {
     return request<ApiResponse<PageResult<JobLogTable[]>>>({
       url: `${API_PATH}/log/list`,
       method: "get",

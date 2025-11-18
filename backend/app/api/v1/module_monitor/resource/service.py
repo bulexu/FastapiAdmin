@@ -9,7 +9,7 @@ from urllib.parse import urlparse
 from fastapi import UploadFile
 
 from app.core.exceptions import CustomException
-from app.core.logger import logger
+from app.core.logger import log
 from app.utils.excel_util import ExcelUtil
 from app.config.setting import settings
 
@@ -216,7 +216,7 @@ class ResourceService:
                 'is_hidden': is_hidden
             }
         except Exception as e:
-            logger.error(f'获取文件信息失败: {str(e)}')
+            log.error(f'获取文件信息失败: {str(e)}')
             return {}
     
     @classmethod
@@ -285,7 +285,7 @@ class ResourceService:
         except CustomException:
             raise
         except Exception as e:
-            logger.error(f'获取目录列表失败: {str(e)}')
+            log.error(f'获取目录列表失败: {str(e)}')
             raise CustomException(msg=f'获取目录列表失败: {str(e)}')
 
     @classmethod
@@ -349,7 +349,7 @@ class ResourceService:
             return sorted_resources
             
         except Exception as e:
-            logger.error(f'搜索资源失败: {str(e)}')
+            log.error(f'搜索资源失败: {str(e)}')
             raise CustomException(msg=f'搜索资源失败: {str(e)}')
 
     @classmethod
@@ -528,7 +528,7 @@ class ResourceService:
             # 生成文件URL
             file_url = cls._generate_http_url(file_path, base_url)
             
-            logger.info(f"文件上传成功: {filename}")
+            log.info(f"文件上传成功: {filename}")
             
             return ResourceUploadSchema(
                 filename=filename,
@@ -538,7 +538,7 @@ class ResourceService:
             ).model_dump(mode='json')
             
         except Exception as e:
-            logger.error(f"文件上传失败: {str(e)}")
+            log.error(f"文件上传失败: {str(e)}")
             raise CustomException(msg=f"文件上传失败: {str(e)}")
 
     @classmethod
@@ -563,13 +563,13 @@ class ResourceService:
                 raise CustomException(msg='路径不是文件')
             
             # 返回本地文件路径给 FileResponse 使用
-            logger.info(f"定位文件路径: {safe_path}")
+            log.info(f"定位文件路径: {safe_path}")
             return safe_path
             
         except CustomException:
             raise
         except Exception as e:
-            logger.error(f"下载文件失败: {str(e)}")
+            log.error(f"下载文件失败: {str(e)}")
             raise CustomException(msg=f"下载文件失败: {str(e)}")
 
     @classmethod
@@ -591,18 +591,18 @@ class ResourceService:
                 safe_path = cls._get_safe_path(path)
                 
                 if not os.path.exists(safe_path):
-                    logger.warning(f"路径不存在，跳过: {path}")
+                    log.error(f"路径不存在，跳过: {path}")
                     continue
                 
                 if os.path.isfile(safe_path):
                     os.remove(safe_path)
-                    logger.info(f"删除文件成功: {safe_path}")
+                    log.info(f"删除文件成功: {safe_path}")
                 elif os.path.isdir(safe_path):
                     shutil.rmtree(safe_path)
-                    logger.info(f"删除目录成功: {safe_path}")
+                    log.info(f"删除目录成功: {safe_path}")
                     
             except Exception as e:
-                logger.error(f"删除失败 {path}: {str(e)}")
+                log.error(f"删除失败 {path}: {str(e)}")
                 raise CustomException(msg=f"删除失败 {path}: {str(e)}")
 
     @classmethod
@@ -633,14 +633,14 @@ class ResourceService:
                 if os.path.isfile(safe_path):
                     os.remove(safe_path)
                     success_paths.append(path)
-                    logger.info(f"删除文件成功: {safe_path}")
+                    log.info(f"删除文件成功: {safe_path}")
                 elif os.path.isdir(safe_path):
                     shutil.rmtree(safe_path)
                     success_paths.append(path)
-                    logger.info(f"删除目录成功: {safe_path}")
+                    log.info(f"删除目录成功: {safe_path}")
                     
             except Exception as e:
-                logger.error(f"删除失败 {path}: {str(e)}")
+                log.error(f"删除失败 {path}: {str(e)}")
                 failed_paths.append(path)
         
         return {
@@ -683,12 +683,12 @@ class ResourceService:
             
             # 移动文件
             shutil.move(source_path, target_path)
-            logger.info(f"移动成功: {source_path} -> {target_path}")
+            log.info(f"移动成功: {source_path} -> {target_path}")
             
         except CustomException:
             raise
         except Exception as e:
-            logger.error(f"移动失败: {str(e)}")
+            log.error(f"移动失败: {str(e)}")
             raise CustomException(msg=f"移动失败: {str(e)}")
 
     @classmethod
@@ -723,12 +723,12 @@ class ResourceService:
             else:
                 shutil.copytree(source_path, target_path, dirs_exist_ok=data.overwrite)
             
-            logger.info(f"复制成功: {source_path} -> {target_path}")
+            log.info(f"复制成功: {source_path} -> {target_path}")
             
         except CustomException:
             raise
         except Exception as e:
-            logger.error(f"复制失败: {str(e)}")
+            log.error(f"复制失败: {str(e)}")
             raise CustomException(msg=f"复制失败: {str(e)}")
 
     @classmethod
@@ -757,12 +757,12 @@ class ResourceService:
             
             # 重命名
             os.rename(old_path, new_path)
-            logger.info(f"重命名成功: {old_path} -> {new_path}")
+            log.info(f"重命名成功: {old_path} -> {new_path}")
             
         except CustomException:
             raise
         except Exception as e:
-            logger.error(f"重命名失败: {str(e)}")
+            log.error(f"重命名失败: {str(e)}")
             raise CustomException(msg=f"重命名失败: {str(e)}")
 
     @classmethod
@@ -797,12 +797,12 @@ class ResourceService:
             
             # 创建目录
             os.makedirs(new_dir_path)
-            logger.info(f"创建目录成功: {new_dir_path}")
+            log.info(f"创建目录成功: {new_dir_path}")
             
         except CustomException:
             raise
         except Exception as e:
-            logger.error(f"创建目录失败: {str(e)}")
+            log.error(f"创建目录失败: {str(e)}")
             raise CustomException(msg=f"创建目录失败: {str(e)}")
 
     @classmethod

@@ -3,7 +3,7 @@
 import time
 from datetime import datetime
 
-from app.core.logger import logger
+from app.core.logger import log
 
 def job(*args, **kwargs) -> None:
     """
@@ -18,7 +18,7 @@ def job(*args, **kwargs) -> None:
         time.sleep(3)
         print(f'{datetime.now()}同步函数执行完成')
     except Exception as e:
-        logger.error(f"同步任务执行失败: {e}")
+        log.error(f"同步任务执行失败: {e}")
         raise
 
 async def async_job(*args, **kwargs) -> None:
@@ -34,6 +34,6 @@ async def async_job(*args, **kwargs) -> None:
         time.sleep(3)
         print(f'{datetime.now()}异步函数执行完成')
     except Exception as e:
-        logger.error(f"异步任务执行失败: {e}")
+        log.error(f"异步任务执行失败: {e}")
         raise
 

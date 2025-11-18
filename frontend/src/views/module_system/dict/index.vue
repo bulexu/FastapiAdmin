@@ -146,7 +146,7 @@
             <el-col :span="1.5">
               <el-tooltip content="刷新">
                 <el-button
-                  v-hasPerm="['module_system:dict_type:refresh']"
+                  v-hasPerm="['module_system:dict_type:query']"
                   type="primary"
                   icon="refresh"
                   circle
@@ -287,7 +287,7 @@
               字典
             </el-button>
             <el-button
-              v-hasPerm="['module_system:dict_type:detail']"
+              v-hasPerm="['module_system:dict_type:query']"
               type="info"
               size="small"
               link
@@ -405,7 +405,6 @@
           <el-button @click="handleCloseDialog">取消</el-button>
           <el-button
             v-if="dialogVisible.type !== 'detail'"
-            v-hasPerm="['module_system:dict_type:submit']"
             type="primary"
             @click="handleSubmit"
           >
@@ -413,7 +412,6 @@
           </el-button>
           <el-button
             v-else
-            v-hasPerm="['module_system:dict_type:detail']"
             type="primary"
             @click="handleCloseDialog"
           >
@@ -554,7 +552,7 @@ const currentDictLabel = ref("");
 async function loadingData() {
   loading.value = true;
   try {
-    const response = await DictAPI.getDictTypeList(queryFormData);
+    const response = await DictAPI.listDictType(queryFormData);
     pageTableData.value = response.data.data.items;
     total.value = response.data.data.total;
   } catch (error: any) {
@@ -621,7 +619,7 @@ async function handleCloseDialog() {
 async function handleOpenDialog(type: "create" | "update" | "detail", id?: number) {
   dialogVisible.type = type;
   if (id) {
-    const response = await DictAPI.getDictTypeDetail(id);
+    const response = await DictAPI.detailDictType(id);
     if (type === "detail") {
       dialogVisible.title = "字典详情";
       Object.assign(detailFormData.value, response.data.data);
@@ -710,7 +708,7 @@ async function handleMoreClick(status: boolean) {
       .then(async () => {
         try {
           loading.value = true;
-          await DictAPI.batchAvailableDict({ ids: selectIds.value, status });
+          await DictAPI.batchDictType({ ids: selectIds.value, status });
           handleResetQuery();
         } catch (error: any) {
           console.error(error);
@@ -751,7 +749,7 @@ const curdContentConfig = {
     query.page_size = 1000;
     const all: any[] = [];
     while (true) {
-      const res = await DictAPI.getDictTypeList(query);
+      const res = await DictAPI.listDictType(query);
       const items = res.data?.data?.items || [];
       const total = res.data?.data?.total || 0;
       all.push(...items);

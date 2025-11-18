@@ -7,13 +7,14 @@ from typing import Any, List, Dict, Literal, Optional
 from sqlglot.expressions import Add, Alter, Create, Delete, Drop, Expression, Insert, Table, TruncateTable, Update
 from sqlglot import parse as sqlglot_parse
 
+from app.config.path_conf import BASE_DIR
 from app.config.setting import settings
-from app.core.logger import logger
+from app.core.logger import log
 from app.core.exceptions import CustomException
-from app.utils.gen_util import GenUtils
-from app.utils.jinja2_template_util import Jinja2TemplateUtil
 
 from app.api.v1.module_system.auth.schema import AuthSchema
+from .tools.jinja2_template_util import Jinja2TemplateUtil
+from .tools.gen_util import GenUtils
 from .schema import GenTableSchema, GenTableOutSchema, GenTableColumnSchema,  GenTableColumnOutSchema
 from .param import GenTableQueryParam
 from .crud import GenTableColumnCRUD, GenTableCRUD
@@ -294,7 +295,7 @@ class GenTableService:
                 table_out = GenTableOutSchema.model_validate(gen_table)
                 result.append(table_out)
             except Exception as e:
-                logger.warning(f"转换业务表时出错: {str(e)}")
+                log.error(f"转换业务表时出错: {str(e)}")
                 continue
         return result
 
@@ -318,7 +319,7 @@ class GenTableService:
                 render_content = await env.get_template(template).render_async(**context)
                 preview_code_result[template] = render_content
             except Exception as e:
-                logger.error(f"渲染模板 {template} 时出错: {str(e)}")
+                log.error(f"渲染模板 {template} 时出错: {str(e)}")
                 # 即使某个模板渲染失败，也继续处理其他模板
                 preview_code_result[template] = f"渲染错误: {str(e)}"
         return preview_code_result
@@ -376,7 +377,7 @@ class GenTableService:
                         render_content = await env.get_template(template_file).render_async(**render_info[2])
                         zip_file.writestr(output_file, render_content)
                 except Exception as e:
-                    logger.error(f"批量生成代码时处理表 {table_name} 出错: {str(e)}")
+                    log.error(f"批量生成代码时处理表 {table_name} 出错: {str(e)}")
                     # 继续处理其他表，不中断整个过程
                     continue
 
@@ -507,18 +508,18 @@ class GenTableService:
         try:
             file_name = Jinja2TemplateUtil.get_file_name(template, gen_table)
             # 默认写入到项目根目录（backend的上一级）
-            project_root = str(settings.BASE_DIR.parent)
+            project_root = str(BASE_DIR.parent)
             full_path = os.path.join(project_root, file_name)
             
             # 确保路径在项目根目录内，防止路径遍历攻击
             if not os.path.abspath(full_path).startswith(os.path.abspath(project_root)):
-                logger.warning(f"路径越界，回退到项目根目录: {file_name}")
+                log.error(f"路径越界，回退到项目根目录: {file_name}")
                 # 回退到项目根目录下的generated文件夹
                 full_path = os.path.join(project_root, "generated", os.path.basename(file_name))
             
             return full_path
         except Exception as e:
-            logger.error(f"生成路径时出错: {str(e)}")
+            log.error(f"生成路径时出错: {str(e)}")
             return None
 
 

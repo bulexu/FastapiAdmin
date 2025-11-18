@@ -3,7 +3,7 @@ import request from "@/utils/request";
 const API_PATH = "/system/notice";
 
 const NoticeAPI = {
-  getNoticeList(query: NoticePageQuery) {
+  listNotice(query: NoticePageQuery) {
     return request<ApiResponse<PageResult<NoticeTable[]>>>({
       url: `${API_PATH}/list`,
       method: "get",
@@ -11,14 +11,14 @@ const NoticeAPI = {
     });
   },
 
-  getNoticeListAvailable() {
+  listNoticeAvailable() {
     return request<ApiResponse<PageResult<NoticeTable[]>>>({
       url: `${API_PATH}/available`,
       method: "get",
     });
   },
 
-  getNoticeDetail(query: number) {
+  detailNotice(query: number) {
     return request<ApiResponse<NoticeTable>>({
       url: `${API_PATH}/detail/${query}`,
       method: "get",
@@ -49,7 +49,7 @@ const NoticeAPI = {
     });
   },
 
-  batchAvailableNotice(body: BatchType) {
+  batchNotice(body: BatchType) {
     return request<ApiResponse>({
       url: `${API_PATH}/available/setting`,
       method: "patch",

@@ -5,7 +5,7 @@ const API_PATH = "/{{ module_name }}/{{ business_name|lower }}";
 // 参考 demo.ts 的风格，提供标准的 CRUD 与导入/导出 API（TypeScript）
 const {{ class_name }}API = {
   // 列表查询
-  list(query: {{ class_name }}PageQuery) {
+  list{{ class_name }}(query: {{ class_name }}PageQuery) {
     return request<ApiResponse<PageResult<{{ class_name }}Table[]>>>({
       url: `${API_PATH}/list`,
       method: "get",
@@ -14,7 +14,7 @@ const {{ class_name }}API = {
   },
 
   // 详情查询
-  detail(id: number) {
+  detail{{ class_name }}(id: number) {
     return request<ApiResponse<{{ class_name }}Table>>({
       url: `${API_PATH}/detail/${id}`,
       method: "get",
@@ -22,7 +22,7 @@ const {{ class_name }}API = {
   },
 
   // 新增
-  create(data: {{ class_name }}Form) {
+  create{{ class_name }}(data: {{ class_name }}Form) {
     return request<ApiResponse>({
       url: `${API_PATH}/create`,
       method: "post",
@@ -31,7 +31,7 @@ const {{ class_name }}API = {
   },
 
   // 修改（带主键）
-  update(id: number, data: {{ class_name }}Form) {
+  update{{ class_name }}(id: number, data: {{ class_name }}Form) {
     return request<ApiResponse>({
       url: `${API_PATH}/update/${id}`,
       method: "put",
@@ -40,7 +40,7 @@ const {{ class_name }}API = {
   },
 
   // 删除（支持批量）
-  delete(ids: number[]) {
+  delete{{ class_name }}(ids: number[]) {
     return request<ApiResponse>({
       url: `${API_PATH}/delete`,
       method: "delete",
@@ -49,7 +49,7 @@ const {{ class_name }}API = {
   },
 
   // 导出
-  export(query: {{ class_name }}PageQuery) {
+  export{{ class_name }}(query: {{ class_name }}PageQuery) {
     return request<Blob>({
       url: `${API_PATH}/export`,
       method: "post",
@@ -59,7 +59,7 @@ const {{ class_name }}API = {
   },
 
   // 下载导入模板
-  downloadTemplate() {
+  downloadTemplate{{ class_name }}() {
     return request<Blob>({
       url: `${API_PATH}/download/template`,
       method: "post",
@@ -68,7 +68,7 @@ const {{ class_name }}API = {
   },
 
   // 导入
-  import(data: FormData) {
+  import{{ class_name }}(data: FormData) {
     return request<ApiResponse>({
       url: `${API_PATH}/import`,
       method: "post",
@@ -77,7 +77,7 @@ const {{ class_name }}API = {
     });
   },
   // 批量启用/停用
-  batchAvailable(body: { ids: number[]; status: boolean }) {
+  batchAvailable{{ class_name }}(body: { ids: number[]; status: boolean }) {
     return request<ApiResponse>({
       url: `${API_PATH}/available/setting`,
       method: "patch",

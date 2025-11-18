@@ -11,7 +11,7 @@ from urllib.parse import urljoin
 
 from app.config.setting import settings
 from app.core.exceptions import CustomException
-from app.core.logger import logger
+from app.core.logger import log
 
 class UploadUtil:
     """
@@ -223,7 +223,7 @@ class UploadUtil:
             return filename, filepath, file_url
             
         except Exception as e:
-            logger.error(f"文件上传失败: {e}")
+            log.error(f"文件上传失败: {e}")
             raise CustomException(msg='文件上传失败')
 
     @staticmethod

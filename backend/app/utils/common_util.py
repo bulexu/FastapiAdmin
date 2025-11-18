@@ -10,21 +10,13 @@ from sqlalchemy.engine.row import Row
 from sqlalchemy.orm.collections import InstrumentedList
 from sqlalchemy.sql.expression import TextClause, null
 
+
 from app.config.setting import settings
-from app.core.logger import logger
+from app.core.logger import log
 from app.core.exceptions import CustomException
 
 
-def worship() -> None:
-    """
-    获取项目启动Banner（优先读取 banner.txt）
-    """
-    banner_file = settings.BASE_DIR.joinpath('banner.txt')
-    if banner_file.exists():
-        raw = banner_file.read_text(encoding='utf-8')
-        # 支持文件内使用 {TITLE} / {VERSION} 等占位符
-        banner = raw.format(TITLE=settings.TITLE, VERSION=settings.VERSION)
-        logger.info(banner)
+
 
 def import_module(module: str, desc: str) -> Any:
     """
@@ -42,10 +34,10 @@ def import_module(module: str, desc: str) -> Any:
         module = importlib.import_module(module_path)
         return getattr(module, module_class)
     except ModuleNotFoundError:
-        logger.error(f"❗️ 导入{desc}失败,未找到模块:{module}")
+        log.error(f"❗️ 导入{desc}失败,未找到模块:{module}")
         raise
     except AttributeError:
-        logger.error(f"❗ ️导入{desc}失败,未找到模块方法:{module}")
+        log.error(f"❗ ️导入{desc}失败,未找到模块方法:{module}")
         raise
 
 
@@ -70,10 +62,10 @@ async def import_modules_async(modules: list, desc: str, **kwargs) -> None:
             module_obj = importlib.import_module(module_path)
             await getattr(module_obj, module_name)(**kwargs)
         except ModuleNotFoundError:
-            logger.error(f"❌️ 导入{desc}失败,未找到模块:{module}")
+            log.error(f"❌️ 导入{desc}失败,未找到模块:{module}")
             raise
         except AttributeError:
-            logger.error(f"❌️ 导入{desc}失败,未找到模块方法:{module}")
+            log.error(f"❌️ 导入{desc}失败,未找到模块方法:{module}")
             raise
 
 

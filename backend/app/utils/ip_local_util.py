@@ -3,7 +3,7 @@
 import re
 import httpx
 
-from app.core.logger import logger
+from app.core.logger import log
 
 
 class IpLocalUtil:
@@ -52,7 +52,7 @@ class IpLocalUtil:
         """
         # 校验IP格式
         if not cls.is_valid_ip(ip):
-            logger.error(f"IP格式不合法: {ip}")
+            log.error(f"IP格式不合法: {ip}")
             return "未知"
         
         # 内网IP直接返回
@@ -78,7 +78,7 @@ class IpLocalUtil:
                     return f"{data.get('country','')}-{data.get('prov','')}-{data.get('city','')}-{data.get('district','')}-{data.get('isp','')}"
 
         except Exception as e:
-            logger.error(f"获取IP归属地失败: {e}")
+            log.error(f"获取IP归属地失败: {e}")
             return "未知"
 
     @classmethod
@@ -102,5 +102,5 @@ class IpLocalUtil:
             except Exception as e:
                 if attempt < max_retries - 1:
                     continue
-                logger.error(f"请求 {url} 失败: {e}")
+                log.error(f"请求 {url} 失败: {e}")
         return None

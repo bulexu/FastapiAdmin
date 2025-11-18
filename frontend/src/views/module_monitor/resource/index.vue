@@ -107,7 +107,7 @@
             <el-col :span="1.5">
               <el-checkbox
                 v-model="showHiddenFiles"
-                v-hasPerm="['module_monitor:resource:show_hidden']"
+                v-hasPerm="['module_monitor:resource:query']"
                 @change="handleShowHiddenChange"
               >
                 显示隐藏文件
@@ -116,14 +116,14 @@
             <el-col :span="1.5">
               <el-button-group>
                 <el-button
-                  v-hasPerm="['module_monitor:resource:view_list']"
+                  v-hasPerm="['module_monitor:resource:query']"
                   :type="viewMode === 'list' ? 'primary' : ''"
                   @click="viewMode = 'list'"
                 >
                   <el-icon><List /></el-icon>
                 </el-button>
                 <el-button
-                  v-hasPerm="['module_monitor:resource:view_grid']"
+                  v-hasPerm="['module_monitor:resource:query']"
                   :type="viewMode === 'grid' ? 'primary' : ''"
                   @click="viewMode = 'grid'"
                 >
@@ -134,7 +134,7 @@
             <el-col :span="1.5">
               <el-tooltip content="刷新">
                 <el-button
-                  v-hasPerm="['module_monitor:resource:refresh']"
+                  v-hasPerm="['module_monitor:resource:query']"
                   type="primary"
                   icon="refresh"
                   circle
@@ -172,7 +172,6 @@
                 <Document v-else />
               </el-icon>
               <span
-                v-hasPerm="['module_monitor:resource:preview']"
                 :class="{ 'file-name-clickable': true }"
                 @click="handleFileNameClick(row)"
               >
@@ -449,7 +448,7 @@ const currentQuery = computed(() => {
 async function loadFileList() {
   loading.value = true;
   try {
-    const response = await ResourceAPI.getResourceList(currentQuery.value);
+    const response = await ResourceAPI.listResource(currentQuery.value);
 
     // 正确处理后端返回的分页数据结构
     const pageResult = response.data?.data;

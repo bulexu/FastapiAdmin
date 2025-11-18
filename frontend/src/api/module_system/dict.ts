@@ -3,7 +3,7 @@ import request from "@/utils/request";
 const API_PATH = "/system/dict";
 
 const DictAPI = {
-  getDictTypeList(query: DictPageQuery) {
+  listDictType(query: DictPageQuery) {
     return request<ApiResponse<PageResult<DictTable[]>>>({
       url: `${API_PATH}/type/list`,
       method: "get",
@@ -11,14 +11,14 @@ const DictAPI = {
     });
   },
 
-  getDictTypeOptionselect() {
+  optionDictType() {
     return request<ApiResponse>({
       url: `${API_PATH}/type/optionselect`,
       method: "get",
     });
   },
 
-  getDictTypeDetail(query: number) {
+  detailDictType(query: number) {
     return request<ApiResponse<DictTable>>({
       url: `${API_PATH}/type/detail/${query}`,
       method: "get",
@@ -49,7 +49,7 @@ const DictAPI = {
     });
   },
 
-  batchAvailableDict(body: BatchType) {
+  batchDictType(body: BatchType) {
     return request<ApiResponse>({
       url: `${API_PATH}/type/available/setting`,
       method: "patch",
@@ -66,7 +66,7 @@ const DictAPI = {
     });
   },
 
-  getDictDataList(query: DictDataPageQuery) {
+  listDictData(query: DictDataPageQuery) {
     return request<ApiResponse<PageResult<DictDataTable[]>>>({
       url: `${API_PATH}/data/list`,
       method: "get",
@@ -74,7 +74,7 @@ const DictAPI = {
     });
   },
 
-  getDictDataDetail(query: number) {
+  detailDictData(query: number) {
     return request<ApiResponse<DictDataTable>>({
       url: `${API_PATH}/data/detail/${query}`,
       method: "get",
@@ -105,7 +105,7 @@ const DictAPI = {
     });
   },
 
-  batchAvailableDictData(body: BatchType) {
+  batchDictData(body: BatchType) {
     return request<ApiResponse>({
       url: `${API_PATH}/data/available/setting`,
       method: "patch",

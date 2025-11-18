@@ -27,7 +27,7 @@ class GenUtils:
         gen_table.class_name = cls.convert_class_name(gen_table.table_name or "")
         gen_table.package_name = 'module_gencode'
         gen_table.module_name = gen_table.package_name.split('.')[-1]
-        gen_table.business_name = gen_table.table_name.split('_')[-1]
+        gen_table.business_name = gen_table.table_name
         gen_table.function_name = re.sub(r'(?:表|测试)', '', gen_table.table_comment or "")
 
     @classmethod

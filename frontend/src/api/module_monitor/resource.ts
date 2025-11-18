@@ -7,7 +7,7 @@ export const ResourceAPI = {
    * 获取目录列表
    * @param query 查询参数
    */
-  getResourceList(query: ResourcePageQuery) {
+  listResource(query: ResourcePageQuery) {
     return request<ApiResponse<PageResult<ResourceItem[]>>>({
       url: `${API_PATH}/list`,
       method: "get",

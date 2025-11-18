@@ -297,7 +297,7 @@ class JobConstant:
         '}',
         ' ',
     ]
-    JOB_WHITE_LIST = ['module_task']
+    JOB_WHITE_LIST = ['function_task']
 
 
 class MenuConstant:

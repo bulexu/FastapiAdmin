@@ -69,7 +69,7 @@ const selectConfig: ISelectConfig = {
       else if (query.status === "false") query.status = false;
     }
     // 请求用户分页列表并适配 TableSelect 需要的结构
-    return UserAPI.getUserList(query).then((res: any) => {
+    return UserAPI.listUser(query).then((res: any) => {
       return {
         total: res.data.data.total,
         list: res.data.data.items,

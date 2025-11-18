@@ -6,7 +6,7 @@ from openai.types.chat.chat_completion import ChatCompletion
 import httpx
 
 from app.config.setting import settings
-from app.core.logger import logger
+from app.core.logger import log
 
 
 class AIClient:
@@ -103,7 +103,7 @@ class AIClient:
                     
         except Exception as e:
             # 记录详细错误，返回友好提示
-            logger.error(f"AI处理查询失败: {str(e)}")
+            log.error(f"AI处理查询失败: {str(e)}")
             yield self._friendly_error_message(e)
 
     async def close(self) -> None:
