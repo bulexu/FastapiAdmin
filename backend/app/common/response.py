@@ -47,7 +47,7 @@ class SuccessResponse(JSONResponse):
             data=data,
             status_code=status_code,
             success=success
-        ).model_dump()
+        ).model_dump(mode='json')
         super().__init__(content=content, status_code=status_code)
 
 
@@ -81,7 +81,7 @@ class ErrorResponse(JSONResponse):
             data=data,
             status_code=status_code,
             success=success
-        ).model_dump()
+        ).model_dump(mode='json')
         super().__init__(content=content, status_code=status_code)
 
 

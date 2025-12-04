@@ -1,5 +1,6 @@
 import { store } from "@/store";
 import DictAPI, { DictDataTable } from "@/api/module_system/dict";
+import result from "element-plus/es/components/result";
 
 export const useDictStore = defineStore("dict", {
   state: () => ({
@@ -19,6 +20,7 @@ export const useDictStore = defineStore("dict", {
           .map((item) => ({
             dict_value: item.dict_value!,
             dict_label: item.dict_label!,
+            list_class: item.list_class
           }));
       };
     },

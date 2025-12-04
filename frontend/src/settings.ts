@@ -37,7 +37,7 @@ export const defaultSettings: AppSettings = {
   // showWatermark: false,
   showWatermark: true,
   // 水印内容
-  watermarkContent: pkg.name,
+  watermarkContent: "Babel Admin",
   // 侧边栏配色方案
   sidebarColorScheme: SidebarColor.CLASSIC_BLUE,
   // 项目引导

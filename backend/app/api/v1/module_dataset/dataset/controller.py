@@ -3,6 +3,7 @@
 from fastapi import APIRouter, Depends, Request, Path
 from fastapi.responses import JSONResponse, StreamingResponse
 from redis.asyncio.client import Redis
+import urllib.parse
 
 from app.common.response import SuccessResponse, StreamResponse
 from app.core.router_class import OperationLogRoute
@@ -17,13 +18,12 @@ from app.api.v1.module_system.dict.service import DictDataService
 from .service import DatasetService
 
 
-MetadataController = APIRouter(route_class=OperationLogRoute, prefix='/dataset', tags=["数据集管理"])
+DatasetRouter = APIRouter(route_class=OperationLogRoute, prefix='/dataset', tags=["数据集管理"])
 
-
-@MetadataController.get('/list', summary="获取数据集表列表", description="获取数据集表列表")
-async def get_meta_table_list(
+@DatasetRouter.get('/list', summary="获取数据集表列表", description="获取数据集表列表")
+async def get_meta_table_list_controller(
     search: GenTableQueryParam = Depends(),
-    auth: AuthSchema = Depends(AuthPermission(["dataset:data:query"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_dataset:dataset:query"]))
 ) -> JSONResponse:
     """
     获取数据集表列表
@@ -40,10 +40,10 @@ async def get_meta_table_list(
     return SuccessResponse(data=result, msg="获取数据集表列表成功")
 
 
-@MetadataController.get('/{table_id}', summary="获取数据集表详情", description="获取数据集表详情")
-async def query_detail_gen_table(
+@DatasetRouter.get('/{table_id}', summary="获取数据集表详情", description="获取数据集表详情")
+async def query_detail_gen_table_controller(
     table_id: int = Path(..., description="表ID"),
-    auth: AuthSchema = Depends(AuthPermission(["dataset:data:query"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_dataset:dataset:query"]))
 ) -> JSONResponse:
     """
     获取数据集表详情
@@ -60,12 +60,12 @@ async def query_detail_gen_table(
     return SuccessResponse(data=result, msg="获取数据集表详情成功")
 
 
-@MetadataController.get('/{table_id}/data', summary="获取数据集表数据", description="获取数据集表数据")
-async def get_meta_table_data(
+@DatasetRouter.get('/{table_id}/data', summary="获取数据集表数据", description="获取数据集表数据")
+async def get_meta_table_data_controller(
     request: Request,
     page: PaginationQueryParam = Depends(),
     table_id: int = Path(..., description="表ID"),
-    auth: AuthSchema = Depends(AuthPermission(["dataset:data:query"]))
+    auth: AuthSchema = Depends(AuthPermission(["module_dataset:dataset:query"]))
 ) -> JSONResponse:
     """
     获取数据集表数据
@@ -85,21 +85,21 @@ async def get_meta_table_data(
 
     result = await DatasetService.get_dataset_list_service(
         auth=auth, 
+        page=page,
         args=args, 
         table_name=gen_table.table_name, 
-        columns=gen_columns, 
-        is_page=True
+        columns=gen_columns
     )
     
     log.info(f'获取table_id为{table_id}的数据成功')
     return SuccessResponse(data=result, msg="获取数据集表数据成功")
 
 
-@MetadataController.get('/{table_id}/export', summary="导出数据集表数据", description="导出数据集表数据")
-async def export_meta_table_data(
+@DatasetRouter.get('/{table_id}/export', summary="导出数据集表数据", description="导出数据集表数据")
+async def export_meta_table_data_controller(
     request: Request,
     table_id: int = Path(..., description="表ID"),
-    auth: AuthSchema = Depends(AuthPermission(["dataset:data:export"])),
+    auth: AuthSchema = Depends(AuthPermission(["module_dataset:dataset:export"])),
     redis: Redis = Depends(redis_getter)
 ) -> StreamingResponse:
     """
@@ -143,6 +143,6 @@ async def export_meta_table_data(
         data=bytes2file_response(export_result),
         media_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         headers={
-            'Content-Disposition': f'attachment; filename={gen_table.table_name}.xlsx'
+            'Content-Disposition': f'attachment; filename={urllib.parse.quote(gen_table.table_name)}.xlsx'
         }
     )

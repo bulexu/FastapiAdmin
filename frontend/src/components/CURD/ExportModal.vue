@@ -1,23 +1,13 @@
 <template>
   <div>
     <!-- 导出弹窗 -->
-    <el-dialog
-      v-model="exportsModalVisible"
-      :align-center="true"
-      title="导出数据"
-      width="600px"
-      style="padding-right: 0"
-      @close="handleCloseExportsModal"
-    >
+    <el-dialog v-model="exportsModalVisible" :align-center="true" title="导出数据" width="600px" style="padding-right: 0"
+      @close="handleCloseExportsModal">
       <!-- 滚动 -->
       <el-scrollbar max-height="60vh">
         <!-- 表单 -->
-        <el-form
-          ref="exportsFormRef"
-          style="padding-right: var(--el-dialog-padding-primary)"
-          :model="exportsFormData"
-          :rules="exportsFormRules"
-        >
+        <el-form ref="exportsFormRef" style="padding-right: var(--el-dialog-padding-primary)" :model="exportsFormData"
+          :rules="exportsFormRules">
           <el-form-item label="文件名" prop="filename">
             <el-input v-model="exportsFormData.filename" placeholder="请输入文件名" clearable />
           </el-form-item>
@@ -26,27 +16,17 @@
           </el-form-item>
           <el-form-item label="数据源" prop="origin">
             <el-select v-model="exportsFormData.origin">
-              <el-option
-                label="当前数据 (当前页的数据)"
-                :value="ExportsOriginEnum.CURRENT"
-                :disabled="!pageData?.length"
-              />
-              <el-option
-                label="选中数据 (所有选中的数据)"
-                :value="ExportsOriginEnum.SELECTED"
-                :disabled="!selectionData?.length"
-              />
-              <el-option
-                label="全量数据 (所有分页的数据)"
-                :value="ExportsOriginEnum.REMOTE"
-                :disabled="!props.contentConfig.exportsAction"
-              />
+              <el-option label="当前数据 (当前页的数据)" :value="ExportsOriginEnum.CURRENT" :disabled="!pageData?.length" />
+              <el-option label="选中数据 (所有选中的数据)" :value="ExportsOriginEnum.SELECTED"
+                :disabled="!selectionData?.length" />
+              <el-option label="全量数据 (所有分页的数据)" :value="ExportsOriginEnum.REMOTE"
+                :disabled="!props.contentConfig.exportsAction" />
             </el-select>
           </el-form-item>
           <el-form-item label="字段" prop="fields">
             <el-checkbox-group v-model="exportsFormData.fields">
               <template v-for="col in cols" :key="col.prop">
-                <el-checkbox v-if="col.prop" :value="col.prop" :label="col.label" />
+                <el-checkbox v-if="col.prop" :value="col.prop" :label="col.label" checked />
               </template>
             </el-checkbox-group>
           </el-form-item>

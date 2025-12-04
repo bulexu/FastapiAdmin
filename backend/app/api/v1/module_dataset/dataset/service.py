@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from app.core.logger import log
+from app.core.base_params import PaginationQueryParam
 from app.utils.excel_util import ExcelUtil
 from app.api.v1.module_system.auth.schema import AuthSchema
 from .crud import DatasetCRUD
@@ -9,7 +10,7 @@ from .crud import DatasetCRUD
 class DatasetService:
     
     @classmethod
-    async def get_dataset_list_service(cls, auth: AuthSchema, args: dict, table_name: str, columns: list, is_page: bool = False):
+    async def get_dataset_list_service(cls, auth: AuthSchema, page: PaginationQueryParam, args: dict, table_name: str, columns: list):
         """
         获取元数据表数据服务
         :param auth: 认证信息
@@ -18,7 +19,7 @@ class DatasetService:
         :param columns: 字段定义列表
         :param is_page: 是否分页
         """
-        data_result = await DatasetCRUD(auth).get_dataset_data_crud(args, table_name, columns, is_page)
+        data_result = await DatasetCRUD(auth).get_dataset_data_crud(page, args, table_name, columns)
         return data_result
 
     @classmethod
@@ -33,8 +34,9 @@ class DatasetService:
         :return: excel 二进制数据
         """
         # 查询数据
-        data_result = await DatasetCRUD(auth).get_dataset_data_crud(args, table_name, columns, is_page=False)
-        rows = data_result if isinstance(data_result, list) else data_result.get('rows', [])
+        page = PaginationQueryParam(page_no=1, page_size=-1)
+        data_result = await DatasetCRUD(auth).get_dataset_data_crud(page, args, table_name, columns)
+        rows = data_result.get('items', []) if isinstance(data_result, dict) else data_result
 
         # 构建 mapping_dict: {python_field: columnComment}
         mapping_dict = {col.get('python_field'): (col.get('column_comment') or col.get('column_name')) for col in columns}
