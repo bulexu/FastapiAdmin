@@ -2,6 +2,7 @@
 
 from collections.abc import Sequence
 from app.core.base_crud import CRUDBase
+from app.core.base_params import PaginationQueryParam
 
 from app.api.v1.module_system.auth.schema import AuthSchema
 from .model import DemoModel
@@ -97,28 +98,21 @@ class DemoCRUD(CRUDBase[DemoModel, DemoCreateSchema, DemoUpdateSchema]):
         """
         return await self.set(ids=ids, status=status)
     
-    async def page_crud(self, offset: int, limit: int, order_by: list[dict] | None = None, search: dict | None = None, preload: list | None = None) -> dict:
+    async def page_crud(self, page: PaginationQueryParam, search: dict | None = None, preload: list | None = None) -> dict:
         """
         分页查询
         
         参数:
-        - offset (int): 偏移量
-        - limit (int): 每页数量
-        - order_by (list[dict] | None): 排序参数
+        - page (PaginationQueryParam): 分页查询参数模型
         - search (dict | None): 查询参数
         - preload (list | None): 预加载关系，未提供时使用模型默认项
         
         返回:
         - dict: 分页数据
         """
-        order_by_list = order_by or [{'id': 'asc'}]
-        search_dict = search or {}
-        
         return await self.page(
-            offset=offset,
-            limit=limit,
-            order_by=order_by_list,
-            search=search_dict,
+            page=page,
+            search=search or {},
             out_schema=DemoOutSchema,
             preload=preload
         )

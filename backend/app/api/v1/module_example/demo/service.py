@@ -8,6 +8,7 @@ import pandas as pd
 from app.core.base_schema import BatchSetAvailable
 from app.core.exceptions import CustomException
 from app.utils.excel_util import ExcelUtil
+from app.core.base_params import PaginationQueryParam
 from app.core.logger import log
 
 from app.api.v1.module_system.auth.schema import AuthSchema
@@ -55,31 +56,24 @@ class DemoService:
         return [DemoOutSchema.model_validate(obj).model_dump() for obj in obj_list]
     
     @classmethod
-    async def page_service(cls, auth: AuthSchema, page_no: int, page_size: int, search: DemoQueryParam | None = None, order_by: list[dict[str, str]] | None = None) -> dict:
+    async def page_service(cls, auth: AuthSchema, page: PaginationQueryParam, search: DemoQueryParam | None = None) -> dict:
         """
         分页查询
         
         参数:
         - auth (AuthSchema): 认证信息模型
-        - page_no (int): 页码
-        - page_size (int): 每页数量
+        - page (PaginationQueryParam): 分页查询参数模型
         - search (DemoQueryParam | None): 查询参数
-        - order_by (list[dict[str, str]] | None): 排序参数
         
         返回:
         - dict: 分页数据
         """
         search_dict = search.__dict__ if search else {}
-        order_by_list = order_by or [{'id': 'asc'}]
-        offset = (page_no - 1) * page_size
         
-        result = await DemoCRUD(auth).page_crud(
-            offset=offset,
-            limit=page_size,
-            order_by=order_by_list,
+        return await DemoCRUD(auth).page_crud(
+            page=page,
             search=search_dict
         )
-        return result
     
     @classmethod
     async def create_service(cls, auth: AuthSchema, data: DemoCreateSchema) -> dict:

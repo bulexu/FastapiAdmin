@@ -3,9 +3,9 @@ import request from "@/utils/request";
 const API_PATH = "/example/demo";
 
 const DemoAPI = {
-  getDemoList(query: DemoPageQuery) {
+  getDemoPage(query: DemoPageQuery) {
     return request<ApiResponse<PageResult<DemoTable[]>>>({
-      url: `${API_PATH}/list`,
+      url: `${API_PATH}/page`,
       method: "get",
       params: query,
     });

@@ -1232,7 +1232,7 @@ async function handlePreview(row: GenTableSchema): Promise<void> {
 async function loadingData(): Promise<void> {
   loading.value = true;
   try {
-    const response = await GencodeAPI.listTable(queryFormData);
+    const response = await GencodeAPI.pageTable(queryFormData);
     if (response?.data?.data) {
       tableList.value = response.data.data.items;
       total.value = response.data.data.total;
@@ -1366,7 +1366,7 @@ async function handlePreviewTable(row?: GenTableSchema): Promise<void> {
     const menu_response = await MenuAPI.listMenu();
     menuOptions.value = formatTree(filterMenuTypes(menu_response.data.data));
 
-    const dict_response = await DictAPI.listDictType({ page_no: 1, page_size: 100 });
+    const dict_response = await DictAPI.pageDictType({ page_no: 1, page_size: 100 });
     dictOptions.value = dict_response.data.data.items;
   } else {
     ElMessage.error("请选择要修改的数据");
@@ -1512,7 +1512,7 @@ function clickRow(row: DBTableSchema): void {
 async function getDbList(): Promise<void> {
   importLoading.value = true;
   try {
-    const res = await GencodeAPI.listDbTable(importQueryFormData);
+    const res = await GencodeAPI.pageDbTable(importQueryFormData);
     if (res.data && res.data.data) {
       dbTableList.value = res.data.data.items;
       importTotal.value = res.data.data.total;

@@ -2,6 +2,7 @@
 
 from app.core.base_schema import BatchSetAvailable
 from app.core.exceptions import CustomException
+from app.core.base_params import PaginationQueryParam
 
 from app.api.v1.module_system.auth.schema import AuthSchema
 from .schema import (
@@ -52,6 +53,23 @@ class ApplicationService:
         search_dict = search.__dict__ if search else None
         obj_list = await ApplicationCRUD(auth).list_crud(search=search_dict, order_by=order_by)
         return [ApplicationOutSchema.model_validate(obj).model_dump() for obj in obj_list]
+    
+    @classmethod
+    async def page_service(cls, auth: AuthSchema, page: PaginationQueryParam, search: ApplicationQueryParam | None = None) -> dict:
+        """
+        分页查询应用列表
+        
+        参数:
+        - auth (AuthSchema): 认证信息模型
+        - page (PaginationQueryParam): 分页参数模型
+        - search (ApplicationQueryParam | None): 查询参数模型
+        
+        返回:
+        - dict: 分页数据
+        """
+        # 过滤空值
+        search_dict = search.__dict__ if search else None
+        return await ApplicationCRUD(auth).page_crud(page=page, search=search_dict)
     
     @classmethod
     async def create_service(cls, auth: AuthSchema, data: ApplicationCreateSchema) -> dict:

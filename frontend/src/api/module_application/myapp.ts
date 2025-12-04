@@ -18,9 +18,9 @@ export const ApplicationAPI = {
    * 查询应用列表
    * @param query 查询参数
    */
-  listApp(query: ApplicationPageQuery) {
+  pageApp(query: ApplicationPageQuery) {
     return request<ApiResponse<PageResult<ApplicationInfo[]>>>({
-      url: `${API_PATH}/list`,
+      url: `${API_PATH}/page`,
       method: "get",
       params: query,
     });

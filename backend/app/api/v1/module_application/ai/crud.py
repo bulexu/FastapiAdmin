@@ -3,10 +3,11 @@
 from typing import Sequence, Any
 
 from app.core.base_crud import CRUDBase
+from app.core.base_params import PaginationQueryParam
 
 from app.api.v1.module_system.auth.schema import AuthSchema
 from .model import McpModel
-from .schema import McpCreateSchema, McpUpdateSchema
+from .schema import McpCreateSchema, McpUpdateSchema, McpOutSchema
 
 
 class McpCRUD(CRUDBase[McpModel, McpCreateSchema, McpUpdateSchema]):
@@ -48,7 +49,7 @@ class McpCRUD(CRUDBase[McpModel, McpCreateSchema, McpUpdateSchema]):
         """
         return await self.get(name=name, preload=preload)
     
-    async def get_list_crud(self, search: dict | None = None, order_by: list[dict[str, str]] | None = None, preload: list[str | Any] | None = None) -> Sequence[McpModel]:
+    async def list_crud(self, search: dict | None = None, order_by: list[dict[str, str]] | None = None, preload: list[str | Any] | None = None) -> Sequence[McpModel]:
         """
         列表查询MCP服务器
         
@@ -98,3 +99,21 @@ class McpCRUD(CRUDBase[McpModel, McpCreateSchema, McpUpdateSchema]):
         - None
         """
         return await self.delete(ids=ids)
+    
+    async def page_crud(self, page: PaginationQueryParam, search: dict | None = None, preload: list[str | Any] | None = None) -> Sequence[McpModel]:
+        """
+        分页查询MCP服务器
+        
+        参数:
+        - page (PaginationQueryParam): 分页查询参数模型
+        - search (dict | None): 查询参数字典
+        - preload (list[str | Any] | None): 预加载关系，未提供时使用模型默认项
+        
+        返回:
+        - Sequence[McpModel]: MCP服务器模型实例序列
+        """
+        return await self.page(
+            page=page, 
+            search=search or {}, 
+            out_schema=McpOutSchema,
+            preload=preload)
