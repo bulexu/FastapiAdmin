@@ -3,6 +3,7 @@
 from typing import Any, AsyncGenerator
 
 from app.core.exceptions import CustomException
+from app.core.base_params import PaginationQueryParam
 from app.api.v1.module_system.auth.schema import AuthSchema
 from .tools.ai_util import AIClient
 from .schema import McpCreateSchema, McpUpdateSchema, McpOutSchema, ChatQuerySchema, McpQueryParam
@@ -37,14 +38,30 @@ class McpService:
         参数:
         - auth (AuthSchema): 认证信息模型
         - search (McpQueryParam | None): 查询参数模型
-        - order_by (list[dict[str, str]] | None): 排序参数列表
+        - order_by (list[dict[str, str]] | None): 排序参数
         
         返回:
         - list[dict[str, Any]]: MCP服务器详情字典列表
         """
         search_dict = search.__dict__ if search else None
-        obj_list = await McpCRUD(auth).get_list_crud(search=search_dict, order_by=order_by)
+        obj_list = await McpCRUD(auth).list_crud(search=search_dict, order_by=order_by)
         return [McpOutSchema.model_validate(obj).model_dump() for obj in obj_list]
+    
+    @classmethod
+    async def page_service(cls, auth: AuthSchema, page: PaginationQueryParam, search: McpQueryParam | None = None) -> dict:
+        """
+        分页列表查询MCP服务器
+        
+        参数:
+        - auth (AuthSchema): 认证信息模型
+        - page (PaginationQueryParam): 分页查询参数模型
+        - search (McpQueryParam | None): 查询参数模型
+        
+        返回:
+        - dict: 包含分页结果的字典
+        """
+        search_dict = search.__dict__ if search else None
+        return await McpCRUD(auth).page_crud(search=search_dict, page=page)
     
     @classmethod
     async def create_service(cls, auth: AuthSchema, data: McpCreateSchema) -> dict[str, Any]:

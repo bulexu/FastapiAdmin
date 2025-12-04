@@ -358,7 +358,7 @@ async function loadingData() {
   loading.value = true;
   try {
     // 调用任务日志列表接口
-    const response = await JobAPI.listJobLog(queryFormData);
+    const response = await JobAPI.pageJobLog(queryFormData);
     pageTableData.value = response.data.data.items;
     total.value = response.data.data.total;
   } catch (error: any) {
@@ -493,7 +493,7 @@ const curdContentConfig = {
     query.page_size = 1000;
     const all: any[] = [];
     while (true) {
-      const res = await JobAPI.listJobLog(query);
+      const res = await JobAPI.pageJobLog(query);
       const items = res.data?.data?.items || [];
       const total = res.data?.data?.total || 0;
       all.push(...items);

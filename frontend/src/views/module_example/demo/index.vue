@@ -498,7 +498,7 @@ const curdContentConfig = {
     query.page_size = 9999;
     const all: any[] = [];
     while (true) {
-      const res = await DemoAPI.getDemoList(query);
+      const res = await DemoAPI.getDemoPage(query);
       const items = res.data?.data?.items || [];
       const total = res.data?.data?.total || 0;
       all.push(...items);
@@ -593,7 +593,7 @@ async function handleRefresh() {
 async function loadingData() {
   loading.value = true;
   try {
-    const response = await DemoAPI.getDemoList(queryFormData);
+    const response = await DemoAPI.getDemoPage(queryFormData);
     pageTableData.value = response.data.data.items;
     total.value = response.data.data.total;
   } catch (error: any) {

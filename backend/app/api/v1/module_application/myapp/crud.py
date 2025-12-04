@@ -3,9 +3,10 @@
 from typing import Sequence, Any
 
 from app.core.base_crud import CRUDBase
+from app.core.base_params import PaginationQueryParam
 from app.api.v1.module_system.auth.schema import AuthSchema
 from .model import ApplicationModel
-from .schema import ApplicationCreateSchema, ApplicationUpdateSchema
+from .schema import ApplicationCreateSchema, ApplicationUpdateSchema, ApplicationOutSchema
 
 
 class ApplicationCRUD(CRUDBase[ApplicationModel, ApplicationCreateSchema, ApplicationUpdateSchema]):
@@ -47,6 +48,25 @@ class ApplicationCRUD(CRUDBase[ApplicationModel, ApplicationCreateSchema, Applic
         - Sequence[ApplicationModel]: 应用列表
         """
         return await self.list(search=search, order_by=order_by, preload=preload)
+    
+    async def page_crud(self, page: PaginationQueryParam, search: dict[str, Any] | None = None, preload: list[str | Any] | None = None) -> dict:
+        """
+        分页查询应用列表
+        
+        参数:
+        - page (PaginationQueryParam): 分页参数
+        - search (dict[str, Any] | None): 查询参数,默认None
+        - preload (list[str | Any] | None): 预加载关系，未提供时使用模型默认项
+        
+        返回:
+        - dict: 分页数据
+        """
+        return await self.page(
+            page=page,
+            search=search or {},
+            out_schema=ApplicationOutSchema,
+            preload=preload
+        )
     
     async def create_crud(self, data: ApplicationCreateSchema) -> ApplicationModel | None:
         """

@@ -41,8 +41,8 @@ async def get_obj_detail_controller(
     log.info(f"获取示例详情成功 {id}")
     return SuccessResponse(data=result_dict, msg="获取示例详情成功")
 
-@DemoRouter.get("/list", summary="查询示例列表", description="查询示例列表")
-async def get_obj_list_controller(
+@DemoRouter.get("/page", summary="查询示例列表", description="查询示例列表")
+async def get_obj_page_controller(
     page: PaginationQueryParam = Depends(),
     search: DemoQueryParam = Depends(),
     auth: AuthSchema = Depends(AuthPermission(["module_example:demo:query"]))
@@ -61,10 +61,8 @@ async def get_obj_list_controller(
     # 使用数据库分页而不是应用层分页
     result_dict = await DemoService.page_service(
         auth=auth, 
-        page_no=page.page_no, 
-        page_size=page.page_size, 
+        page=page, 
         search=search, 
-        order_by=page.order_by
     )
     log.info("查询示例列表成功")
     return SuccessResponse(data=result_dict, msg="查询示例列表成功")

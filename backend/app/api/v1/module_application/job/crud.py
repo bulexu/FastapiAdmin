@@ -3,10 +3,11 @@
 from typing import Sequence, Any
 
 from app.core.base_crud import CRUDBase
+from app.core.base_params import PaginationQueryParam
 
 from app.api.v1.module_system.auth.schema import AuthSchema
 from .model import JobModel, JobLogModel
-from .schema import JobCreateSchema,JobUpdateSchema,JobLogCreateSchema,JobLogUpdateSchema
+from .schema import JobCreateSchema,JobUpdateSchema,JobLogCreateSchema,JobLogUpdateSchema,JobOutSchema,JobLogOutSchema
 
 
 class JobCRUD(CRUDBase[JobModel, JobCreateSchema, JobUpdateSchema]):
@@ -101,7 +102,26 @@ class JobCRUD(CRUDBase[JobModel, JobCreateSchema, JobUpdateSchema]):
         - 此操作会删除所有定时任务日志,请谨慎操作
         """
         return await self.clear()
-
+    
+    async def page_crud(self, page: PaginationQueryParam, search: dict | None = None, preload: list | None = None) -> dict:
+        """
+        分页查询定时任务
+        
+        参数:
+        - page (PaginationQueryParam): 分页查询参数模型
+        - search (dict | None): 查询参数
+        - preload (list | None): 预加载关系，未提供时使用模型默认项
+        
+        返回:
+        - dict: 分页数据
+        """
+        
+        return await self.page(
+            page=page,
+            search=search or {},
+            out_schema=JobOutSchema, 
+            preload=preload,
+        )
 
 class JobLogCRUD(CRUDBase[JobLogModel, JobLogCreateSchema, JobLogUpdateSchema]):
     """定时任务日志数据层"""
@@ -142,6 +162,26 @@ class JobLogCRUD(CRUDBase[JobLogModel, JobLogCreateSchema, JobLogUpdateSchema]):
         - Sequence[JobLogModel]: 定时任务日志模型序列
         """
         return await self.list(search=search, order_by=order_by, preload=preload)
+    
+    async def page_obj_log_crud(self, page: PaginationQueryParam, search: dict | None = None, preload: list | None = None) -> dict:
+        """
+        分页查询定时任务日志
+        
+        参数:
+        - page (PaginationQueryParam): 分页查询参数模型
+        - search (dict | None): 查询参数
+        - preload (list | None): 预加载关系，未提供时使用模型默认项
+        
+        返回:
+        - dict: 分页数据
+        """
+        
+        return await self.page(
+            page=page,
+            search=search or {},
+            out_schema=JobLogOutSchema, 
+            preload=preload,
+        )
     
     async def delete_obj_log_crud(self, ids: list[int]) -> None:
         """

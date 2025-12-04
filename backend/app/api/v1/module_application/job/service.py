@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from app.core.exceptions import CustomException
+from app.core.base_params import PaginationQueryParam
 from app.utils.cron_util import CronUtil
 from app.utils.excel_util import ExcelUtil
 from app.api.v1.module_system.auth.schema import AuthSchema
@@ -51,6 +52,22 @@ class JobService:
         """
         obj_list = await JobCRUD(auth).get_obj_list_crud(search=search.__dict__, order_by=order_by)
         return [JobOutSchema.model_validate(obj).model_dump() for obj in obj_list]
+    
+    @classmethod
+    async def page_service(cls, auth: AuthSchema, page: PaginationQueryParam, search: JobQueryParam | None = None) -> dict:
+        """
+        分页查询定时任务
+        
+        参数:
+        - auth (AuthSchema): 认证信息模型
+        - page (PaginationQueryParam): 分页查询参数模型
+        - search (JobQueryParam | None): 查询参数模型
+        
+        返回:
+        - Dict: 包含分页结果的字典
+        """
+        search_dict = search.__dict__ if search else None
+        return await JobCRUD(auth).page_crud(search=search_dict, page=page)
     
     @classmethod
     async def create_job_service(cls, auth: AuthSchema, data: JobCreateSchema) -> dict:
@@ -239,6 +256,22 @@ class JobLogService:
         """
         obj_list = await JobLogCRUD(auth).get_obj_log_list_crud(search=search.__dict__, order_by=order_by)
         return [JobLogOutSchema.model_validate(obj).model_dump() for obj in obj_list]
+    
+    @classmethod
+    async def page_job_log_service(cls, auth: AuthSchema, page: PaginationQueryParam, search: JobLogQueryParam | None = None) -> list[dict]:
+        """
+        分页查询定时任务日志
+
+        参数:
+        - auth (AuthSchema): 认证信息模型
+        - page (PaginationQueryParam): 分页查询参数模型
+        - search (JobLogQueryParam | None): 查询参数模型 
+
+        返回:
+        - list[dict]: 包含分页结果的字典
+        """
+        search_dict = search.__dict__ if search else None
+        return await JobLogCRUD(auth).page_obj_log_crud(search=search_dict, page=page)
     
     @classmethod
     async def delete_job_log_service(cls, auth: AuthSchema, ids: list[int]) -> None:

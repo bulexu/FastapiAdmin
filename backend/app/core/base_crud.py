@@ -11,6 +11,7 @@ from sqlalchemy import inspect as sa_inspect
 from app.core.base_model import MappedBase
 from app.core.exceptions import CustomException
 from app.core.permission import Permission
+from app.core.base_params import PaginationQueryParam
 from app.api.v1.module_system.auth.schema import AuthSchema
 
 ModelType = TypeVar("ModelType", bound=MappedBase)
@@ -133,14 +134,12 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         except Exception as e:
             raise CustomException(msg=f"树形列表查询失败: {str(e)}")
     
-    async def page(self, offset: int, limit: int, order_by: List[Dict[str, str]], search: Dict, out_schema: Type[OutSchemaType], preload: Optional[List[Union[str, Any]]] = None) -> Dict:
+    async def page(self, page: PaginationQueryParam, search: Dict, out_schema: Type[OutSchemaType], preload: Optional[List[Union[str, Any]]] = None) -> Dict:
         """
         获取分页数据
         
         参数:
-        - offset (int): 偏移量
-        - limit (int): 每页数量
-        - order_by (List[Dict[str, str]]): 排序字段
+        - page (PaginationQueryParam): 分页查询参数模型
         - search (Dict): 查询条件
         - out_schema (Type[OutSchemaType]): 输出数据模型
         - preload (Optional[List[Union[str, Any]]]): 预加载关系
@@ -153,7 +152,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         """
         try:
             conditions = await self.__build_conditions(**search) if search else []
-            order = order_by or [{'id': 'asc'}]
+            order = page.order_by or [{'id': 'asc'}]
             sql = select(self.model).where(*conditions).order_by(*self.__order_by(order))
             # 应用预加载选项
             for opt in self.__loader_options(preload):
@@ -169,12 +168,16 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
             total_result = await self.auth.db.execute(count_sql)
             total = total_result.scalar() or 0
 
+            # 获取分页数据
+            offset = (page.page_no - 1) * page.page_size
+            limit = page.page_size
+
             result: Result = await self.auth.db.execute(sql.offset(offset).limit(limit))
             objs = result.scalars().all()
 
             return {
-                "page_no": offset // limit + 1 if limit else 1,
-                "page_size": limit if limit else 10,
+                "page_no": page.page_no,
+                "page_size": page.page_size,
                 "total": total,
                 "has_next": offset + limit < total,
                 "items": [out_schema.model_validate(obj).model_dump() for obj in objs]

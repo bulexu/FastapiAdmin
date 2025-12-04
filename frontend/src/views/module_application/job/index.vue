@@ -751,7 +751,7 @@ async function handleRefresh() {
 async function loadingData() {
   loading.value = true;
   try {
-    const response = await JobAPI.listJob(queryFormData);
+    const response = await JobAPI.pageJob(queryFormData);
     pageTableData.value = response.data.data.items;
     total.value = response.data.data.total;
   } catch (error: any) {
@@ -985,7 +985,7 @@ const curdContentConfig = {
     query.page_size = 1000;
     const all: any[] = [];
     while (true) {
-      const res = await JobAPI.listJob(query);
+      const res = await JobAPI.pageJob(query);
       const items = res.data?.data?.items || [];
       const total = res.data?.data?.total || 0;
       all.push(...items);

@@ -328,7 +328,7 @@ const formatTime = (time: string | undefined) => {
 async function loadApplicationList() {
   loading.value = true;
   try {
-    const response = await ApplicationAPI.listApp(queryFormData);
+    const response = await ApplicationAPI.pageApp(queryFormData);
     applicationList.value = response.data.data.items;
     total.value = response.data.data.total;
   } catch (error) {
