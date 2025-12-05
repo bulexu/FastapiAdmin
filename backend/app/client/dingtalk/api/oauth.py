@@ -1,0 +1,1 @@
+# https://open.dingtalk.com/document/development/obtain-identity-credentials

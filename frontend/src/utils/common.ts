@@ -1,3 +1,5 @@
+import * as pako from 'pako';
+
 // 问候语：根据当前小时返回不同问候语
 export function greetings() {
   // 当前时间（用于计算问候语）
@@ -145,4 +147,17 @@ export function isEmpty(obj: string | null | undefined) {
 // 验证是否为blob格式
 export function blobValidate(data: Blob): boolean {
   return data.type !== "application/json";
+}
+
+export function parseParams(inputs: { [key: string]: string }) {
+
+  const compressedInputs = {};
+  Object.entries(inputs).map(([key, value]) => {
+    const uint8Array = new TextEncoder().encode(value);
+    const compressed = pako.gzip(uint8Array);
+    const base64String = btoa(String.fromCharCode.apply(null, compressed));
+    compressedInputs[key] = base64String;
+  })
+
+  return new URLSearchParams(compressedInputs);
 }

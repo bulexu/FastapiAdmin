@@ -36,8 +36,8 @@ export const defaultSettings: AppSettings = {
   // 是否显示水印 (修改默认开启水印)
   // showWatermark: false,
   showWatermark: true,
-  // 水印内容
-  watermarkContent: "Babel Admin",
+  // 水印内容 Babel Admin
+  watermarkContent: "",
   // 侧边栏配色方案
   sidebarColorScheme: SidebarColor.CLASSIC_BLUE,
   // 项目引导

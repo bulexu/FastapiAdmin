@@ -78,6 +78,12 @@ export const constantRoutes: RouteRecordRaw[] = [
         meta: { title: "内部应用", icon: "Monitor", hidden: true, keepAlive: false },
         component: () => import("@/views/module_application/myapp/components/InternalApp.vue"),
       },
+      {
+        path: "application/prompt/design",
+        name: "PromptDesign",
+        meta: { title: "提示词设计", icon: "MagicStick", hidden: true, keepAlive: true },
+        component: () => import("@/views/module_application/prompt/design.vue"),
+      },
     ],
   },
 ];

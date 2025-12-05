@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*- 
 
 from typing import AsyncGenerator
-from openai import AsyncOpenAI, OpenAI
-from openai.types.chat.chat_completion import ChatCompletion
+from openai import AsyncOpenAI
 import httpx
 
 from app.config.setting import settings

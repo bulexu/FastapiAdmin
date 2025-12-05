@@ -39,6 +39,7 @@ export default defineConfig(({ mode }: ConfigEnv) => {
       },
     },
     server: {
+      compress: false,
       host: true,
       port: Number(env.VITE_APP_PORT),
       open: true,
